@@ -1,0 +1,167 @@
+import { toast } from "react-hot-toast";
+
+const checkServerError = (
+  response: any,
+  resetState: () => void,
+  cancelRefreshing?: () => void
+) => {
+  if (response?.message === "Network Error") {
+    toast.error(response?.message + "\n" + "Try again later.");
+    resetState();
+    cancelRefreshing && cancelRefreshing();
+  }
+  if (response?.code === "ECONNABORTED") {
+    toast.error("Connection Error" + "\n" + "Try again later.");
+    resetState();
+    cancelRefreshing && cancelRefreshing();
+  }
+  if (
+    response?.code === "--route/route-not-found" ||
+    response?.code === "--api/server-error"
+  ) {
+    toast.error("Something Went Wrong" + ".." + "Try again later.");
+    resetState();
+    cancelRefreshing && cancelRefreshing();
+  }
+};
+
+// check for invalid token
+const checkInvalidToken = (
+  response: any,
+  resetState: () => void,
+  cancelRefreshing?: () => void
+): void => {
+  if (response?.code === "--auth/invalid-token") {
+    toast.error("Session Expired. Please log in again.");
+    location.reload();
+    resetState();
+    cancelRefreshing && cancelRefreshing();
+  }
+};
+
+// login response handler
+export function HandleAuthenticationResponse(
+  response: any,
+  resetState: () => void,
+  successfulAuthentication: () => void
+) {
+  if (response?.code === "--auth/invalid-credentials") {
+    toast.error("Invalid credentials");
+    resetState();
+    console.log("hey");
+    return;
+  }
+  if (response?.code === "--auth/user-notfound") {
+    toast.error("User not found");
+    resetState();
+    return;
+  }
+  if (response?.code === "--auth/invalid-fields") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+  if (response?.code === "--auth/password-incorrect") {
+    toast.error("Password is incorrect.");
+    resetState();
+    return;
+  }
+  if (response?.code === "--auth/verify-email") {
+    toast.success(response?.message, {
+      duration: 3000,
+    });
+    resetState();
+    successfulAuthentication();
+    return;
+  }
+  if (response?.code === "--auth/account-verified") {
+    toast.success(`Account verified..\n\n ${response?.message}`, {
+      duration: 3000,
+    });
+    resetState();
+    successfulAuthentication();
+    return;
+  }
+  if (response?.code === "--auth/loggedIn") {
+    resetState();
+    const { email, id, image, token, username, fullname } = response?.data;
+    const userData = {
+      id,
+      image,
+      email,
+      username,
+      fullname,
+    };
+    localStorage.setItem("authToken", JSON.stringify(token));
+    localStorage.setItem("userData", JSON.stringify(userData));
+    successfulAuthentication();
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
+
+// thread response handler
+export function HandleThreadResponse(
+  response: any,
+  resetState: () => void,
+  successfull: () => void
+) {
+  if (response?.code === "--createThread/invalid-fields") {
+    toast.error("Some thread input are empty");
+    resetState();
+    console.log("hey");
+    return;
+  }
+  if (response?.code === "--createThread/failed-replying-thread") {
+    toast.error("Failed adding child thread content.");
+    resetState();
+    return;
+  }
+  if (response?.code === "--createThread/failed-creating-thread") {
+    toast.error(`Failed creating thread. try again later.`);
+    resetState();
+    return;
+  }
+  if (response?.code === "--bookmarkThread/thread-exists") {
+    toast.error(`Thread already bookmarked.`);
+    resetState();
+    return;
+  }
+  if (response?.code === "--bookmarkThread/successfull") {
+    toast.success(`Thread bookmarked.`);
+    resetState();
+    return;
+  }
+  if (response?.code === "--createThread/success") {
+    toast.success(`Thread created successfully`, {
+      duration: 3000,
+    });
+    resetState();
+    successfull();
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
+
+export function HandleBookmarkResponse(
+  response: any,
+  resetState: () => void,
+  successfull: () => void,
+  returnData: (data) => any
+) {
+  if (response?.code === "--bookmarks/all-bookmarks") {
+    resetState();
+    successfull();
+    returnData(response?.data);
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
