@@ -82,3 +82,22 @@ export const fetchAllBookmarks = async (type: string) => {
     return e.response?.data ?? { message: e.message, code: e?.code };
   }
 };
+
+// notifier
+export const createVariant = async (data: any) => {
+  try {
+    const res = await $http.post(`/notifier/createVariant`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const allVariants = async () => {
+  try {
+    const res = await $http.get(`/notifier/allVariants`);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
