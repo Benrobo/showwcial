@@ -211,10 +211,35 @@ export function HandleNotifierResponse(
     return;
   }
 
+  if (response?.code === "--createVariant/name-exists") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--deleteVariant/invalid-ID") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--deleteVariant/unauthorised") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
   if (response?.code === "--createVariant/success") {
     toast.success("Variant created successfully.");
     resetState();
     successfull();
+    return;
+  }
+
+  if (response?.code === "--deleteVariant/success") {
+    toast.success("variant deleted successfully.");
+    resetState();
+    returnData(response?.data);
     return;
   }
 

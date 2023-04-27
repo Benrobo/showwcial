@@ -10,27 +10,32 @@ import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useMutation, useQuery } from "react-query";
-import { createVariant, fetchAllVariants } from "../../http";
+import { createVariant, deleteVariant, fetchAllVariants } from "../../http";
 import { HandleNotifierResponse } from "../../util/response";
 import { Router } from "next/router";
 import { Spinner } from "../../components/Loader";
 
 function Notifier() {
   const [showCreateVariant, setShowCreateVariant] = useState(false);
-  const [selectedVariant, setSelectedVariant] = useState("");
+  const [selectedVariantId, setSelectedVariantId] = useState("");
+  const [selectedVariant, setSelectedVariant] = useState<any>({});
   const [allVariants, setAllVariants] = useState([]);
-  const [rerenderVariants, setRerenderVariants] = useState(false);
   const variantQuery = useQuery({
     queryFn: async () => await fetchAllVariants(),
     queryKey: ["allVariants"],
   });
+  const deleteVariantMutation = useMutation(
+    async (id: string) => await deleteVariant(id)
+  );
 
   useEffect(() => {
-    if (rerenderVariants) {
-      //   variantQuery.refetch();
-      setTimeout(() => setRerenderVariants(false), 2000);
+    if (selectedVariantId.length > 0) {
+      const filterSelected = allVariants.filter(
+        (d) => d?.id === selectedVariantId
+      );
+      setSelectedVariant(filterSelected[0]);
     }
-  }, [rerenderVariants]);
+  }, [selectedVariantId]);
 
   useEffect(() => {
     const { data, error } = variantQuery;
@@ -44,6 +49,30 @@ function Notifier() {
       );
     }
   }, [variantQuery.data]);
+
+  useEffect(() => {
+    const { data, error } = deleteVariantMutation;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandleNotifierResponse(
+        response,
+        () => {},
+        () => {},
+        () => {
+          variantQuery.refetch();
+          setSelectedVariantId("");
+        }
+      );
+    }
+  }, [deleteVariantMutation.data]);
+
+  const deleteSelectedVariant = () => {
+    if (typeof window !== "undefined") {
+      const comfirm = window.confirm("Are you sure about this action?");
+      if (!comfirm) return;
+      deleteVariantMutation.mutateAsync(selectedVariantId);
+    }
+  };
 
   return (
     <MainDashboardLayout activeTab="notifier">
@@ -78,58 +107,88 @@ function Notifier() {
                 <Spinner color="#fff" />
               </div>
             ) : !variantQuery.isLoading && allVariants.length > 0 ? (
-              allVariants.map((data, i) => (
-                <NotifierVariant
-                  id={data?.id}
-                  name={data?.name}
-                  token={data?.token}
-                  icon={data?.icon}
-                  tags={data?.tags}
-                />
-              ))
+              allVariants
+                .sort(
+                  (a, b) =>
+                    Date.parse(a.createdAt as any) - Date.parse(b.createdAt)
+                )
+                .map((data, i) => (
+                  <NotifierVariant
+                    id={data?.id}
+                    name={data?.name}
+                    token={data?.token}
+                    icon={data?.icon}
+                    tags={data?.tags}
+                    selectedVariant={selectedVariantId}
+                    onSelected={() => {
+                      if (selectedVariantId === data?.id)
+                        return setSelectedVariantId("");
+                      setSelectedVariantId(data?.id);
+                    }}
+                  />
+                ))
             ) : null}
           </div>
         </div>
 
         <div className="w-full h-full flex flex-col items-start justify-start">
-          {false && (
+          {selectedVariantId.length === 0 ? (
             <div className="w-full h-full flex flex-col items-center justify-center">
               <p className="text-white-200 font-pp-sb text-[14px] ">
-                Nothing to show here for now..
+                {allVariants.length > 0
+                  ? "👈 Select one of the variants"
+                  : "Nothing to show here for now 😞.."}
               </p>
-              <span>😞</span>
+            </div>
+          ) : (
+            <div className="w-full flex flex-col items-center justify-center px-4 py-4">
+              <div className="w-full flex flex-col items-start justify-start gap-4">
+                <p className="text-white-300 font-pp-rg text-[14px]">
+                  NAME:{" "}
+                  <span className="text-white-200 font-pp-sb ml-5">
+                    {selectedVariant?.name}
+                  </span>
+                </p>
+                <p className="text-white-300 font-pp-rg text-[14px]">
+                  Token:
+                  <span className="text-white-200 font-pp-sb ml-5">
+                    {selectedVariant?.token}
+                  </span>
+                </p>
+                <p className="text-white-300 font-pp-rg text-[14px]">
+                  Communities:
+                  <span className="text-white-200 font-pp-sb ml-5">
+                    <NotifierTags tags={selectedVariant?.communities ?? []} />
+                  </span>
+                </p>
+                <p className="text-white-300 font-pp-rg text-[14px]">
+                  Disable:
+                  <span className="text-white-200 font-pp-sb ml-5">
+                    <Switch isChecked={selectedVariant?.disabled} />
+                  </span>
+                </p>
+                <Gap height={50} />
+                <button
+                  className="px-6 py-3 flex items-center justify-center text-white-100 bg-red-400 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+                  onClick={deleteSelectedVariant}
+                  disabled={deleteVariantMutation?.isLoading}
+                >
+                  {deleteVariantMutation?.isLoading ? (
+                    <Spinner color="#fff" />
+                  ) : (
+                    "Delete Variant"
+                  )}
+                </button>
+              </div>
             </div>
           )}
-          <div className="w-full flex flex-col items-center justify-center px-4 py-4">
-            <div className="w-full flex flex-col items-start justify-start gap-4">
-              <p className="text-white-300 font-pp-rg">
-                NAME:{" "}
-                <span className="text-white-200 font-pp-sb ml-5">Test 1</span>
-              </p>
-              <p className="text-white-300 font-pp-rg">
-                Token:
-                <span className="text-white-200 font-pp-sb ml-5">
-                  {genRandNum(35)}
-                </span>
-              </p>
-              <p className="text-white-300 font-pp-rg">
-                Enable:
-                <span className="text-white-200 font-pp-sb ml-5">
-                  <Switch isChecked={true} />
-                </span>
-              </p>
-              <Gap height={50} />
-              <button className="px-6 py-3 flex items-center justify-center text-white-100 bg-red-400 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg">
-                Delete Variant
-              </button>
-            </div>
-          </div>
         </div>
       </div>
 
       {showCreateVariant && (
         <CreateVariant
           closeModal={() => setShowCreateVariant(!showCreateVariant)}
+          refreshVariant={() => variantQuery.refetch()}
         />
       )}
     </MainDashboardLayout>
@@ -140,9 +199,10 @@ export default withAuth(Notifier);
 
 interface CreateVariantProp {
   closeModal?: () => void;
+  refreshVariant?: () => void;
 }
 
-function CreateVariant({ closeModal }: CreateVariantProp) {
+function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
   const createVariantMutation = useMutation(
     async (data: any) => await createVariant(data)
   );
@@ -253,7 +313,7 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
         () => {},
         () => {
           closeModal();
-          location && location.reload();
+          refreshVariant();
         }
       );
     }
@@ -306,6 +366,7 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
                 data-name="icon"
                 disabled={createVariantMutation.isLoading}
               >
+                <option value="">emoji</option>
                 <option value="🔥">🔥</option>
                 <option value="🚀">🚀</option>
                 <option value="✅">✅</option>
@@ -396,6 +457,8 @@ interface NotifierVariantPropS {
   token: string;
   id: string;
   icon: string;
+  onSelected: () => void;
+  selectedVariant: string;
 }
 
 function NotifierVariant({
@@ -404,16 +467,23 @@ function NotifierVariant({
   token,
   id,
   icon,
+  onSelected,
+  selectedVariant,
 }: NotifierVariantPropS) {
   const copyToken = () => {
     copyToClipboard(token);
     toast.success("Token copied successfully.");
   };
+
+  const SelectedStyle =
+    selectedVariant === id ? "bg-dark-200 text-white-100" : "bg-dark-300";
+
   return (
     <button
       data-id={id}
       key={id}
-      className="w-full h-auto flex items-start justify-start bg-dark-300 py-4 px-3 rounded-lg"
+      className={`w-full h-auto flex items-start justify-start ${SelectedStyle} py-4 px-3 rounded-lg`}
+      onClick={onSelected}
     >
       <div className="w-[70px] h-full flex items-center justify-center p-4 rounded-lg border-solid border-[.5px] border-white-600 ">
         <span className="text-2xl">{icon}</span>
@@ -441,14 +511,18 @@ type NotifierProp = {
 function NotifierTags({ tags }: NotifierProp) {
   return (
     <>
-      {tags.map((d, i) => (
-        <span
-          className="px-2 py-1 rounded-md text-[10px] bg-dark-100 text-white-100 border-solid border-[1px] border-blue-300 font-pp-sb"
-          key={i}
-        >
-          {d}
-        </span>
-      ))}
+      {tags.length === 0 ? (
+        <span className="text-white-300">N/A</span>
+      ) : (
+        tags.map((d, i) => (
+          <span
+            className="px-2 py-1 rounded-md text-[10px] bg-dark-100 text-white-100 border-solid border-[1px] border-blue-300 font-pp-sb"
+            key={i}
+          >
+            {d}
+          </span>
+        ))
+      )}
     </>
   );
 }

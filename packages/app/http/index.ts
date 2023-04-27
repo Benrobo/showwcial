@@ -101,3 +101,12 @@ export const fetchAllVariants = async () => {
     return e.response?.data ?? { message: e.message, code: e?.code };
   }
 };
+
+export const deleteVariant = async (variantId: string) => {
+  try {
+    const res = await $http.delete(`/notifier/deleteVariant/${variantId}`);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
