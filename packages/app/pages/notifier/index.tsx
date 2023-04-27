@@ -9,6 +9,11 @@ import Modal from "../../components/Modal";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useMutation } from "react-query";
+import { createVariant } from "../../http";
+import { HandleNotifierResponse } from "../../util/response";
+import { Router } from "next/router";
+import { Spinner } from "../../components/Loader";
 
 function Notifier() {
   const [showCreateVariant, setShowCreateVariant] = useState(false);
@@ -97,6 +102,9 @@ interface CreateVariantProp {
 }
 
 function CreateVariant({ closeModal }: CreateVariantProp) {
+  const createVariantMutation = useMutation(
+    async (data: any) => await createVariant(data)
+  );
   const [loadingState, setLoadingState] = useState(false);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [activeCommunities, setActiveCommunities] = useState<
@@ -194,8 +202,24 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
     fetchTagAndCommunities();
   }, []);
 
-  async function saveVariant() {
-    console.log(variantData);
+  useEffect(() => {
+    const { data, error } = createVariantMutation;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandleNotifierResponse(
+        response,
+        () => createVariantMutation.reset(),
+        () => {},
+        () => {
+          closeModal();
+          location.reload();
+        }
+      );
+    }
+  }, [createVariantMutation.data]);
+
+  function saveVariant() {
+    createVariantMutation.mutate(variantData);
   }
 
   return (
@@ -213,6 +237,7 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
               className="w-full border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
               data-name="type"
               onChange={(e) => handleInput(e, "type")}
+              disabled={createVariantMutation.isLoading}
             >
               <option value="">Select type</option>
               <option value="thread">Thread</option>
@@ -232,11 +257,13 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
                 placeholder="Name"
                 data-name="name"
                 onChange={(e) => handleInput(e, "name")}
+                disabled={createVariantMutation.isLoading}
               />
               <select
                 className="w-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
                 onChange={(e) => handleInput(e, "icon")}
                 data-name="icon"
+                disabled={createVariantMutation.isLoading}
               >
                 <option value="🔥">🔥</option>
                 <option value="🚀">🚀</option>
@@ -252,6 +279,7 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
                 className="w-full max-h-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
                 multiple
                 data-name="tags"
+                disabled={createVariantMutation.isLoading}
                 onChange={(e) => {
                   limitSelection(e, 5);
                   handleInput(e, "multiple");
@@ -305,8 +333,13 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
             <button
               className="w-full px-6 py-3 flex items-center justify-center text-white-100 bg-blue-300 hover:animate-pulse transition-all font-pp-rg text-[13px] rounded-lg"
               onClick={saveVariant}
+              disabled={createVariantMutation.isLoading}
             >
-              Save Variant
+              {createVariantMutation.isLoading ? (
+                <Spinner color="#fff" />
+              ) : (
+                "Save Variant"
+              )}
             </button>
           </div>
           <br />
