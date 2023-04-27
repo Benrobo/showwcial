@@ -5,7 +5,7 @@ import { BsCheckCircleFill } from "react-icons/bs";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import Link from "next/link";
 import { useMutation, useQuery } from "react-query";
-import { verifyUser, loginUser } from "../../http";
+import { verifyUser, loginUser, resendTempPwd } from "../../http";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../../components/Loader";
 import { useRouter } from "next/router";
@@ -14,6 +14,7 @@ import { HandleAuthenticationResponse } from "../../util/response";
 import withoutAuth from "../../util/withoutAuth";
 import isAuthenticated from "../../util/isAuthenticated";
 import DataContext from "../../context/DataContext";
+import Timer from "../../components/Timer";
 
 function OAuth() {
   const { setIsOauthWindowOpened, isOauthWindowOpened } =
@@ -31,7 +32,19 @@ function OAuth() {
   const verifyMutation = useMutation(async (data: any) => {
     return await verifyUser(data);
   });
+  const resendPwdMutation = useMutation(
+    async (data: any) => await resendTempPwd(data)
+  );
   const [showpwdInp, setShowPwdInp] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
+  const [shouldResendPwd, setShouldResendPwd] = useState(false);
+  const RESEND_CODE_TIMER = 60;
+
+  const togglePwdVisib = () => setShowPwd(!showpwd);
+  const clearMutation = () => {
+    loginMutation.reset();
+    verifyMutation.reset();
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("authToken");
@@ -41,12 +54,6 @@ function OAuth() {
       isOauthWindowOpened && window.close();
     }
   }, []);
-
-  const togglePwdVisib = () => setShowPwd(!showpwd);
-  const clearMutation = () => {
-    loginMutation.reset();
-    verifyMutation.reset();
-  };
 
   const handleInput = (e: any) => {
     const name: string = e.target?.name;
@@ -66,7 +73,7 @@ function OAuth() {
     const { data, error } = verifyMutation;
     if (typeof data !== "undefined" || error !== null) {
       const response = data;
-      console.log({ response });
+      if (response?.code === "--auth/verify-email") setShouldResendPwd(true);
       HandleAuthenticationResponse(
         response,
         () => clearMutation(),
@@ -84,13 +91,30 @@ function OAuth() {
         () => clearMutation(),
         () => {
           const userData = data?.data;
-          window.opener.postMessage(userData, "*");
-          window.close();
+          if (typeof window === "undefined") return;
+          window?.opener?.postMessage(userData, "*");
+          window?.close();
           setIsOauthWindowOpened(false);
         }
       );
     }
   }, [loginMutation.data]);
+
+  useEffect(() => {
+    // resendCodeMutation
+    if (
+      typeof resendPwdMutation.data !== "undefined" ||
+      resendPwdMutation.error !== null
+    ) {
+      const { data } = resendPwdMutation;
+      const response = data;
+      HandleAuthenticationResponse(
+        response,
+        () => resendPwdMutation.reset(),
+        () => {}
+      );
+    }
+  }, [resendPwdMutation.data]);
 
   async function handleUserAuthentication() {
     const { username, email } = inputData;
@@ -106,6 +130,11 @@ function OAuth() {
     delete inputData["password"];
     verifyMutation.mutate(inputData as any);
   }
+
+  const resendPwd = async () => {
+    resendPwdMutation.mutateAsync({ email: inputData?.email });
+    setResendTimer(RESEND_CODE_TIMER);
+  };
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
@@ -177,7 +206,28 @@ function OAuth() {
               </div>
             </div>
           )}
-          <div className="w-full flex items-end justify-end">
+          <div className="w-full flex items-start justify-between">
+            {shouldResendPwd ? (
+              resendTimer <= 0 ? (
+                <button
+                  className={`w-auto bg-dark-200 text-white-100 text-center ml-2 px-3 py-1 rounded-[30px]`}
+                  onClick={resendPwd}
+                >
+                  <p
+                    className={`text-white-100 text-[12px] flex items-center justify-center font-pp-rg`}
+                  >
+                    Resend
+                  </p>
+                </button>
+              ) : (
+                <Timer
+                  timeframe={resendTimer}
+                  action={() => setResendTimer(0)}
+                />
+              )
+            ) : (
+              <div></div>
+            )}
             <Link
               className="text-white-300 text-[13px] underline "
               href="/forgot-password"
