@@ -5,11 +5,11 @@ import BaseController from "./base";
 import prisma from "../config/prisma";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
-// import bcryptjs from "bcryptjs";
+import bcryptjs from "bcryptjs";
 
-// const pwd = "1234";
-// const hash = bcryptjs.hashSync(pwd, 10);
-// console.log({ hash });
+const pwd = "1234";
+const hash = bcryptjs.hashSync(pwd, 10);
+console.log({ hash });
 
 export default class BookmarkController extends BaseController {
   protected bookmarkThreadSchema;
