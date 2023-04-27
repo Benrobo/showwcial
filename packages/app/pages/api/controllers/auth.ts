@@ -8,6 +8,7 @@ import bcrypt from "bcryptjs";
 import memcache from "memory-cache";
 import { sendMail } from "../helper/sendMail";
 import JsonWebToken from "../helper/jwt";
+import { isEmpty } from "../../../util";
 
 interface AuthData {
   username?: string;
@@ -157,6 +158,67 @@ export default class Authentication extends BaseController {
 
     this.success(res, "--auth/verify-email", `Verify your email.`, 200);
     return;
+  }
+
+  public async resendTempPwd(req: NextApiRequest, res: NextApiResponse) {
+    const email = req.body.email;
+    if (isEmpty(email)) {
+      this.error(
+        res,
+        "--resendTempPwd/user-notfound",
+        "User email is empty.",
+        404
+      );
+      return;
+    }
+
+    // chekc if email exists in cache.
+    const userCachedData = JSON.parse(memcache.get(email));
+    if (userCachedData === null) {
+      this.error(
+        res,
+        "--resendTempPwd/password-expired",
+        "Temporary password expired, requests for new one.",
+        400
+      );
+      return;
+    }
+
+    const { defaultPwd, defaultPwdHash, username, _userId } = userCachedData;
+
+    const mailBody = `
+    <h2>Account Verification</h2>
+    A user with this username <b>${username}</b> and email <b>${email}</b> try to login into Showwcial, if this was you use the temporary password below in verifying your account.
+    </br>
+    <p>Password: <b>${defaultPwd}</b></p>
+    </br>
+    Password expires in 30min time, use it before the expiration time.
+    </br>
+    </br>
+    <h3>Please reset your default password after first time use.</h3>
+    `;
+    await sendMail(email, "Verify Account", mailBody);
+
+    // restore the default password in cache.
+    const cacheTime = 30 * 60 * 1000;
+    memcache.put(
+      email,
+      JSON.stringify({
+        defaultPwd,
+        defaultPwdHash,
+        _userId,
+        username,
+        email,
+      }),
+      cacheTime
+    );
+
+    this.success(
+      res,
+      "--resendTempPwd/success",
+      `temporary password sent..`,
+      200
+    );
   }
 
   public async fetchShowwcaseUserDetails(username: string) {
