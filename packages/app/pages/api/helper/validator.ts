@@ -20,3 +20,11 @@ export const PostThreadSchema = Joi.object({
 export const BookmarkThreadSchema = Joi.object({
   threadId: Joi.number().required(),
 });
+
+export const NotifierVariantSchema = Joi.object({
+  tags: Joi.array().items(Joi.string().required()).max(5),
+  communities: Joi.array().items(Joi.string().required()).max(5),
+  name: Joi.string().required(),
+  icon: Joi.string().required(),
+  type: Joi.string().required(),
+});
