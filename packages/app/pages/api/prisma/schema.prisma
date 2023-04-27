@@ -83,14 +83,15 @@ model BookMarks {
 }
 
 model BotNotifier {
-    id              String  @id
+    id              String   @id
     userId          String
     name            String
     type            String // thread, shows, jobs
     tags            String
     communities     Json
-    token           String? @db.Text
-    isAuthenticated Boolean @default(false) // filled when user get authenticated using the bot on discord.
+    token           String?  @db.Text
+    isAuthenticated Boolean  @default(false) // filled when user get authenticated using the bot on discord.
+    disabled        Boolean? @default(false) // filled when user disable the notifier.
 
     discordChannelId   String? // filled when user get authenticated using the bot on discord.
     discordChannelName String? // filled when user get authenticated using the bot on discord.

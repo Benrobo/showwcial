@@ -91,3 +91,13 @@ export function formatStringToMarkdown(content) {
 export const copyToClipboard = (content: string) => {
   navigator && navigator.clipboard.writeText(content);
 };
+
+export function genRandNum(len: number = 10) {
+  const char = "01234567890abcdegh".split("");
+  let generated = "";
+  for (let i = 0; i < len; i++) {
+    const rand = Math.floor(Math.random() * char.length);
+    generated += char[rand];
+  }
+  return generated;
+}
