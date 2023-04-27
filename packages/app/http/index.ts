@@ -34,9 +34,9 @@ export const verifyUserEmail = async (code: string) => {
   }
 };
 
-export const resendVerificationCode = async (email: string) => {
+export const resendTempPwd = async (email: string) => {
   try {
-    const res = await $http.get(`/auth/resend/verification/${email}`);
+    const res = await $http.post(`/auth/resendTempPwd`, email);
     return res?.data ?? (res as any)?.response?.data;
   } catch (e: any) {
     return e.response?.data ?? { message: e.message, code: e?.code };
@@ -93,7 +93,7 @@ export const createVariant = async (data: any) => {
   }
 };
 
-export const allVariants = async () => {
+export const fetchAllVariants = async () => {
   try {
     const res = await $http.get(`/notifier/allVariants`);
     return res?.data ?? (res as any)?.response?.data;
