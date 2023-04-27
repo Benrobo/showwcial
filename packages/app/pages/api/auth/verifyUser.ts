@@ -2,10 +2,6 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { CatchErrors } from "../middlewares/catchError";
 import Authentication from "../controllers/auth";
 
-type Data = {
-  name: string;
-};
-
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const authentication = new Authentication();
 
