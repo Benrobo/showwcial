@@ -86,7 +86,7 @@ textarea::placeholder {
 }
 
 .hideScrollBar::-webkit-scrollbar {
-  width: 3px;
+  width: 5px;
 }
 .hideScrollBar::-webkit-scrollbar-thumb {
   border-radius: 30px;
