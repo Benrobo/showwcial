@@ -82,6 +82,33 @@ export function HandleAuthenticationResponse(
     successfulAuthentication();
     return;
   }
+
+  // resending temporary password
+  if (response?.code === "--resendTempPwd/password-expired") {
+    toast.error(`${response?.message}`, {
+      duration: 3000,
+    });
+    resetState();
+    // location && location.reload();
+    return;
+  }
+  if (response?.code === "--resendTempPwd/user-notFound") {
+    toast.error(`${response?.message}`, {
+      duration: 3000,
+    });
+    resetState();
+    // location && location.reload();
+    return;
+  }
+  if (response?.code === "--resendTempPwd/success") {
+    toast.success(`Temporary password sent..`, {
+      duration: 3000,
+    });
+    resetState();
+    return;
+  }
+  // end of resend temp password.
+
   if (response?.code === "--auth/loggedIn") {
     resetState();
     const { email, id, image, token, username, fullname } = response?.data;
@@ -170,7 +197,7 @@ export function HandleNotifierResponse(
   response: any,
   resetState: () => void,
   returnData: (data) => any,
-  successfull?: () => void
+  successfull?: () => void | any
 ) {
   if (response?.code === "--createVariant/invalid-fields") {
     toast.error(response?.message);
@@ -188,6 +215,12 @@ export function HandleNotifierResponse(
     toast.success("Variant created successfully.");
     resetState();
     successfull();
+    return;
+  }
+
+  if (response?.code === "--allVariants/success") {
+    resetState();
+    returnData(response?.data);
     return;
   }
 
