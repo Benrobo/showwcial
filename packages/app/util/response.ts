@@ -165,3 +165,33 @@ export function HandleBookmarkResponse(
   checkServerError(response, resetState);
   checkInvalidToken(response, resetState);
 }
+
+export function HandleNotifierResponse(
+  response: any,
+  resetState: () => void,
+  returnData: (data) => any,
+  successfull?: () => void
+) {
+  if (response?.code === "--createVariant/invalid-fields") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--createVariant/invalid-type") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--createVariant/success") {
+    toast.success("Variant created successfully.");
+    resetState();
+    successfull();
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
