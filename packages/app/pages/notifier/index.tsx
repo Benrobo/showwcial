@@ -2,21 +2,48 @@ import { BsDiscord } from "react-icons/bs";
 import MainDashboardLayout from "../../components/Layout/mainDashboard";
 import withAuth from "../../util/withAuth";
 import Gap from "../../components/Gap";
-import { genRandNum } from "../../util";
+import { copyToClipboard, genRandNum } from "../../util";
 import { BiCopy } from "react-icons/bi";
 import { Switch } from "@chakra-ui/react";
 import Modal from "../../components/Modal";
 import { ChangeEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useMutation } from "react-query";
-import { createVariant } from "../../http";
+import { useMutation, useQuery } from "react-query";
+import { createVariant, fetchAllVariants } from "../../http";
 import { HandleNotifierResponse } from "../../util/response";
 import { Router } from "next/router";
 import { Spinner } from "../../components/Loader";
 
 function Notifier() {
   const [showCreateVariant, setShowCreateVariant] = useState(false);
+  const [selectedVariant, setSelectedVariant] = useState("");
+  const [allVariants, setAllVariants] = useState([]);
+  const [rerenderVariants, setRerenderVariants] = useState(false);
+  const variantQuery = useQuery({
+    queryFn: async () => await fetchAllVariants(),
+    queryKey: ["allVariants"],
+  });
+
+  useEffect(() => {
+    if (rerenderVariants) {
+      //   variantQuery.refetch();
+      setTimeout(() => setRerenderVariants(false), 2000);
+    }
+  }, [rerenderVariants]);
+
+  useEffect(() => {
+    const { data, error } = variantQuery;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandleNotifierResponse(
+        response,
+        () => {},
+        (data) => setAllVariants(data),
+        null
+      );
+    }
+  }, [variantQuery.data]);
 
   return (
     <MainDashboardLayout activeTab="notifier">
@@ -46,7 +73,21 @@ function Notifier() {
           <br />
           <Gap />
           <div className="w-full flex flex-col items-start justify-start gap-3">
-            <NotifierVariant />
+            {variantQuery.isLoading ? (
+              <div className="w-full h-full flex flex-col items-center justify-center">
+                <Spinner color="#fff" />
+              </div>
+            ) : !variantQuery.isLoading && allVariants.length > 0 ? (
+              allVariants.map((data, i) => (
+                <NotifierVariant
+                  id={data?.id}
+                  name={data?.name}
+                  token={data?.token}
+                  icon={data?.icon}
+                  tags={data?.tags}
+                />
+              ))
+            ) : null}
           </div>
         </div>
 
@@ -212,7 +253,7 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
         () => {},
         () => {
           closeModal();
-          location.reload();
+          location && location.reload();
         }
       );
     }
@@ -349,21 +390,44 @@ function CreateVariant({ closeModal }: CreateVariantProp) {
   );
 }
 
-function NotifierVariant() {
+interface NotifierVariantPropS {
+  tags: string[];
+  name: string;
+  token: string;
+  id: string;
+  icon: string;
+}
+
+function NotifierVariant({
+  tags,
+  name,
+  token,
+  id,
+  icon,
+}: NotifierVariantPropS) {
+  const copyToken = () => {
+    copyToClipboard(token);
+    toast.success("Token copied successfully.");
+  };
   return (
-    <button className="w-full h-auto flex items-start justify-start bg-dark-300 py-4 px-3 rounded-lg">
+    <button
+      data-id={id}
+      key={id}
+      className="w-full h-auto flex items-start justify-start bg-dark-300 py-4 px-3 rounded-lg"
+    >
       <div className="w-[70px] h-full flex items-center justify-center p-4 rounded-lg border-solid border-[.5px] border-white-600 ">
-        <span className="text-2xl">🔥</span>
+        <span className="text-2xl">{icon}</span>
       </div>
       <div className="w-full flex flex-col items-start justify-start ml-2 gap-2">
-        <p className="text-white-100 font-pp-sb text-[14px]">Tests 1</p>
+        <p className="text-white-100 font-pp-sb text-[14px]">{name}</p>
         <div className="w-full flex flex-wrap items-start justify-start gap-2">
-          <NotifierTags
-            tags={["javascript", "reactjs", "backend", "AI", "LLM"]}
-          />
+          <NotifierTags tags={tags} />
         </div>
       </div>
-      <button className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg">
+      <button
+        className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+        onClick={copyToken}
+      >
         <BiCopy color="#ccc" />
       </button>
     </button>
