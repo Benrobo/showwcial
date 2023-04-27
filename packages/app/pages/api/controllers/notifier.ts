@@ -40,6 +40,7 @@ export default class NotifierController extends BaseController {
         userId: uId,
         name,
         type,
+        icon,
         tags: JSON.stringify(tags),
         communities: JSON.stringify(communities),
         token,
@@ -71,7 +72,7 @@ export default class NotifierController extends BaseController {
 
     this.success(
       res,
-      "--createVariant/success",
+      "--allVariants/success",
       "success",
       200,
       formatedData as any
