@@ -93,6 +93,8 @@ model BotNotifier {
     isAuthenticated Boolean  @default(false) // filled when user get authenticated using the bot on discord.
     disabled        Boolean? @default(false) // filled when user disable the notifier.
 
+    icon String
+
     discordChannelId   String? // filled when user get authenticated using the bot on discord.
     discordChannelName String? // filled when user get authenticated using the bot on discord.
 
