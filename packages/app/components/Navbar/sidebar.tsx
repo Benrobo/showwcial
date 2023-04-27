@@ -9,7 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { BsFillTagsFill } from "react-icons/bs";
+import { BsFillTagsFill, BsRobot } from "react-icons/bs";
 import { FaCog } from "react-icons/fa";
 import { MdSpaceDashboard, MdStyle, MdWebStories } from "react-icons/md";
 import { RxCaretDown } from "react-icons/rx";
@@ -33,7 +33,7 @@ const returnActiveStyle = (active: string, name: string) => {
     case "thread-thread":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
-    case "tags-tags":
+    case "notifier-notifier":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
     case "domain-domain":
@@ -87,14 +87,14 @@ function SideBar({ active }: SidebarProps) {
             <MdWebStories className="ml-2 text-2xl " /> Threads
           </li>
         </Link>
-        <Link href="#" className="w-full">
+        <Link href="/notifier" className="w-full">
           <li
             className={`${returnActiveStyle(
               active,
-              "tags"
+              "notifier"
             )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
           >
-            <BsFillTagsFill className="ml-2 text-2xl " /> Tags
+            <BsRobot className="ml-2 text-2xl " /> Notifier
           </li>
         </Link>
 

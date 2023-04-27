@@ -13,6 +13,7 @@
     "app": "yarn workspace app run dev",
     "dev": "yarn workspace app run dev",
     "build": "yarn workspaces run build",
+    "dbPush": "yarn workspace app run dbPush",
     "watch": "yarn workspaces run watch"
   },
   "keywords": [],

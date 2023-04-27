@@ -21,8 +21,9 @@ model Users {
 
     accounts         Accounts?
     threadBookmarks  BookMarks[]
-    messagesSent     Message[]   @relation("sentMessages")
-    messagesReceived Message[]   @relation("receivedMessages")
+    botNotifier      BotNotifier[]
+    messagesSent     Message[]     @relation("sentMessages")
+    messagesReceived Message[]     @relation("receivedMessages")
 
     @@unique([id])
 }
@@ -79,4 +80,38 @@ model BookMarks {
     user            Users  @relation(fields: [userId], references: [id])
 
     @@index([userId])
+}
+
+model BotNotifier {
+    id              String  @id
+    userId          String
+    name            String
+    type            String // thread, shows, jobs
+    tags            String
+    communities     Json
+    token           String? @db.Text
+    isAuthenticated Boolean @default(false) // filled when user get authenticated using the bot on discord.
+
+    discordChannelId   String? // filled when user get authenticated using the bot on discord.
+    discordChannelName String? // filled when user get authenticated using the bot on discord.
+
+    createdAt DateTime @default(now())
+
+    user      Users          @relation(fields: [userId], references: [id])
+    prevPosts BotPrevPosts[]
+
+    @@index([userId])
+}
+
+model BotPrevPosts {
+    notifierId String @id
+    action     String
+    type       String // thread, shows, jobs
+    postId     String
+
+    createdAt DateTime @default(now())
+
+    notifier BotNotifier @relation(fields: [notifierId], references: [id])
+
+    @@index([notifierId])
 }
