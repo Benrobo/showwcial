@@ -16,8 +16,8 @@ client.on("ready", async () => {
 client.on("interactionCreate", (interaction) => {
   if (!interaction.isCommand()) return;
 
-  const { commandName, options } = interaction;
-  // console.log(interaction);
+  const { commandName, options, channelId } = interaction;
+  console.log(interaction);
   if (commandName === "authenticate") {
     const tokenInput = interaction.options.get("token");
     const value = tokenInput.value as string;

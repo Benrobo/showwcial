@@ -37,3 +37,7 @@ model BotPrevPosts {
     @@index([notifierId])
 }
 ```
+
+## How to use th discord bot.
+
+user would be able to requests latests or random `threads, shows, jobs.` using `/latest` or `/shows`. we then make requests to backend api, retrieve the user token from cache and use the token to fetch notifier details

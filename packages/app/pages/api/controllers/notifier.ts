@@ -4,6 +4,7 @@ import BaseController from "./base";
 import { v4 as uuidv4 } from "uuid";
 import prisma from "../config/prisma";
 import { isEmpty } from "../../../util";
+import memcache from "memory-cache";
 
 export default class NotifierController extends BaseController {
   protected notifierVariantSchema: any;
@@ -60,7 +61,6 @@ export default class NotifierController extends BaseController {
         isAuthenticated: false,
         disabled: false,
         discordChannelId: "",
-        discordChannelName: "",
       },
     });
 
@@ -125,5 +125,74 @@ export default class NotifierController extends BaseController {
     await prisma.botNotifier.delete({ where: { id: variantId } });
 
     this.success(res, "--deleteVariant/success", "success", 200);
+  }
+
+  public async authenticateBot(req: NextApiRequest, res: NextApiResponse) {
+    const { token, channelId } = req.body;
+
+    if (isEmpty(token) || isEmpty(channelId)) {
+      return this.error(
+        res,
+        "--botAuth/invalid-fields",
+        "Token or channel ID is missing.",
+        400
+      );
+    }
+
+    const tokenExists = await prisma.botNotifier.findFirst({
+      where: { token },
+      include: { user: true },
+    });
+
+    if (tokenExists === null) {
+      return this.error(
+        res,
+        "--botAuth/invalid-token",
+        "token doesn't exists.",
+        400
+      );
+    }
+
+    // ! remember to make a separate query which uses both channelId and token
+    // ! and check if bot is authenticated for a specific channel. [to support multiple channels.]
+    // check if bot is already authenticated.
+    if (tokenExists?.isAuthenticated) {
+      return this.error(
+        res,
+        "--botAuth/already-authenticated",
+        "bot already authenticated.",
+        400
+      );
+    }
+
+    const userId = tokenExists?.userId;
+    const userInfo = await prisma.users.findFirst({
+      where: { id: userId },
+      include: { accounts: true },
+    });
+
+    // update bot notifier
+    await prisma.botNotifier.update({
+      where: { id: tokenExists?.id },
+      data: { isAuthenticated: true, discordChannelId: channelId },
+    });
+
+    const refToken = userInfo?.accounts?.refresh_token;
+
+    const botCacheData = {
+      refToken,
+      channelId,
+      notifierToken: token,
+    };
+
+    memcache.put(channelId, JSON.stringify(botCacheData));
+
+    this.success(
+      res,
+      "--botAuth/success",
+      "bot successfully authenticated.",
+      200,
+      botCacheData
+    );
   }
 }

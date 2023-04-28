@@ -33,7 +33,7 @@ const checkInvalidToken = (
 ): void => {
   if (response?.code === "--auth/invalid-token") {
     toast.error("Session Expired. Please log in again.");
-    location.reload();
+    location.href = "/auth/login";
     resetState();
     cancelRefreshing && cancelRefreshing();
   }

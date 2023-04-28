@@ -90,13 +90,12 @@ model BotNotifier {
     tags            String
     communities     Json
     token           String?  @db.Text
-    isAuthenticated Boolean  @default(false) // filled when user get authenticated using the bot on discord.
-    disabled        Boolean? @default(false) // filled when user disable the notifier.
+    isAuthenticated Boolean  @default(false)
+    disabled        Boolean? @default(false)
 
     icon String
 
-    discordChannelId   String? // filled when user get authenticated using the bot on discord.
-    discordChannelName String? // filled when user get authenticated using the bot on discord.
+    discordChannelId Json? // list of channels id.
 
     createdAt DateTime @default(now())
 
