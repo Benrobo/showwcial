@@ -155,8 +155,11 @@ export default class NotifierController extends BaseController {
 
     // ! remember to make a separate query which uses both channelId and token
     // ! and check if bot is authenticated for a specific channel. [to support multiple channels.]
-    // check if bot is already authenticated.
+
     if (tokenExists?.isAuthenticated) {
+      // const cacheData = memcache.exportJson();
+      // console.log(JSON.parse(cacheData));
+
       return this.error(
         res,
         "--botAuth/already-authenticated",
@@ -185,7 +188,8 @@ export default class NotifierController extends BaseController {
       notifierToken: token,
     };
 
-    memcache.put(channelId, JSON.stringify(botCacheData));
+    // -1 wont allow the cache to expire.
+    memcache.put(channelId, JSON.stringify(botCacheData), 999999999);
 
     this.success(
       res,
