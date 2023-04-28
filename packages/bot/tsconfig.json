@@ -22,8 +22,8 @@
     "importHelpers": true,
     "baseUrl": "./"
   },
-  "include": [".env", "./app.ts"],
-  "exclude": ["node_modules"],
+  "include": [".env", "./*.ts", "./**/*.ts"],
+  "exclude": ["node_modules", "./dist"],
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   }

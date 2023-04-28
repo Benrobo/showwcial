@@ -1,5 +1,5 @@
 // import { REST, Routes } from "discord.js"
-import Env from "./env";
+import Env from "./config/env";
 import { Client, IntentsBitField as Intents, Embed } from "discord.js";
 import registerCommand from "./commands/register";
 
@@ -19,7 +19,9 @@ client.on("interactionCreate", (interaction) => {
   const { commandName, options } = interaction;
   // console.log(interaction);
   if (commandName === "authenticate") {
-    interaction.reply(`Hello, bro!`);
+    const tokenInput = interaction.options.get("token");
+    const value = tokenInput.value as string;
+    interaction.reply(value);
   } else if (commandName === "embed") {
   }
 });

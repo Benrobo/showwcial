@@ -1,5 +1,5 @@
 import { REST, Routes, ApplicationCommandOptionType } from "discord.js";
-import Env from "../env";
+import Env from "../config/env";
 
 const commands = [
   {
