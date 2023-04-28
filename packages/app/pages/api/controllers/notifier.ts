@@ -188,7 +188,7 @@ export default class NotifierController extends BaseController {
       notifierToken: token,
     };
 
-    // -1 wont allow the cache to expire.
+    // 99999999 set expiry time to future.
     memcache.put(channelId, JSON.stringify(botCacheData), 999999999);
 
     this.success(
