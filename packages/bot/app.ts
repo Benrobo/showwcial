@@ -39,9 +39,13 @@ client.on("interactionCreate", async (interaction) => {
       .setColor(embeddColor);
 
     // handle response.
-    if (response?.success === false) interaction.reply({ embeds: [embeddMsg] });
-    if (response?.success === true) interaction.reply({ embeds: [embeddMsg] });
-  } else if (commandName === "embed") {
+    // * ephemeral: true would only make the message visible to sender.
+    if (response?.success === false)
+      interaction.reply({ embeds: [embeddMsg], ephemeral: true });
+    if (response?.success === true)
+      interaction.reply({ embeds: [embeddMsg], ephemeral: true });
+  }
+  if (commandName === "threads") {
   }
 });
 

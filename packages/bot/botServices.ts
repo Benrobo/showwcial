@@ -69,4 +69,6 @@ export default class BotServices {
       return response;
     }
   }
+
+  public async handleThreads(channelId: string) {}
 }
