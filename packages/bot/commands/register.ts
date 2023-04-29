@@ -14,6 +14,21 @@ const commands = [
       },
     ],
   },
+  {
+    name: "threads",
+    description:
+      "Because who doesn't want to keep up with the latest thread drama?",
+  },
+  {
+    name: "shows",
+    description:
+      "Get your front-row seat to the latest Showwcase shows, guaranteed to make you say 'meh'.",
+  },
+  {
+    name: "jobs",
+    description:
+      "Get the latest job openings from Showwcase, we all know you're not happy with your current one.",
+  },
 ];
 
 const rest = new REST({ version: "9" }).setToken(Env.discordToken as string);

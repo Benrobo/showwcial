@@ -88,32 +88,32 @@ model BotNotifier {
     name            String
     type            String // thread, shows, jobs
     tags            String
-    communities     Json
+    communities     String
     token           String?  @db.Text
     isAuthenticated Boolean  @default(false)
     disabled        Boolean? @default(false)
 
     icon String
 
-    discordChannelId Json? // list of channels id.
+    discordChannelId String?
 
     createdAt DateTime @default(now())
 
-    user      Users          @relation(fields: [userId], references: [id])
-    prevPosts BotPrevPosts[]
+    user Users @relation(fields: [userId], references: [id])
+    // prevPosts BotPrevPosts[]
 
     @@index([userId])
 }
 
 model BotPrevPosts {
-    notifierId String @id
-    action     String
-    type       String // thread, shows, jobs
-    postId     String
+    id     String @unique
+    type   String // thread, shows, jobs
+    postId String
 
+    // action String
     createdAt DateTime @default(now())
 
-    notifier BotNotifier @relation(fields: [notifierId], references: [id])
+    // notifier BotNotifier @relation(fields: [id], references: [id])
 
-    @@index([notifierId])
+    // @@index([id])
 }

@@ -58,10 +58,7 @@ function Notifier() {
         response,
         () => {},
         () => {},
-        () => {
-          variantQuery.refetch();
-          setSelectedVariantId("");
-        }
+        () => variantQuery.refetch()
       );
     }
   }, [deleteVariantMutation.data]);
@@ -71,6 +68,7 @@ function Notifier() {
       const comfirm = window.confirm("Are you sure about this action?");
       if (!comfirm) return;
       deleteVariantMutation.mutateAsync(selectedVariantId);
+      setSelectedVariantId("");
     }
   };
 

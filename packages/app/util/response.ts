@@ -23,6 +23,12 @@ const checkServerError = (
     resetState();
     cancelRefreshing && cancelRefreshing();
   }
+  if (response?.code === "--auth/account-notfound") {
+    toast.error("Something Went Wrong" + ".." + "Try again later.");
+    resetState();
+    location.href = "/auth/login";
+    localStorage.removeItem("authToken");
+  }
 };
 
 // check for invalid token

@@ -5,12 +5,32 @@ import { v4 as uuidv4 } from "uuid";
 import prisma from "../config/prisma";
 import { isEmpty } from "../../../util";
 import memcache from "memory-cache";
+import axios from "axios";
 
 export default class NotifierController extends BaseController {
   protected notifierVariantSchema: any;
   constructor() {
     super();
     this.notifierVariantSchema = NotifierVariantSchema;
+  }
+
+  public async getShowwcaseThreads() {
+    let response = { data: null, success: false };
+    try {
+      const res = await axios.get(
+        `https://cache.showwcase.com/feeds/discover?limit=100`
+      );
+      response["data"] = res?.data ?? (res as any)?.response?.data;
+      response["success"] = true;
+      return response;
+    } catch (e: any) {
+      response["data"] = e.response?.data ?? {
+        message: e.message,
+        code: e?.code,
+      };
+      response["success"] = false;
+      return response;
+    }
   }
 
   public async createVariant(req: NextApiRequest, res: NextApiResponse) {
@@ -174,7 +194,13 @@ export default class NotifierController extends BaseController {
       include: { accounts: true },
     });
 
-    // update bot notifier
+    // ! still delebrating on this
+    // const prevChannels = tokenExists.discordChannelId as string[];
+
+    // if (!prevChannels.includes(channelId)) {
+    //   prevChannels.push(channelId);
+    // }
+
     await prisma.botNotifier.update({
       where: { id: tokenExists?.id },
       data: { isAuthenticated: true, discordChannelId: channelId },
@@ -198,5 +224,105 @@ export default class NotifierController extends BaseController {
       200,
       botCacheData
     );
+  }
+
+  public async fetchThreads(req: NextApiRequest, res: NextApiResponse) {
+    const { channelId } = req.body;
+    if (isEmpty(channelId)) {
+      return this.error(
+        res,
+        "--botThreads/invalid-fields",
+        "Channel ID is missing.",
+        400
+      );
+    }
+
+    // check if channelId exists in cache.
+    const notifierData = await prisma.botNotifier.findFirst({
+      where: { discordChannelId: channelId },
+    });
+
+    if (notifierData === null) {
+      return this.error(
+        res,
+        "--botThreads/channel-notfound",
+        "Failed to fetch.. channel ID isn't found in our record.",
+        400
+      );
+    }
+
+    // const tags = JSON.parse(notifierData?.tags);
+    const communities = JSON.parse(notifierData?.communities);
+    const PostsWithoutCommunities = [];
+    const PostsWithCommunities = [];
+
+    const allThreads = await this.getShowwcaseThreads();
+
+    if (!allThreads?.success) {
+      return this.error(
+        res,
+        "--botThreads/error-fetching",
+        "Error occured while fetching threads.",
+        400
+      );
+    }
+
+    for (let i = 0; i < allThreads?.data.length; i++) {
+      const d = allThreads?.data[i];
+      if (communities.includes(d?.community?.slug)) {
+        PostsWithoutCommunities.push(d);
+      }
+      if (typeof d?.community !== "undefined") {
+        PostsWithCommunities.push(d);
+      }
+    }
+
+    const combinedPosts = PostsWithoutCommunities.concat(PostsWithCommunities);
+    const selectedPosts =
+      combinedPosts[Math.floor(Math.random() * combinedPosts.length)];
+
+    if (Object.entries(selectedPosts).length === 0) {
+      return this.error(
+        res,
+        "--botThreads/insufficient-thread",
+        "Insufficient Threads.",
+        400
+      );
+    }
+
+    // check if selected posts hasn't been posted before.
+    const prevPost = await prisma.botPrevPosts.findMany({
+      where: { postId: `${selectedPosts?.id}`, type: "thread" },
+    });
+
+    console.log({ prev: prevPost.length });
+
+    if (prevPost.length === 0) {
+      console.log("HERE 3");
+      // now store selected post which would be used for discord message.
+      await prisma.botPrevPosts.create({
+        data: {
+          id: uuidv4(),
+          type: "thread",
+          postId: selectedPosts?.id.toString(),
+        },
+      });
+
+      // send selected posts to discord.
+      this.success(
+        res,
+        "--botThread/success",
+        "posts fetched successfully",
+        200,
+        selectedPosts
+      );
+      return;
+    }
+    console.log("HERE 4");
+    // if previous post is found in db, get all posts id from prevPosts table and fiter ones that isn't present in combinePosts
+    const allPrevPosts = await prisma.botPrevPosts.findMany();
+    const allPrevPostsId = allPrevPosts.filter((p) => p.postId.length > 0);
+
+    res.json({ combinedPosts, selectedPosts, prevPost, allPrevPostsId });
   }
 }
