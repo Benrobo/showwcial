@@ -59,7 +59,6 @@ function TopBar() {
                   userInfo?.image ??
                   "https://api.dicebear.com/5.x/micah/svg?seed=Baby"
                 }
-                alt="some"
                 className="bg-dark-200 border-solid border-[1px] border-blue-300 rounded-[100%] w-[30px] mr-2 "
               />
               {/* <img
