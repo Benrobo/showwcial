@@ -4,7 +4,7 @@ const ShowwcialBackend = `http://localhost:3000/api`;
 
 const $axios = axios.create({
   baseURL: ShowwcialBackend,
-  timeout: 5000,
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
