@@ -295,10 +295,7 @@ export default class NotifierController extends BaseController {
       where: { postId: `${selectedPosts?.id}`, type: "thread" },
     });
 
-    console.log({ prev: prevPost.length });
-
     if (prevPost.length === 0) {
-      console.log("HERE 3");
       // now store selected post which would be used for discord message.
       await prisma.botPrevPosts.create({
         data: {
@@ -311,18 +308,33 @@ export default class NotifierController extends BaseController {
       // send selected posts to discord.
       this.success(
         res,
-        "--botThread/success",
+        "--botThreads/success",
         "posts fetched successfully",
         200,
         selectedPosts
       );
       return;
     }
-    console.log("HERE 4");
     // if previous post is found in db, get all posts id from prevPosts table and fiter ones that isn't present in combinePosts
     const allPrevPosts = await prisma.botPrevPosts.findMany();
     const allPrevPostsId = allPrevPosts.filter((p) => p.postId.length > 0);
 
-    res.json({ combinedPosts, selectedPosts, prevPost, allPrevPostsId });
+    // now store selected post which would be used for discord message.
+    await prisma.botPrevPosts.create({
+      data: {
+        id: uuidv4(),
+        type: "thread",
+        postId: selectedPosts?.id.toString(),
+      },
+    });
+
+    // send selected posts to discord.
+    this.success(
+      res,
+      "--botThreads/success",
+      "posts fetched successfully",
+      200,
+      selectedPosts
+    );
   }
 }
