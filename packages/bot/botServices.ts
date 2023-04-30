@@ -3,6 +3,19 @@ import $axios from "./config/axios";
 export default class BotServices {
   public constructor() {}
 
+  private isEmpty(content: string) {
+    if (
+      typeof content === "undefined" ||
+      content === null ||
+      content.length === 0
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  private formatThreadContent(content: string) {}
+
   private isServerError(res: any) {
     return res?.code === "--api/server-error" ? true : false;
   }
@@ -70,5 +83,92 @@ export default class BotServices {
     }
   }
 
-  public async handleThreads(channelId: string) {}
+  public async handleThreads(channelId: string) {
+    let response = {
+      success: false,
+      title: null,
+      url: null,
+      image: null,
+      content: null,
+      msg: "",
+    };
+
+    if (
+      channelId === "" ||
+      channelId === null ||
+      typeof channelId === "undefined"
+    ) {
+      response["msg"] = "Channel not found. Please try again later.";
+      return response;
+    }
+
+    // make request to fetch posts.
+    const resp = await this.request("/notifier/getThreads", { channelId });
+
+    if (resp?.code === "--botThreads/error-fetching") {
+      response["msg"] = resp.message;
+      return response;
+    }
+    if (resp?.code === "--botThreads/channel-notfound") {
+      response["msg"] = `Channel isn't authenticated. Please do so.`;
+      return response;
+    }
+    if (resp?.code === "--botThreads/insufficient-thread") {
+      response["msg"] = `${resp.message}. Please join more communities.`;
+      return response;
+    }
+    if (resp?.code === "--botThreads/success") {
+      const { title, message, linkPreviewMeta, code, id, images } = resp?.data;
+
+      const threadUrl = `https://www.showwcase.com/thread/${id}`;
+      const embeddTitle =
+        typeof title !== "undefined" && title?.length > 0 ? `**${title}**` : "";
+      let embeddImage = null;
+      let formatedTitle = null;
+
+      if (linkPreviewMeta !== "null") {
+        if (linkPreviewMeta?.images?.length > 0) {
+          embeddImage = linkPreviewMeta?.images[0];
+        }
+        if (typeof linkPreviewMeta?.project?.coverImage !== "undefined") {
+          embeddImage = linkPreviewMeta?.project?.coverImage;
+        }
+      }
+      if (images.length > 0) {
+        embeddImage = images[0];
+      }
+
+      if (this.isEmpty(title) && !this.isEmpty(message)) {
+        formatedTitle =
+          message.length > 66
+            ? `**${message.slice(0, 67)}**...`
+            : `**${message.slice(0, 67)}**...`;
+      }
+
+      response["msg"] = null;
+      response["success"] = true;
+      response["url"] = threadUrl;
+      response["title"] = title;
+      response["content"] = `${
+        embeddTitle ?? formatedTitle
+      }\n${message}\n\n**Link:** ${threadUrl}`;
+      response["image"] = embeddImage;
+
+      return response;
+    }
+    if (this.isServerError(resp)) {
+      response["msg"] = "Server error. Please try again later";
+      return response;
+    }
+
+    if (this.isConnectionError(resp)) {
+      response["msg"] = "Connection error. Please try again later";
+      return response;
+    }
+
+    if (this.isNetworkError(resp)) {
+      response["msg"] = "Connection error. Please try again later";
+      return response;
+    }
+  }
 }
