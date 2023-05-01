@@ -80,6 +80,41 @@ client.on("interactionCreate", async (interaction) => {
       interaction.reply({ embeds: [embeddMsg], ephemeral: true });
     }
   }
+  if (commandName === "shows") {
+    try {
+      const response = await botServices.handleShows(channelId);
+      const embeddColor = response?.success ? 0x3f7eee : 0xff0000;
+      const embeddTitle = response?.success
+        ? `✅ **Latest Shows**`
+        : `❌ **Failed Fetching Shows**`;
+      const embeddImage = response?.success
+        ? response?.image ??
+          "https://images-ext-1.discordapp.net/external/qzgQmLYic48-UPuxj52aRYm9vXgpjvUoXqNXPUvwWxE/https/assets.showwcase.com/og-image/default.png?width=1382&height=972"
+        : "https://img.freepik.com/free-vector/400-error-bad-request-concept-illustration_114360-1933.jpg?w=1000";
+
+      let embeddMsg = embed
+        .setTitle(embeddTitle)
+        .setDescription(response?.content ?? response?.msg)
+        .setColor(embeddColor)
+        .setURL(response?.url)
+        .setImage(embeddImage);
+
+      // * ephemeral: true would only make the message visible to sender.
+      if (response?.success === false)
+        interaction.reply({ embeds: [embeddMsg], ephemeral: true });
+      if (response?.success === true)
+        interaction.reply({
+          embeds: [embeddMsg],
+          ephemeral: false,
+        });
+    } catch (e: any) {
+      // console.log(e);
+      const embeddMsg = embed
+        .setTitle(`❌ **Failed Fetching Thread**`)
+        .setDescription(`Something went wrong. Please try again later.`);
+      interaction.reply({ embeds: [embeddMsg], ephemeral: true });
+    }
+  }
 });
 
 client.login(Env.discordToken);
