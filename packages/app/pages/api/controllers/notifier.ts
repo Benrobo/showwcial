@@ -7,6 +7,8 @@ import { isEmpty } from "../../../util";
 import memcache from "memory-cache";
 import axios from "axios";
 
+//! Remember to fix duplicates threads been fetched.
+
 export default class NotifierController extends BaseController {
   protected notifierVariantSchema: any;
   constructor() {
@@ -235,11 +237,15 @@ export default class NotifierController extends BaseController {
       );
     }
 
-    // check if channelId exists in cache.
+    // check if channelId exists in db.
     const notifierData = await prisma.botNotifier.findMany();
-    const availableChannel = notifierData.filter(
-      (n) => n?.discordChannelId === channelId
-    );
+    const filteredChannels = notifierData.map((ch) => {
+      const channelIds = JSON.parse(ch.notifAuthChannels as string);
+      if (channelIds.includes(channelId)) return ch;
+      return null;
+    });
+    const availableChannel =
+      filteredChannels[0] === null ? [] : filteredChannels;
 
     if (availableChannel.length === 0) {
       return this.error(
