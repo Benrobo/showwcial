@@ -116,7 +116,7 @@ function Notifier() {
                     name={data?.name}
                     token={data?.token}
                     icon={data?.icon}
-                    tags={data?.tags}
+                    tags={data?.tags.slice(0, 5)}
                     selectedVariant={selectedVariantId}
                     onSelected={() => {
                       if (selectedVariantId === data?.id)
@@ -157,6 +157,12 @@ function Notifier() {
                   Communities:
                   <span className="text-white-200 font-pp-sb ml-5">
                     <NotifierTags tags={selectedVariant?.communities ?? []} />
+                  </span>
+                </p>
+                <p className="text-white-300 flex font-pp-rg text-[14px]">
+                  Tags:
+                  <span className="text-white-200 flex flex-wrap font-pp-sb ml-5">
+                    <NotifierTags tags={selectedVariant?.tags ?? []} />
                   </span>
                 </p>
                 <p className="text-white-300 font-pp-rg text-[14px]">
@@ -275,6 +281,38 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
     }
   };
 
+  const fetchShowTags = async () => {
+    try {
+      setAllTags([]);
+      setLoadingState(true);
+      const baseUrl = "https://cache.showwcase.com";
+      const shows = await axios
+        .get(`${baseUrl}/projects?limit=100`)
+        .then((r) => r.data);
+
+      setLoadingState(false);
+
+      let filteredShows = [];
+
+      shows.forEach((showData: any) => {
+        if (showData?.tags?.length > 0) {
+          showData?.tags
+            .map((tag: any) => tag?.tagDescription)
+            .forEach((tg: string) => {
+              if (!filteredShows.includes(tg)) {
+                filteredShows.push(tg.replace("#", ""));
+              }
+            });
+        }
+      });
+      setAllTags(filteredShows);
+    } catch (e: any) {
+      setLoadingState(false);
+      console.log(e);
+      toast.error(`Something went wrong.`);
+    }
+  };
+
   const handleInput = (e: any, type: string) => {
     if (type === "multiple") {
       const selectedOptions = [];
@@ -298,8 +336,15 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
   };
 
   useEffect(() => {
-    fetchTagAndCommunities();
-  }, []);
+    // fetch on initial render and when the type get updated.
+    if (variantData?.type === "" || variantData.type === "thread") {
+      // if allTags state already contains data, dont refetch data.
+      if (allTags.length === 0) fetchTagAndCommunities();
+    }
+    if (variantData.type === "shows") {
+      fetchShowTags();
+    }
+  }, [variantData?.type]);
 
   useEffect(() => {
     const { data, error } = createVariantMutation;
@@ -340,9 +385,7 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
             >
               <option value="">Select type</option>
               <option value="thread">Thread</option>
-              <option value="shows" disabled>
-                Shows
-              </option>
+              <option value="shows">Shows</option>
               <option value="jobs" disabled>
                 Jobs
               </option>
@@ -373,7 +416,7 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
             </div>
             <div className="w-full flex flex-col items-start justify-start mt-3">
               <p className="text-white-400 font-pp-rg text-[13px] mb-2">
-                Tags (max: 5)
+                Tags (max: 10)
               </p>
               <select
                 className="w-full max-h-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
@@ -381,7 +424,7 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
                 data-name="tags"
                 disabled={createVariantMutation.isLoading}
                 onChange={(e) => {
-                  limitSelection(e, 5);
+                  limitSelection(e, 10);
                   handleInput(e, "multiple");
                 }}
               >
@@ -400,34 +443,36 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
                 )}
               </select>
             </div>
-            <div className="w-full flex flex-col items-start justify-start mt-3">
-              <p className="text-white-400 font-pp-rg text-[13px] mb-2">
-                Communities (max: 5)
-              </p>
-              <select
-                className="w-full h-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
-                multiple
-                data-name="communities"
-                onChange={(e) => {
-                  limitSelection(e, 5);
-                  handleInput(e, "multiple");
-                }}
-              >
-                {loadingState ? (
-                  <option value="">..Fetching 😌</option>
-                ) : activeCommunities?.length > 0 ? (
-                  activeCommunities.map((data, i) => (
-                    <option value={data?.slug} key={i}>
-                      {data?.name}
+            {variantData?.type === "thread" && (
+              <div className="w-full flex flex-col items-start justify-start mt-3">
+                <p className="text-white-400 font-pp-rg text-[13px] mb-2">
+                  Communities (max: 10)
+                </p>
+                <select
+                  className="w-full h-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+                  multiple
+                  data-name="communities"
+                  onChange={(e) => {
+                    limitSelection(e, 10);
+                    handleInput(e, "multiple");
+                  }}
+                >
+                  {loadingState ? (
+                    <option value="">..Fetching 😌</option>
+                  ) : activeCommunities?.length > 0 ? (
+                    activeCommunities.map((data, i) => (
+                      <option value={data?.slug} key={i}>
+                        {data?.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      No data available
                     </option>
-                  ))
-                ) : (
-                  <option value="" disabled>
-                    No data available
-                  </option>
-                )}
-              </select>
-            </div>
+                  )}
+                </select>
+              </div>
+            )}
           </div>
           <div className="w-full flex items-center justify-center p-3">
             <button
