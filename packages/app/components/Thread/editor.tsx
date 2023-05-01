@@ -181,9 +181,10 @@ function ThreadInputBox({
   MAX_CHAR,
   clearInput,
 }: ThreadInputProps) {
-  const { userInfo } = useContext(DataContext);
+  const {} = useContext(DataContext);
   const [borderDivHeight, setBorderDivHeight] = useState(0);
   const inputRef = useRef(null);
+  const userInfo = JSON.parse(localStorage.getItem("userData"));
 
   if (clearInput) inputRef.current.value = "";
 
