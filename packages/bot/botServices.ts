@@ -41,6 +41,7 @@ export default class BotServices {
       token,
       channelId,
     });
+    console.log({ res });
     if (res?.code === "--botAuth/already-authenticated") {
       response["message"] = `🎉 You are already authenticated.`;
       response["success"] = true;
