@@ -78,9 +78,8 @@ export default class NotifierController extends BaseController {
         tags: JSON.stringify(tags),
         communities: JSON.stringify(communities),
         token,
-        isAuthenticated: false,
         disabled: false,
-        discordChannelId: "",
+        notifAuthChannels: JSON.stringify([]),
       },
     });
 
@@ -173,19 +172,22 @@ export default class NotifierController extends BaseController {
       );
     }
 
-    // ! remember to make a separate query which uses both channelId and token
-    // ! and check if bot is authenticated for a specific channel. [to support multiple channels.]
+    const authChannel =
+      JSON.parse(tokenExists?.notifAuthChannels as string) ?? [];
 
-    if (tokenExists?.isAuthenticated) {
-      // const cacheData = memcache.exportJson();
-      // console.log(JSON.parse(cacheData));
+    const prevChannel = authChannel as string[];
 
+    if (tokenExists?.isAuthenticated && prevChannel.includes(channelId)) {
       return this.error(
         res,
         "--botAuth/already-authenticated",
-        "bot already authenticated.",
+        "token already authenticated.",
         400
       );
+    }
+
+    if (!prevChannel.includes(channelId)) {
+      prevChannel.push(channelId);
     }
 
     const userId = tokenExists?.userId;
@@ -194,16 +196,12 @@ export default class NotifierController extends BaseController {
       include: { accounts: true },
     });
 
-    // ! still delebrating on this
-    // const prevChannels = tokenExists.discordChannelId as string[];
-
-    // if (!prevChannels.includes(channelId)) {
-    //   prevChannels.push(channelId);
-    // }
-
     await prisma.botNotifier.update({
-      where: { id: tokenExists?.id },
-      data: { isAuthenticated: true, discordChannelId: channelId },
+      where: { id: tokenExists.id },
+      data: {
+        isAuthenticated: true,
+        notifAuthChannels: JSON.stringify(prevChannel),
+      },
     });
 
     const refToken = userInfo?.accounts?.refresh_token;
@@ -238,11 +236,12 @@ export default class NotifierController extends BaseController {
     }
 
     // check if channelId exists in cache.
-    const notifierData = await prisma.botNotifier.findFirst({
-      where: { discordChannelId: channelId },
-    });
+    const notifierData = await prisma.botNotifier.findMany();
+    const availableChannel = notifierData.filter(
+      (n) => n?.discordChannelId === channelId
+    );
 
-    if (notifierData === null) {
+    if (availableChannel.length === 0) {
       return this.error(
         res,
         "--botThreads/channel-notfound",
@@ -252,7 +251,7 @@ export default class NotifierController extends BaseController {
     }
 
     // const tags = JSON.parse(notifierData?.tags);
-    const communities = JSON.parse(notifierData?.communities);
+    const communities = JSON.parse(availableChannel[0]?.communities);
     const PostsWithoutCommunities = [];
     const PostsWithCommunities = [];
 
@@ -317,7 +316,6 @@ export default class NotifierController extends BaseController {
     }
     // if previous post is found in db, get all posts id from prevPosts table and fiter ones that isn't present in combinePosts
     const allPrevPosts = await prisma.botPrevPosts.findMany();
-    const allPrevPostsId = allPrevPosts.filter((p) => p.postId.length > 0);
 
     // now store selected post which would be used for discord message.
     await prisma.botPrevPosts.create({
@@ -337,4 +335,6 @@ export default class NotifierController extends BaseController {
       selectedPosts
     );
   }
+
+  public async fetchShows(req: NextApiRequest, res: NextApiResponse) {}
 }
