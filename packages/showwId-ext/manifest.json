@@ -1,0 +1,26 @@
+{
+  "name": "ShowwId",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "An extension which checks if a user has an account on Showwcase.",
+  "icons": {
+    "16": "./icon/logo2.png",
+    "32": "./icon/logo2.png",
+    "48": "./icon/logo2.png",
+    "128": "./icon/logo2.png"
+  },
+  "permissions": ["activeTab", "tabs", "https://twitter.com/*/"],
+  "content_scripts": [
+    {
+      "js": ["contentScript.js"],
+      "css": ["main.css"],
+      "matches": ["https://twitter.com/*"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icon/showwcase.png"],
+      "matches": ["https://twitter.com/*"]
+    }
+  ]
+}
