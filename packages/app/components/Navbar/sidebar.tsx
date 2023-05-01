@@ -15,6 +15,7 @@ import { MdSpaceDashboard, MdStyle, MdWebStories } from "react-icons/md";
 import { RxCaretDown } from "react-icons/rx";
 import { TbWorld } from "react-icons/tb";
 import ImageTag from "../Image";
+import { CgWebsite } from "react-icons/cg";
 
 interface SidebarProps {
   active?: string;
@@ -34,6 +35,9 @@ const returnActiveStyle = (active: string, name: string) => {
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
     case "notifier-notifier":
+      style = `text-white-100 bg-white-600 pp-EB`;
+      break;
+    case "pageBuilder-pageBuilder":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
     case "domain-domain":
@@ -95,6 +99,16 @@ function SideBar({ active }: SidebarProps) {
             )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
           >
             <BsRobot className="ml-2 text-2xl " /> Notifier
+          </li>
+        </Link>
+        <Link href="/pageBuilder" className="w-full">
+          <li
+            className={`${returnActiveStyle(
+              active,
+              "pageBuilder"
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+          >
+            <CgWebsite className="ml-2 text-2xl " /> Page Builder
           </li>
         </Link>
 
