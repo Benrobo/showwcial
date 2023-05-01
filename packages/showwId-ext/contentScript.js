@@ -28,6 +28,7 @@ async function checkUserExistsOnShowwcase() {
     .then((res) => res.json())
     .then((data) => {
       const userExists = data?.available === false ? true : false;
+      if (!userExists) return;
       const alternateParentDiv = document.querySelector(
         "#react-root > div > div > div.css-1dbjc4n.r-18u37iz.r-13qz1uu.r-417010 > main > div > div > div > div > div > div:nth-child(3) > div > div > div > div > div.css-1dbjc4n.r-6gpygo.r-14gqq1x > div.css-1dbjc4n.r-1wbh5a2.r-dnmrzs.r-1ny4l3l > div > div.css-1dbjc4n.r-1awozwy.r-18u37iz.r-1wbh5a2"
       );
