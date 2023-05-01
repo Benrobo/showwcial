@@ -46,7 +46,7 @@ export function SiteInfo() {
           borderColor={"rgba(255,255,255,0.08)"}
           fontSize="14px"
           pointerEvents={"none"}
-          className="select-none "
+          className="select-none font-pp-rg"
         />
         <Input
           placeholder="slug"
@@ -56,6 +56,7 @@ export function SiteInfo() {
           _focus={{ border: "none", borderColor: "transparent" }}
           _hover={{ borderColor: "rgba(255,255,255,0.08)", bg: "none" }}
           fontSize="14px"
+          className="font-pp-rg"
         />
         <InputRightElement width="4.5rem">
           <Button
