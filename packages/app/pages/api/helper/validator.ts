@@ -22,8 +22,8 @@ export const BookmarkThreadSchema = Joi.object({
 });
 
 export const NotifierVariantSchema = Joi.object({
-  tags: Joi.array().items(Joi.string().required()).max(5),
-  communities: Joi.array().items(Joi.string().required()).max(5),
+  tags: Joi.array().items(Joi.string().required()).max(10),
+  communities: Joi.array().items(Joi.string()),
   name: Joi.string().required(),
   icon: Joi.string().required(),
   type: Joi.string().required(),
