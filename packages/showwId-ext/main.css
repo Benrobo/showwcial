@@ -1,0 +1,13 @@
+.showwId-cont {
+  margin-top: 1px;
+  margin-left: 5px;
+  border: 2px solid #3f7eee;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+  width: 20px;
+  height: 20px;
+}
