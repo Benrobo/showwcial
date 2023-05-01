@@ -52,16 +52,17 @@ client.on("interactionCreate", async (interaction) => {
       const embeddTitle = response?.success
         ? `✅ **Latest Thread**`
         : `❌ **Failed Fetching Thread**`;
+      const embeddImage = response?.success
+        ? response?.image ??
+          "https://images-ext-1.discordapp.net/external/qzgQmLYic48-UPuxj52aRYm9vXgpjvUoXqNXPUvwWxE/https/assets.showwcase.com/og-image/default.png?width=1382&height=972"
+        : "https://img.freepik.com/free-vector/400-error-bad-request-concept-illustration_114360-1933.jpg?w=1000";
 
       let embeddMsg = embed
         .setTitle(embeddTitle)
         .setDescription(response?.content ?? response?.msg)
         .setColor(embeddColor)
         .setURL(response?.url)
-        .setImage(
-          response?.image ??
-            "https://images-ext-1.discordapp.net/external/qzgQmLYic48-UPuxj52aRYm9vXgpjvUoXqNXPUvwWxE/https/assets.showwcase.com/og-image/default.png?width=1382&height=972"
-        );
+        .setImage(embeddImage);
 
       // * ephemeral: true would only make the message visible to sender.
       if (response?.success === false)
