@@ -432,8 +432,8 @@ export default class NotifierController extends BaseController {
     if (Object.entries(selectedPosts).length === 0) {
       return this.error(
         res,
-        "--botThreads/insufficient-thread",
-        "Insufficient Threads.",
+        "--botThreads/insufficient-shows",
+        "Insufficient shows.",
         400
       );
     }
@@ -457,7 +457,7 @@ export default class NotifierController extends BaseController {
       this.success(
         res,
         "--botThreads/success",
-        "posts fetched successfully",
+        "Shows fetched successfully",
         200,
         selectedPosts
       );
@@ -479,7 +479,7 @@ export default class NotifierController extends BaseController {
     this.success(
       res,
       "--botThreads/success",
-      "posts fetched successfully",
+      "Shows fetched successfully",
       200,
       selectedPosts
     );
