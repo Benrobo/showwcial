@@ -83,19 +83,21 @@ model BookMarks {
 }
 
 model BotNotifier {
-    id              String   @id
-    userId          String
-    name            String
-    type            String // thread, shows, jobs
-    tags            String
-    communities     String
-    token           String?  @db.Text
-    isAuthenticated Boolean  @default(false)
-    disabled        Boolean? @default(false)
+    id          String  @id
+    userId      String
+    name        String
+    type        String // thread, shows, jobs
+    tags        String
+    communities String
+    token       String? @db.Text
+
+    disabled Boolean? @default(false)
 
     icon String
 
-    discordChannelId String?
+    isAuthenticated Boolean @default(false)
+
+    notifAuthChannels Json? @default("[]")
 
     createdAt DateTime @default(now())
 
