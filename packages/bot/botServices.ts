@@ -172,4 +172,86 @@ export default class BotServices {
       return response;
     }
   }
+
+  public async handleShows(channelId: string) {
+    let response = {
+      success: false,
+      title: null,
+      url: null,
+      image: null,
+      content: null,
+      msg: "",
+    };
+
+    if (
+      channelId === "" ||
+      channelId === null ||
+      typeof channelId === "undefined"
+    ) {
+      response["msg"] = "Channel not found. Please try again later.";
+      return response;
+    }
+
+    // make request to fetch posts.
+    const resp = await this.request("/notifier/getShows", { channelId });
+
+    if (resp?.code === "--botThreads/error-fetching") {
+      response["msg"] = resp.message;
+      return response;
+    }
+    if (resp?.code === "--botThreads/channel-notfound") {
+      response["msg"] = `Channel isn't authenticated. Please do so.`;
+      return response;
+    }
+    if (resp?.code === "--botThreads/insufficient-shows") {
+      response["msg"] = `${resp.message}. Please try again later.`;
+      return response;
+    }
+    if (resp?.code === "--botThreads/success") {
+      const { title, projectSummary, readingStats, id, slug, coverImage } =
+        resp?.data;
+
+      const ShowUrl = `https://www.showwcase.com/thread/${id}/${slug}`;
+      const embeddTitle =
+        typeof title !== "undefined" && title?.length > 0 ? `**${title}**` : "";
+      let embeddImage = this.isEmpty(coverImage) ? null : coverImage;
+      let formatedTitle = null;
+      let content = this.isEmpty(projectSummary) ? "" : projectSummary;
+      let readingTime = this.isEmpty(readingStats)
+        ? ""
+        : `**${readingStats?.text}**`;
+
+      if (this.isEmpty(title) && !this.isEmpty(projectSummary)) {
+        formatedTitle =
+          projectSummary.length > 66
+            ? `**${projectSummary.slice(0, 67)}**...`
+            : `**${projectSummary.slice(0, 67)}**...`;
+      }
+
+      response["msg"] = null;
+      response["success"] = true;
+      response["url"] = ShowUrl;
+      response["title"] = title;
+      response["content"] = `${
+        embeddTitle ?? formatedTitle
+      }\n${content}\n\n${readingTime}\n\n**Link:** ${ShowUrl}`;
+      response["image"] = embeddImage;
+
+      return response;
+    }
+    if (this.isServerError(resp)) {
+      response["msg"] = "Server error. Please try again later";
+      return response;
+    }
+
+    if (this.isConnectionError(resp)) {
+      response["msg"] = "Connection error. Please try again later";
+      return response;
+    }
+
+    if (this.isNetworkError(resp)) {
+      response["msg"] = "Connection error. Please try again later";
+      return response;
+    }
+  }
 }
