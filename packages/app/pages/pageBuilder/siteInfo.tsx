@@ -46,7 +46,7 @@ export function SiteInfo() {
           borderColor={"rgba(255,255,255,0.08)"}
           fontSize="14px"
           pointerEvents={"none"}
-          className="select-none font-pp-rg"
+          className="select-none font-pp-rg cursor-pointer"
         />
         <Input
           placeholder="slug"

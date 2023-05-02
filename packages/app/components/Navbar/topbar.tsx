@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { RxCaretDown } from "react-icons/rx";
 import ImageTag from "../Image";
 import { BiCog } from "react-icons/bi";
+import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
+import { IoLockOpen } from "react-icons/io5";
 
 function TopBar() {
   const [scrollY, setScrollY] = useState(0);
@@ -31,6 +33,12 @@ function TopBar() {
     }
   }, [scrollY]);
 
+  const handleLogout = () => {
+    localStorage.removeItem("userData");
+    localStorage.removeItem("authToken");
+    location.href = "/auth/login";
+  };
+
   return (
     <div
       className={`w-full h-auto px-7 py-3 border-b-[1px] border-b-white-600 fixed top-0 left-0 z-[200] bg-dark-100 backdrop-blur bg-opacity-75 `}
@@ -49,9 +57,41 @@ function TopBar() {
         <div className="w-auto left flex items-center justify-center">
           <ul className="ml-[3rem] flex items-center justify-center gap-5">
             <li className="text-white-200 text-[13.5px] pp-RG ">
-              <Link href="/">
-                <BiCog className=" text-white-100 text-2xl " />
-              </Link>
+              {/* @ts-ignore */}
+              <Menu>
+                <MenuButton
+                  as={Button as any}
+                  rightIcon={<BiCog className=" text-white-100 text-2xl " />}
+                  background="none"
+                  _active={{
+                    backgroundColor: "transparent",
+                  }}
+                  _hover={{
+                    backgroundColor: "transparent",
+                  }}
+                ></MenuButton>
+                {/* @ts-ignore */}
+                <MenuList
+                  width={120}
+                  className="w-[100px]"
+                  background={"#131418"}
+                  borderColor={"#26282c"}
+                  padding={0}
+                  marginTop={2}
+                >
+                  {/* @ts-ignore */}
+                  <MenuItem
+                    background={"#131418"}
+                    _hover={{ backgroundColor: "#1E1E22" }}
+                    padding={2}
+                    borderRadius={5}
+                    onClick={handleLogout}
+                  >
+                    <IoLockOpen className="text-white-200 mr-2" size={20} />{" "}
+                    Logout
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             </li>
             <li className="text-white-200 text-[13.5px] pp-RG flex items-center justify-center ">
               <ImageTag
