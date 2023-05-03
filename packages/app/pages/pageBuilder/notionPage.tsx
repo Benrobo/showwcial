@@ -2,7 +2,27 @@ import { Button, Input } from "@chakra-ui/react";
 import React from "react";
 import Gap from "../../components/Gap";
 
-function AddNotionPage() {
+type ValidPagePropInfo =
+  | "name"
+  | "slug"
+  | "type"
+  | "themeName"
+  | "notionPage"
+  | "";
+interface PageProps {
+  savePageInfo: (name: ValidPagePropInfo, value: string) => void;
+  pageInfo: any;
+}
+
+function AddNotionPage({ savePageInfo, pageInfo }: PageProps) {
+  const handleInput = (e: any) => {
+    const dataset = e.target?.dataset;
+    const name = dataset?.name as ValidPagePropInfo;
+    const value = e.target?.value;
+    if (typeof name === "undefined") return;
+    savePageInfo(name, value);
+  };
+
   return (
     <div className="w-full h-full">
       <div className="w-full flex flex-col items-start justify-center">
@@ -22,6 +42,9 @@ function AddNotionPage() {
             fontSize={"14px"}
             roundedRight="none"
             textColor={"#fff"}
+            data-name="notionPage"
+            onChange={handleInput}
+            value={pageInfo?.notionPage}
           />
           <Button
             bgColor={"#4898f0"}
