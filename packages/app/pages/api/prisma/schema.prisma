@@ -122,14 +122,16 @@ model BotPrevPosts {
 }
 
 model Site {
-    id         String   @id
-    userId     String
-    name       String
-    slug       String   @unique
-    pageType   String
-    themeName  String
-    notionPage String?
-    createdAt  DateTime @default(now())
+    id          String  @id
+    userId      String
+    name        String
+    slug        String  @unique
+    pageType    String
+    themeName   String
+    notionPage  String?
+    socialLinks Json?
+
+    createdAt DateTime @default(now())
 
     user Users @relation(fields: [userId], references: [id])
 

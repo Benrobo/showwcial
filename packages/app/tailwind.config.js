@@ -18,6 +18,7 @@ module.exports = {
           600: "rgba(0,0,0,.5)",
           700: "rgba(0,0,0,.9)",
           800: "rgba(19, 20, 24, .8)",
+          900: "rgba(19, 20, 24, .4)",
         },
         dark2: {
           100: "#131418",
@@ -70,6 +71,7 @@ module.exports = {
           105: "#4055e4",
           200: "#4898f0",
           300: "#3F7EEE",
+          301: "#59CBE8",
           400: "#0655E2",
           500: "#513cef",
           600: "#5452d379",
@@ -110,11 +112,11 @@ module.exports = {
           600: "#e82a4f",
         },
       },
-    },
-    fontFamily: {
-      "pp-eb": ["Poppins-ExtraBold"],
-      "pp-rg": ["Poppins-Regular"],
-      "pp-sb": ["Poppins-SemiBold"],
+      fontFamily: {
+        "pp-eb": ["Poppins-ExtraBold"],
+        "pp-rg": ["Poppins-Regular"],
+        "pp-sb": ["Poppins-SemiBold"],
+      },
     },
   },
   plugins: [],
