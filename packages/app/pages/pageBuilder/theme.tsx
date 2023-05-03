@@ -1,7 +1,19 @@
 import { useState } from "react";
 import { BiLinkExternal } from "react-icons/bi";
 
-export default function Themes() {
+type ValidPagePropInfo =
+  | "name"
+  | "slug"
+  | "type"
+  | "themeName"
+  | "notionPage"
+  | "";
+interface PageProps {
+  savePageInfo: (name: ValidPagePropInfo, value: string) => void;
+  pageInfo?: any;
+}
+
+export default function Themes({ savePageInfo, pageInfo }: PageProps) {
   const [selectedTheme, setSelectedTheme] = useState("");
 
   const handleThemeSelect = (e) => {
@@ -13,6 +25,7 @@ export default function Themes() {
       return;
     }
     setSelectedTheme(name);
+    savePageInfo("themeName", name);
   };
 
   return (
