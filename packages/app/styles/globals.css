@@ -19,6 +19,11 @@
   src: url("/fonts/Poppins-ExtraBold.ttf");
 }
 
+html {
+  scroll-behavior: smooth;
+  transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
 body {
   width: 100%;
   height: 100vh;
@@ -90,6 +95,15 @@ textarea::placeholder {
 }
 .hideScrollBar::-webkit-scrollbar-thumb {
   border-radius: 30px;
+}
+
+.hideScrollBar2::-webkit-scrollbar {
+  width: 5px;
+  background: transparent;
+}
+.hideScrollBar2::-webkit-scrollbar-thumb {
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
 }
 /* Fonts */
 .pp-RG {
