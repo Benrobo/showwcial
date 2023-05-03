@@ -47,6 +47,11 @@ export default function OasisTheme() {
                   Contacts
                 </a>
               </li>
+              <li className="flex items-center justify-center gap-2 m-2">
+                <button className="w-auto px-5 py-2 rounded-md border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all font-pp-rg text-[13px]">
+                  Resume
+                </button>
+              </li>
             </ul>
           </div>
         </div>
