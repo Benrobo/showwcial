@@ -14,8 +14,11 @@ import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { SiteInfo } from "./siteInfo";
 import Themes from "./theme";
 import AddNotionPage from "./notionPage";
+import { toast } from "react-hot-toast";
 
 function PortfolioBuilder() {
+  const [openModal, setOpenModal] = useState(false);
+
   return (
     <MainDashboardLayout activeTab="pageBuilder">
       <div className="w-full h-full flex items-start justify-center">
@@ -35,12 +38,12 @@ function PortfolioBuilder() {
           </p>
           <button
             className="px-6 py-3 mt-2 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
-            onClick={() => {}}
+            onClick={() => setOpenModal(true)}
           >
             Create Site
           </button>
         </div>
-        <CreateSite />
+        {openModal && <CreateSite closeModal={() => setOpenModal(false)} />}
       </div>
     </MainDashboardLayout>
   );
@@ -54,11 +57,35 @@ interface CreateSiteProps {
 
 function CreateSite({ closeModal }: CreateSiteProps) {
   const [step, setStep] = useState<number>(0);
+  const [pageInfo, setPageInfo] = useState({
+    name: "",
+    slug: "",
+    type: "",
+    themeName: "",
+    notionPage: "",
+  });
+
   let component = null;
   let controlButton = null;
 
+  type ValidPagePropInfo =
+    | "name"
+    | "slug"
+    | "type"
+    | "themeName"
+    | "notionPage"
+    | "";
+
+  const savePageInfo = (name: ValidPagePropInfo, value: string) => {
+    setPageInfo((prev) => ({ ...prev, [name]: value }));
+  };
+
   const next = () => {
-    setStep((prev: number) => (prev += 1));
+    console.log(pageInfo);
+    if (step <= 1) setStep((prev: number) => (prev += 1));
+    if (step === 2) {
+      toast.success("save config");
+    }
   };
 
   const prev = () => {
@@ -70,13 +97,17 @@ function CreateSite({ closeModal }: CreateSiteProps) {
   const renderComponent = (step: number) => {
     switch (step) {
       case 0:
-        component = <SiteInfo />;
+        component = (
+          <SiteInfo savePageInfo={savePageInfo} pageInfo={pageInfo} />
+        );
         break;
       case 1:
-        component = <Themes />;
+        component = <Themes savePageInfo={savePageInfo} />;
         break;
       case 2:
-        component = <AddNotionPage />;
+        component = (
+          <AddNotionPage savePageInfo={savePageInfo} pageInfo={pageInfo} />
+        );
         break;
       default:
         component = null;
