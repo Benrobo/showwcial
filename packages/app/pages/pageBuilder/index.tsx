@@ -13,12 +13,13 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
 import { SiteInfo } from "./siteInfo";
 import Themes from "./theme";
+import AddNotionPage from "./notionPage";
 
 function PortfolioBuilder() {
   return (
     <MainDashboardLayout activeTab="pageBuilder">
       <div className="w-full h-full flex items-start justify-center">
-        <div className="w-full h-auto flex flex-col items-start justify-start py-5 px-4 border-r-solid border-r-[1px] border-r-white-600 overflow-y-scroll hideScrollBar border-b-[.5px] border-b-white-600 border-b-solid">
+        <div className="w-full h-full flex flex-col items-start justify-start py-5 px-4 border-r-solid border-r-[1px] border-r-white-600 overflow-y-scroll hideScrollBar border-b-[.5px] border-b-white-600 border-b-solid">
           <div className="flex items-center justify-start gap-5">
             {/* <BsDiscord className="text-blue-300" size={25} /> */}
             <p className="text-white-100 font-pp-eb text-[20px]">
@@ -75,7 +76,7 @@ function CreateSite({ closeModal }: CreateSiteProps) {
         component = <Themes />;
         break;
       case 2:
-        // component = <AddNotionPage />;
+        component = <AddNotionPage />;
         break;
       default:
         component = null;
@@ -151,14 +152,16 @@ function CreateSite({ closeModal }: CreateSiteProps) {
 
   return (
     <Modal isOpen isBlurBg onClose={closeModal} showCloseIcon>
-      <div className="w-full h-full mt-14 flex flex-col items-center justify-center">
-        <div className="w-[600px] h-auto  max-h-[450px] rounded-md bg-dark-300 overflow-y-scroll hideScrollBar">
+      <div className="w-full h-full mt-10 flex flex-col items-center justify-center">
+        <div className="w-[700px] h-auto rounded-md bg-dark-300 overflow-y-scroll hideScrollBar">
           <div className="w-full flex items-center justify-center p-3  border-b-[.5px] border-b-white-600 border-b-solid">
             <p className="text-white-200 font-pp-sb">Portfolio Builder</p>
           </div>
           <div className="w-full flex flex-col items-start justify-center p-3">
-            <div className="w-full px-4 py-5">{renderComponent(step)}</div>
-            <div className="w-full h-[70px] flex items-end justify-end px-7 ">
+            <div className="w-full h-auto px-2 py-5">
+              {renderComponent(step)}
+            </div>
+            <div className="w-full h-[10px] mt-2 flex items-center justify-end px-7 ">
               {renderControlButton(step, next, prev)}
             </div>
             <br />
