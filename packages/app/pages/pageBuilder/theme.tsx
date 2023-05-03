@@ -60,7 +60,7 @@ interface ThemeProps {
 function ThemeCards({ name, id, selectedTheme, onClick }: ThemeProps) {
   return (
     <div
-      className="w-[200px] h-[200px] rounded-[10px] bg-dark-100 relative border-solid border-[3px] border-transparent transition-all cursor-pointer hover:border-blue-300 theme-card "
+      className="w-[200px] h-[200px] rounded-[10px] bg-dark-100 relative border-solid border-[3px] border-transparent scale-[.95] hover:scale-[1] transition-all cursor-pointer hover:border-blue-300 theme-card "
       style={{
         borderColor: selectedTheme === name ? "#3F7EEE" : "transparent",
       }}
@@ -68,7 +68,7 @@ function ThemeCards({ name, id, selectedTheme, onClick }: ThemeProps) {
       // data-name={name}
     >
       <div
-        className="w-full flex items-center theme-bg rounded-[8px]"
+        className="w-full flex items-center theme-bg rounded-[8px] cursor-pointer"
         onClick={onClick}
         data-name={name}
       >

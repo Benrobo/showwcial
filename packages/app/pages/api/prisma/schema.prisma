@@ -22,6 +22,7 @@ model Users {
     accounts         Accounts?
     threadBookmarks  BookMarks[]
     botNotifier      BotNotifier[]
+    sites            Site[]
     messagesSent     Message[]     @relation("sentMessages")
     messagesReceived Message[]     @relation("receivedMessages")
 
@@ -118,4 +119,19 @@ model BotPrevPosts {
     // notifier BotNotifier @relation(fields: [id], references: [id])
 
     // @@index([id])
+}
+
+model Site {
+    id         String   @id
+    userId     String
+    name       String
+    slug       String   @unique
+    pageType   String
+    themeName  String
+    notionPage String?
+    createdAt  DateTime @default(now())
+
+    user Users @relation(fields: [userId], references: [id])
+
+    @@index([userId])
 }
