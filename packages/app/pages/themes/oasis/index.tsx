@@ -10,6 +10,7 @@ import ImageTag from "../../../components/Image";
 import Gap from "../../../components/Gap";
 import { IoLogoOctocat } from "react-icons/io";
 import { FiExternalLink } from "react-icons/fi";
+import { HiOutlineFolder } from "react-icons/hi2";
 
 export default function OasisTheme() {
   return (
@@ -250,13 +251,51 @@ export default function OasisTheme() {
             </h2>
           </div>
           <br />
-          <div className="w-full min-h-[340px] flex flex-wrap items-center justify-center gap-2">
+          <div className="w-full min-h-[740px] flex flex-wrap items-center justify-center gap-2">
             <PortfolioCards />
             <PortfolioCards />
             <PortfolioCards />
             <PortfolioCards />
             <PortfolioCards />
           </div>
+          <Gap height={200} />
+          <div className="w-full max-w-[1000px] ">
+            <div className="w-full flex flex-col items-center justify-center">
+              <h2 className="text-slate-100 font-pp-sb text-[25px] ">
+                Other Noteworthy Projects.
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 gap-5 mt-9 p-[40px]">
+              <GithubRepoCards />
+              <GithubRepoCards />
+              <GithubRepoCards />
+              <GithubRepoCards />
+              <GithubRepoCards />
+              <GithubRepoCards />
+            </div>
+          </div>
+          <div id="projects"></div>
+        </section>
+        {/* Contact Section */}
+        <section className="w-full max-w-[600px] mx-auto text-center h-full my-10 mb-10 flex flex-col items-center justify-center">
+          <h2 className="text-blue-301 font-mono text-[16px] before:content-['04'] before:text-blue-301 before:mr-2 ">
+            What's Next?
+          </h2>
+          <h2 className="text-slate-100 font-pp-eb text-[46px] mb-8">
+            Get In Touch
+          </h2>
+          <p className="text-slate-200 font-pp-rg text-[17px] ">
+            I'm not saying I'm the world's best conversationalist, but I did
+            once talk to myself for three hours straight. So I think we'll be
+            just fine.
+          </p>
+          <br />
+          <a
+            href="mailto:johndoe@mail.com"
+            className="w-auto px-8 py-4 rounded-[1px] border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all font-pp-rg text-[14px]"
+          >
+            Say Hello
+          </a>
         </section>
       </main>
     </div>
@@ -290,6 +329,37 @@ function PortfolioCards() {
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero
           corrupti explicabo blanditiis ipsum rerum hic!
         </p>
+        <div className="flex items-start justify-start flex-wrap gap-2">
+          <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
+            Reactjs
+          </span>
+          <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
+            Reactjs
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GithubRepoCards() {
+  return (
+    <div className="w-full h-auto p-8 rounded-[10px] flex flex-col items-start justify-start bg-dark-100 shadow-lg ">
+      <div className="w-full flex items-center justify-between mb-5">
+        <HiOutlineFolder size={25} className="text-blue-301" />
+        <IoLogoOctocat size={25} className="text-blue-301" />
+      </div>
+      <div className="w-full flex flex-col items-start justify-start gap-3 mb-0">
+        <p className="text-slate-100 font-pp-sb text-[18px] hover:text-blue-301 transition-all ">
+          webapis-playground Public
+        </p>
+        <p className="text-slate-200 font-pp-rg text-[12px] transition-all ">
+          The Web APIs Playground is a project to showcase the JavaScript Web
+          APIs with examples and demonstrations. Client-side JavaScript APIs are
+          here to help with providing wrapper functions for many low-level
+          tasks.
+        </p>
+        <br />
         <div className="flex items-start justify-start flex-wrap gap-2">
           <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
             Reactjs
