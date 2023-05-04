@@ -69,7 +69,7 @@ export default function OasisTheme() {
         id="orientation"
         className="w-[40px] h-full max-h-[335px] fixed left-[40px] right-auto bottom-0 z-[10] "
       >
-        <ul className="w-full h-full flex flex-col items-center justify-center gap-6 after:w-[1px] after:h-[90px] after:contents-[''] after:bg-white-400 ">
+        <ul className="w-full h-full max-h-[220px] flex flex-col items-center justify-end gap-6 after:fixed after:left-[60px] after:bottom-0 after:w-[1px] after:h-[90px] after:contents-[''] after:bg-white-400 ">
           <li className="flex flex-col items-center justify-center">
             <a href="#">
               <RiGithubLine className="text-blue-301" size={25} />
@@ -188,6 +188,65 @@ export default function OasisTheme() {
             </div>
           </div>
           <div id="about"></div>
+        </section>
+        {/* Experience / Job Section */}
+        <section className="w-full max-w-[700px] h-full my-10 mb-10">
+          <div className="w-full flex items-center justify-start">
+            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['02.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:h-[1px] after:bg-slate-200 after:ml-10 ">
+              Work Experience
+            </h2>
+          </div>
+          <br />
+          <div id="experience"></div>
+          <div className="w-full  px-[20px] flex items-start justify-start">
+            <div className="w-[150px] h-full flex flex-col items-start justify-start">
+              <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-blue-301 text-blue-301 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
+                Company Name
+              </button>
+              <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-white-600 text-white-200 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
+                Company Name
+              </button>
+              <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-white-600 text-white-200 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
+                Company Name
+              </button>
+              <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-white-600 text-white-200 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
+                Company Name
+              </button>
+            </div>
+            <div className="w-full min-h-[340px] h-full flex flex-col items-start justify-start px-4">
+              <div className="flex items-center justify-center gap-4">
+                <h2 className="text-slate-100 font-pp-rg text-[17px] ">
+                  User Interface Architect & Senior Manager UX
+                </h2>
+                <h2 className="text-blue-301 font-pp-sb text-[17px] ">
+                  @ Company
+                </h2>
+              </div>
+              <div className="flex items-center justify-center gap-4">
+                <p className="text-slate-200 text-[13px] font-mono">
+                  July - December 2017
+                </p>
+              </div>
+              <div className="mt-3 flex flex-col items-start justify-start">
+                <p className="relative w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
+                  - Developed and styled interactive web applications for Apple
+                  Music using Ember and SCSS
+                </p>
+                <p className="relative w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
+                  - Built and shipped the Apple Music Extension for Facebook
+                  Messenger leveraging third-party and internal API integrations
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* Projects Section */}
+        <section className="w-full  max-w-[700px] h-full my-10 mb-10">
+          <div className="w-full flex items-center justify-start">
+            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['03.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:h-[1px] after:bg-slate-200 after:ml-10 ">
+              Projects
+            </h2>
+          </div>
         </section>
       </main>
     </div>
