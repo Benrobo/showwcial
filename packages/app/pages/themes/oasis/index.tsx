@@ -11,6 +11,7 @@ import Gap from "../../../components/Gap";
 import { IoLogoOctocat } from "react-icons/io";
 import { FiExternalLink } from "react-icons/fi";
 import { HiOutlineFolder } from "react-icons/hi2";
+import ShowwcialBanner from "../comp/banner";
 
 export default function OasisTheme() {
   return (
@@ -298,6 +299,7 @@ export default function OasisTheme() {
           </a>
         </section>
       </main>
+      <ShowwcialBanner />
     </div>
   );
 }
