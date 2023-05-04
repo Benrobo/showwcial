@@ -8,6 +8,8 @@ import { RiGithubLine } from "react-icons/ri";
 import { SiHashnode } from "react-icons/si";
 import ImageTag from "../../../components/Image";
 import Gap from "../../../components/Gap";
+import { IoLogoOctocat } from "react-icons/io";
+import { FiExternalLink } from "react-icons/fi";
 
 export default function OasisTheme() {
   return (
@@ -241,14 +243,62 @@ export default function OasisTheme() {
           </div>
         </section>
         {/* Projects Section */}
-        <section className="w-full  max-w-[700px] h-full my-10 mb-10">
+        <section className="w-full h-full my-10 mb-10">
           <div className="w-full flex items-center justify-start">
             <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['03.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:h-[1px] after:bg-slate-200 after:ml-10 ">
               Projects
             </h2>
           </div>
+          <br />
+          <div className="w-full min-h-[340px] flex flex-wrap items-center justify-center gap-2">
+            <PortfolioCards />
+            <PortfolioCards />
+            <PortfolioCards />
+            <PortfolioCards />
+            <PortfolioCards />
+          </div>
         </section>
       </main>
+    </div>
+  );
+}
+
+function PortfolioCards() {
+  return (
+    <div className="w-full max-w-[300px] h-full max-h-[500px] rounded-[15px] bg-dark-100 p-4 mt-4 ">
+      <div className="relative w-full max-h-[250px] bg-red-200 h-[250px] rounded-[15px] project-image ">
+        <style>{`
+          .project-image{
+            background-image: url("/images/themes/demo1.webp");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+        `}</style>
+        <div className="w-auto flex items-center justify-center bg-white-500 backdrop-blur-[10px] p-2 absolute top-0 right-0 gap-3 rounded-t-[15px] rounded-l-[0px] ">
+          <a href="">
+            <IoLogoOctocat className="text-dark-100" size={20} />
+          </a>
+          <a href="">
+            <FiExternalLink className="text-dark-100" size={20} />
+          </a>
+        </div>
+      </div>
+      <div className="w-full flex flex-col items-start justify-start py-2 mt-2">
+        <p className="text-white-100 font-pp-eb text-[24px] mb-2 ">AI App</p>
+        <p className="text-slate-100 font-pp-rg text-[13px] mb-5 ">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero
+          corrupti explicabo blanditiis ipsum rerum hic!
+        </p>
+        <div className="flex items-start justify-start flex-wrap gap-2">
+          <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
+            Reactjs
+          </span>
+          <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
+            Reactjs
+          </span>
+        </div>
+      </div>
     </div>
   );
 }
