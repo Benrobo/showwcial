@@ -83,7 +83,7 @@ export default function OasisTheme({
               className="w-[40px] rounded-[50%]"
               src={
                 userImage ??
-                "https://profile-assets.showwcase.com/4187/1645381241792-79FB9C2F-57D4-4E37-AF6B-FE05D87754C9.jpeg"
+                "https://profile-assets.showwcase.com/102662/1683311191679-1683311188721-DSC_1744.jpeg"
               }
             />
           </div>
@@ -268,7 +268,7 @@ export default function OasisTheme({
                   className="w-[300px] rounded-md "
                   src={
                     about?.image ??
-                    "https://profile-assets.showwcase.com/4187/1645381241792-79FB9C2F-57D4-4E37-AF6B-FE05D87754C9.jpeg"
+                    "https://profile-assets.showwcase.com/102662/1683311191679-1683311188721-DSC_1744.jpeg"
                   }
                 />
               </div>
