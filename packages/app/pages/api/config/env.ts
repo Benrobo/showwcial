@@ -18,6 +18,7 @@ const ENV = {
       : `https://paycode.co`,
   showwcaseAPIKey: process.env.SHOWWCASE_API_KEY,
   showwcaseToken: process.env.SHOWWCASE_TOKEN,
+  notionApiToken: process.env.NOTION_API_KEY,
 };
 
 export default ENV;
