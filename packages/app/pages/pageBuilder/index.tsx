@@ -80,6 +80,7 @@ function CreateSite({ closeModal }: CreateSiteProps) {
   const savePageInfo = (name: ValidPagePropInfo, value: string) => {
     setPageInfo((prev) => ({ ...prev, [name]: value }));
   };
+  const [isNotionVerified, setIsNotionVerified] = useState(false);
 
   const handlePageVerification = (step: number) => {
     if (step === 0) {
@@ -97,11 +98,16 @@ function CreateSite({ closeModal }: CreateSiteProps) {
       }
       return true;
     }
-
     if (step === 1) {
-      console.log({ pageInfo });
       if (isEmpty(pageInfo?.themeName)) {
         toast.error("Select atleast one theme.");
+        return false;
+      }
+      return true;
+    }
+    if (step === 2) {
+      if (isEmpty(pageInfo?.notionPage)) {
+        toast.error("Notion page can't be empty.");
         return false;
       }
       return true;
@@ -112,8 +118,8 @@ function CreateSite({ closeModal }: CreateSiteProps) {
     const successfulVerification = handlePageVerification(step);
     if (!successfulVerification) return;
     if (step <= 1) setStep((prev: number) => (prev += 1));
-    if (step === 2) {
-      toast.success("save config");
+    if (step === 2 && !isNotionVerified) {
+      toast.error("Please verify notion page first.");
     }
   };
 
