@@ -15,6 +15,7 @@ import { SiteInfo } from "./siteInfo";
 import Themes from "./theme";
 import AddNotionPage from "./notionPage";
 import { toast } from "react-hot-toast";
+import { isEmpty } from "../../util";
 
 function PortfolioBuilder() {
   const [openModal, setOpenModal] = useState(false);
@@ -80,8 +81,36 @@ function CreateSite({ closeModal }: CreateSiteProps) {
     setPageInfo((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handlePageVerification = (step: number) => {
+    if (step === 0) {
+      if (isEmpty(pageInfo?.name)) {
+        toast.error("Site name cant be empty.");
+        return false;
+      }
+      if (isEmpty(pageInfo?.type)) {
+        toast.error("Page Type cant be empty.");
+        return false;
+      }
+      if (isEmpty(pageInfo?.slug)) {
+        toast.error("Slug cant be empty.");
+        return false;
+      }
+      return true;
+    }
+
+    if (step === 1) {
+      console.log({ pageInfo });
+      if (isEmpty(pageInfo?.themeName)) {
+        toast.error("Select atleast one theme.");
+        return false;
+      }
+      return true;
+    }
+  };
+
   const next = () => {
-    console.log(pageInfo);
+    const successfulVerification = handlePageVerification(step);
+    if (!successfulVerification) return;
     if (step <= 1) setStep((prev: number) => (prev += 1));
     if (step === 2) {
       toast.success("save config");
@@ -102,7 +131,7 @@ function CreateSite({ closeModal }: CreateSiteProps) {
         );
         break;
       case 1:
-        component = <Themes savePageInfo={savePageInfo} />;
+        component = <Themes savePageInfo={savePageInfo} pageInfo={pageInfo} />;
         break;
       case 2:
         component = (
