@@ -110,3 +110,13 @@ export const deleteVariant = async (variantId: string) => {
     return e.response?.data ?? { message: e.message, code: e?.code };
   }
 };
+
+// Page Builer
+export const verifyNotionPage = async (pageId: string) => {
+  try {
+    const res = await $http.post(`/pageBuilder/verifyNotion`, pageId);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
