@@ -208,7 +208,7 @@ export default function OasisTheme({
           <Gap height={300} />
         </section>
         {/* About Section */}
-        <section className="w-full h-full my-10 mb-10">
+        <section id="about" className="w-full h-full my-10 mb-10">
           <div className="w-full flex items-center justify-start">
             <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['01.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
               About
@@ -274,10 +274,12 @@ export default function OasisTheme({
               </div>
             </div>
           </div>
-          <div id="about"></div>
         </section>
         {/* Experience / Job Section */}
-        <section className="w-full max-w-[700px] h-full my-10 mb-10">
+        <section
+          id="experience"
+          className="w-full max-w-[700px] h-full my-10 mb-10"
+        >
           <div className="w-full flex items-center justify-start">
             <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['02.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
               Work Experience
@@ -397,7 +399,10 @@ export default function OasisTheme({
           </div>
         </section>
         {/* Contact Section */}
-        <section className="w-full max-w-[600px] mx-auto text-center h-full my-10 mb-10 flex flex-col items-center justify-center">
+        <section
+          id="contacts"
+          className="w-full max-w-[600px] mx-auto text-center h-full my-10 mb-10 flex flex-col items-center justify-center"
+        >
           <h2 className="text-blue-301 font-mono text-[16px] before:content-['04'] before:text-blue-301 before:mr-2 ">
             What's Next?
           </h2>
