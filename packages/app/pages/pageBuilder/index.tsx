@@ -121,6 +121,9 @@ function CreateSite({ closeModal }: CreateSiteProps) {
     if (step === 2 && !isNotionVerified) {
       toast.error("Please verify notion page first.");
     }
+    if (step === 2 && isNotionVerified) {
+      toast.success("Verificatio");
+    }
   };
 
   const prev = () => {
@@ -141,7 +144,11 @@ function CreateSite({ closeModal }: CreateSiteProps) {
         break;
       case 2:
         component = (
-          <AddNotionPage savePageInfo={savePageInfo} pageInfo={pageInfo} />
+          <AddNotionPage
+            savePageInfo={savePageInfo}
+            pageInfo={pageInfo}
+            setIsNotionVerified={setIsNotionVerified}
+          />
         );
         break;
       default:
