@@ -5,6 +5,7 @@ import { isEmpty } from "../../../util";
 import prisma from "../config/prisma";
 import { GetDatabaseResponse } from "@notionhq/client/build/src/api-endpoints";
 import { v4 as uuidv4 } from "uuid";
+import { SiteSchema } from "../helper/validator";
 
 function notion(token: string) {
   const notion = new Client({
@@ -14,8 +15,10 @@ function notion(token: string) {
 }
 
 export default class PageBuilderController extends BaseController {
+  private siteSchema: any;
   constructor() {
     super();
+    this.siteSchema = SiteSchema;
   }
 
   public async verifyNotionPage(req: NextApiRequest, res: NextApiResponse) {
@@ -117,12 +120,11 @@ export default class PageBuilderController extends BaseController {
     await prisma.site.create({
       data: {
         id: uuidv4(),
-        name: "",
-        pageType: "",
-        slug: "",
-        themeName: "",
         notionDatabaseId: databaseId,
-        socialLinks: JSON.stringify([]),
+        name: "",
+        slug: "",
+        pageType: "",
+        themeName: "",
         userId: uId,
       },
     });
@@ -134,5 +136,44 @@ export default class PageBuilderController extends BaseController {
       200,
       pageContent
     );
+  }
+
+  public async createSite(req: NextApiRequest, res: NextApiResponse) {
+    const payload = req.body;
+    const uId = req["user"]?.id;
+    const { error, value } = this.siteSchema.validate(payload);
+
+    if (typeof error !== "undefined") {
+      const msg = error.message;
+      this.error(res, "--pageBuilder/invalid-fields", msg, 400);
+      return;
+    }
+
+    // check if slug exists
+    const { slug, name, type, themeName, notionPageId } = payload;
+    const slugExists = await prisma.site.findMany({ where: { slug } });
+
+    if (slugExists.length > 0) {
+      this.error(res, "--pageBuilder/slug-exists", "Slug already exists", 400);
+      return;
+    }
+
+    // check if notion Id exits
+    const notionExists = await prisma.site.findFirst({
+      where: { notionDatabaseId: notionPageId },
+    });
+    if (notionExists !== null) {
+      // ! fetch user showwcase social links, experiences,
+
+      // update site
+      await prisma.site.update({
+        where: { id: notionExists?.id },
+        data: {
+          name,
+          themeName,
+          notionDatabaseId: notionPageId,
+        },
+      });
+    }
   }
 }
