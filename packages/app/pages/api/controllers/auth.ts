@@ -229,7 +229,7 @@ export default class Authentication extends BaseController {
         githubProfile: res.githubProfile,
         headline: res.headline,
         location: res.location,
-        profilePictureKey: res.profilePictureKey,
+        profilePictureKey: res.profilePictureUrl,
       };
     } catch (e: any) {
       return null;
