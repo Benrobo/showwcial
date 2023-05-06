@@ -52,7 +52,7 @@ const Modal = ({
 
   return (
     <div
-      className={`w-full hideScrollBar backdrop-blur bg-black bg-opacity-75 h-[100vh] ${
+      className={`w-full hideScrollBar backdrop-blur bg-dark-600 bg-opacity-75 h-[100vh] ${
         fixed ? "fixed z-[250px]" : "absolute"
       } top-0 left-0 flex flex-col items-center justify-center z-[50] overflow-y-auto hideScollBar py-5`}
       data-name="main-modal"
