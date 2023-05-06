@@ -260,8 +260,6 @@ export function HandleNotifierResponse(
   checkInvalidToken(response, resetState);
 }
 
-// Page Builer
-
 // Settings
 export function HandleSettingsResponse(
   response: any,
@@ -298,6 +296,66 @@ export function HandleSettingsResponse(
         ? data?.notionIntegrationToken
         : ""
     );
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
+
+// Page Builder
+export function HandlePageBuilderResponse(
+  response: any,
+  resetState: () => void,
+  returnData: (data) => any,
+  successfull?: () => void | any
+) {
+  if (response?.code === "--pageBuilder/invalid-notion-page") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/invalid-notion-token") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+  if (response?.code === "--pageBuilder/invalid-notion-url") {
+    toast.error(`Notion page isn't linked to integration.`);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/server-error") {
+    toast.error(
+      `Something went wrong verifying notion page. Please try again later.`
+    );
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/notionPage-in-use") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/missing-colums") {
+    toast.error(response?.message);
+    resetState();
+    const data = response?.data;
+    returnData(data?.fields);
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/notion-verified") {
+    toast.success(response?.message);
+    resetState();
+    successfull && successfull();
+    const data = response?.data;
+    returnData(Object.keys(data?.properties));
     return;
   }
 
