@@ -28,3 +28,11 @@ export const NotifierVariantSchema = Joi.object({
   icon: Joi.string().required(),
   type: Joi.string().required(),
 });
+
+export const SiteSchema = Joi.object({
+  name: Joi.string().required(),
+  type: Joi.string().required(),
+  slug: Joi.string().required(),
+  themeName: Joi.string().required(),
+  notionPageId: Joi.string().required(),
+});
