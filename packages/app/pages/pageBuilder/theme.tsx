@@ -8,7 +8,7 @@ type ValidPagePropInfo =
   | "slug"
   | "type"
   | "themeName"
-  | "notionPage"
+  | "notionPageId"
   | "";
 interface PageProps {
   savePageInfo: (name: ValidPagePropInfo, value: string) => void;
