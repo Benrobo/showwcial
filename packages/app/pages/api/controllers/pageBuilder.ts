@@ -349,6 +349,39 @@ export default class PageBuilderController extends BaseController {
 
     this.success(
       res,
+      "--pageBuilder/sites-fetched",
+      "sites fetched successfully.",
+      200,
+      { sites: createdSites }
+    );
+  }
+
+  public async getCreatedSiteBySlug(req: NextApiRequest, res: NextApiResponse) {
+    const payload = req.body;
+    const slug = payload["slug"];
+
+    const createdSites = await prisma.site.findMany({
+      where: { slug },
+      include: { portfolioData: true },
+    });
+
+    createdSites.forEach((d) => {
+      if (d?.portfolioData !== null) {
+        const portfolio = d?.portfolioData;
+        if (typeof portfolio?.ghRepo === "string") {
+          d.portfolioData["ghRepo"] = JSON.parse(portfolio?.ghRepo);
+        }
+        if (typeof portfolio?.experiences === "string") {
+          d.portfolioData["experiences"] = JSON.parse(portfolio?.experiences);
+        }
+        if (typeof portfolio?.socialLinks === "string") {
+          d.portfolioData["socialLinks"] = JSON.parse(portfolio?.socialLinks);
+        }
+      }
+    });
+
+    this.success(
+      res,
       "--pageBuilder/success",
       "sites fetched successfully.",
       200,

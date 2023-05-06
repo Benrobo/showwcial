@@ -384,6 +384,15 @@ export function HandlePageBuilderResponse(
     return;
   }
 
+  if (response?.code === "--pageBuilder/sites-fetched") {
+    const data = response?.data;
+    const allSites = data?.sites;
+    returnData(allSites);
+    resetState();
+    successfull && successfull();
+    return;
+  }
+
   // api server error
   checkServerError(response, resetState);
   checkInvalidToken(response, resetState);
