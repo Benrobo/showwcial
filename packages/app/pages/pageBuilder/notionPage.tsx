@@ -14,7 +14,7 @@ type ValidPagePropInfo =
   | "slug"
   | "type"
   | "themeName"
-  | "notionPage"
+  | "notionPageId"
   | "";
 interface PageProps {
   savePageInfo: (name: ValidPagePropInfo, value: string) => void;
@@ -27,7 +27,6 @@ function AddNotionPage({
   pageInfo,
   setIsNotionVerified,
 }: PageProps) {
-  const [loading, setLoading] = useState(false);
   const [inpVal, setInpVal] = useState("");
   const verifyNotionMutation = useMutation(
     async (data) => await verifyNotionPage(data as any)
@@ -39,7 +38,10 @@ function AddNotionPage({
     const name = dataset?.name as ValidPagePropInfo;
     const value = e.target?.value;
     if (typeof name === "undefined") return;
-    savePageInfo(name, value);
+    const id = extractIdFromUrl(value);
+    if (id !== null) {
+      savePageInfo(name, id);
+    }
     setInpVal(value);
   };
   const [validPortfolioData, setValidPortfolioData] = useState({
@@ -56,6 +58,18 @@ function AddNotionPage({
   if (pageInfo?.type === "portfolio") {
     NotionTemplate =
       "https://benrobo.notion.site/9875e21da7864b67a24edd0f82b4ec9f?v=7409c57af5674b2e983ff2591dea170b";
+  }
+
+  function extractIdFromUrl(notionPage: string) {
+    try {
+      const url = new URL(notionPage);
+      const pathname = url?.pathname.replaceAll("/", "").split("-");
+      const notionId = pathname[pathname.length - 1];
+      return notionId;
+    } catch (e: any) {
+      // toast.error("Url is invalid");
+      return null;
+    }
   }
 
   useEffect(() => {
@@ -164,9 +178,9 @@ function AddNotionPage({
             placeholder="https://benrobo.notion.site/Portfolio-f8dec7f670154145a0a0dc04fd07961f"
             onChange={handleInput}
             // defaultValue={inpVal}
-            // value={pageInfo?.notionPage}
+            // value={pageInfo?.notionPageId}
             value={inpVal}
-            data-name="notionPage"
+            data-name="notionPageId"
           />
           <button
             onClick={verifyNotionUrl}
