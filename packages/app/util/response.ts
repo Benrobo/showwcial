@@ -259,3 +259,49 @@ export function HandleNotifierResponse(
   checkServerError(response, resetState);
   checkInvalidToken(response, resetState);
 }
+
+// Page Builer
+
+// Settings
+export function HandleSettingsResponse(
+  response: any,
+  resetState: () => void,
+  returnData: (data) => any,
+  successfull?: () => void | any
+) {
+  if (response?.code === "--settings/invalid-field") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--settings/token-updated") {
+    resetState();
+    toast.success(`Token updated successfully.`);
+    successfull && successfull();
+    return;
+  }
+
+  if (response?.code === "--settings/token-added") {
+    resetState();
+    successfull && successfull();
+    toast.success(`Token added successfully.`);
+    return;
+  }
+
+  if (response?.code === "--settings/token-fetched") {
+    resetState();
+    successfull && successfull();
+    const data = response?.data;
+    returnData(
+      data?.notionIntegrationToken?.length > 0
+        ? data?.notionIntegrationToken
+        : ""
+    );
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
