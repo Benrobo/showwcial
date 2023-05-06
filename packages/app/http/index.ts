@@ -1,5 +1,6 @@
 import { randomUUID } from "crypto";
 import $http from "./axios";
+import { genRandNum } from "../util";
 
 export async function getUser() {
   const req = await $http.get("/");
@@ -115,6 +116,24 @@ export const deleteVariant = async (variantId: string) => {
 export const verifyNotionPage = async (pageId: string) => {
   try {
     const res = await $http.post(`/pageBuilder/verifyNotion`, pageId);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const addNotionIntegrationToken = async (data: string) => {
+  try {
+    const res = await $http.post(`/settings/addToken`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const getNotionToken = async () => {
+  try {
+    const res = await $http.get(`/settings/getToken?id=${genRandNum(20)}`);
     return res?.data ?? (res as any)?.response?.data;
   } catch (e: any) {
     return e.response?.data ?? { message: e.message, code: e?.code };
