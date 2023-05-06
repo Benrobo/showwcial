@@ -140,9 +140,13 @@ model PortfolioData {
     siteId      String  @unique
     socialLinks Json?
     experiences Json?
-    taglines    String?
+    tagline     String?
     headline    String?
     email       String?
+    about       String? @db.LongText
+    stacks      Json?
+    resumeUrl   String?
+    ghRepo      Json?
 
     site Site @relation(fields: [siteId], references: [id])
 }
