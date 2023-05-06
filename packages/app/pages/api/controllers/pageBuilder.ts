@@ -53,7 +53,16 @@ export default class PageBuilderController extends BaseController {
         this.error(
           res,
           "--pageBuilder/invalid-notion-token",
-          "Token is invalid, please update notion token",
+          "Token is invalid, please update notion token.",
+          500
+        );
+        return;
+      }
+      if (e?.code === "object_not_found") {
+        this.error(
+          res,
+          "--pageBuilder/invalid-notion-url",
+          `Notion page isn't connected to integration.${e.message}`,
           500
         );
         return;
@@ -118,17 +127,17 @@ export default class PageBuilderController extends BaseController {
     }
 
     // create new one.
-    await prisma.site.create({
-      data: {
-        id: uuidv4(),
-        notionDatabaseId: databaseId,
-        name: "",
-        slug: "",
-        pageType: "",
-        themeName: "",
-        userId: uId,
-      },
-    });
+    // await prisma.site.create({
+    //   data: {
+    //     id: uuidv4(),
+    //     notionDatabaseId: databaseId,
+    //     name: "",
+    //     slug: "",
+    //     pageType: "",
+    //     themeName: "",
+    //     userId: uId,
+    //   },
+    // });
 
     this.success(
       res,
