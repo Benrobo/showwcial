@@ -134,7 +134,7 @@ function SideBar({ active }: SidebarProps) {
             <MdStyle className="ml-2 text-2xl " /> Themes
           </li>
         </Link>
-        <Link href="#" className="w-full">
+        <Link href="/settings" className="w-full">
           <li
             className={`${returnActiveStyle(
               active,
