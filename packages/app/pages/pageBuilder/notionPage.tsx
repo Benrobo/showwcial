@@ -1,8 +1,13 @@
 import { Button, Input } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Gap from "../../components/Gap";
 import { Spinner } from "../../components/Loader";
 import { verifyNotionPage } from "../../http";
+import { toast } from "react-hot-toast";
+import { useMutation } from "react-query";
+import { HandlePageBuilderResponse } from "../../util/response";
+import { ImCheckboxChecked } from "react-icons/im";
+import { IoClose } from "react-icons/io5";
 
 type ValidPagePropInfo =
   | "name"
@@ -14,10 +19,20 @@ type ValidPagePropInfo =
 interface PageProps {
   savePageInfo: (name: ValidPagePropInfo, value: string) => void;
   pageInfo: any;
+  setIsNotionVerified: (val: boolean) => void;
 }
 
-function AddNotionPage({ savePageInfo, pageInfo }: PageProps) {
+function AddNotionPage({
+  savePageInfo,
+  pageInfo,
+  setIsNotionVerified,
+}: PageProps) {
   const [loading, setLoading] = useState(false);
+  const [inpVal, setInpVal] = useState("");
+  const verifyNotionMutation = useMutation(
+    async (data) => await verifyNotionPage(data as any)
+  );
+  const [verified, setVerified] = useState<null | boolean>(null);
 
   const handleInput = (e: any) => {
     const dataset = e.target?.dataset;
@@ -25,17 +40,17 @@ function AddNotionPage({ savePageInfo, pageInfo }: PageProps) {
     const value = e.target?.value;
     if (typeof name === "undefined") return;
     savePageInfo(name, value);
+    setInpVal(value);
   };
-
-  const [validData, setValidData] = useState({
-    portfolio: {
-      name: false,
-      description: false,
-      tags: false,
-      ghUrl: false,
-      lvUrl: false,
-    },
+  const [validPortfolioData, setValidPortfolioData] = useState({
+    name: false,
+    description: false,
+    tags: false,
+    ghUrl: false,
+    lvUrl: false,
+    image: false,
   });
+
   let NotionTemplate = "";
 
   if (pageInfo?.type === "portfolio") {
@@ -43,9 +58,93 @@ function AddNotionPage({ savePageInfo, pageInfo }: PageProps) {
       "https://benrobo.notion.site/9875e21da7864b67a24edd0f82b4ec9f?v=7409c57af5674b2e983ff2591dea170b";
   }
 
-  async function verifyNotionUrl() {
-    const res = await verifyNotionPage("9875e21da7864b67a24edd0f82b4ec9f");
-    console.log(res);
+  useEffect(() => {
+    const { data, error } = verifyNotionMutation;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandlePageBuilderResponse(
+        response,
+        () => {},
+        (data) => {
+          const validCols = [
+            "Github Url",
+            "Description",
+            "Tags",
+            "Live Url",
+            "Image",
+            "Name",
+          ].map((d) => d.toLowerCase());
+          let validCount = 0;
+          let idx = 0;
+
+          while (idx <= validCols.length) {
+            const lowerD = data.map((d) => d?.toLowerCase());
+            if (validCols.includes(lowerD[idx])) validCount++;
+            idx++;
+          }
+
+          data.forEach((d) => {
+            const lowerD = d.toLowerCase();
+            if (lowerD === "github url") {
+              setValidPortfolioData((prev) => ({ ...prev, ["ghUrl"]: true }));
+            }
+            if (lowerD === "description") {
+              setValidPortfolioData((prev) => ({
+                ...prev,
+                ["description"]: true,
+              }));
+            }
+            if (lowerD === "tags") {
+              setValidPortfolioData((prev) => ({ ...prev, ["tags"]: true }));
+            }
+            if (lowerD === "live url") {
+              setValidPortfolioData((prev) => ({ ...prev, ["lvUrl"]: true }));
+            }
+            if (lowerD === "image") {
+              setValidPortfolioData((prev) => ({ ...prev, ["image"]: true }));
+            }
+            if (lowerD === "name") {
+              setValidPortfolioData((prev) => ({ ...prev, ["name"]: true }));
+            }
+          });
+
+          if (validCount === validCols.length) {
+            setVerified(true);
+            setIsNotionVerified(true);
+          } else {
+            setVerified(false);
+            setIsNotionVerified(false);
+          }
+        },
+        () => {}
+      );
+    }
+  }, [verifyNotionMutation.data]);
+
+  useEffect(() => {
+    if (verified !== null) {
+      // console.log({ verified });
+    }
+  }, [verified]);
+
+  function verifyNotionUrl() {
+    try {
+      const url = new URL(inpVal);
+      const pathname = url?.pathname.replaceAll("/", "").split("-");
+      const notionId = pathname[pathname.length - 1];
+      setValidPortfolioData({
+        description: false,
+        ghUrl: false,
+        image: false,
+        lvUrl: false,
+        name: false,
+        tags: false,
+      });
+      setVerified(null);
+      verifyNotionMutation.mutate({ id: notionId } as any);
+    } catch (e: any) {
+      toast.error("invalid url");
+    }
   }
 
   return (
@@ -64,14 +163,17 @@ function AddNotionPage({ savePageInfo, pageInfo }: PageProps) {
             className="w-full py-[14px] rounded-l-[10px] outline-none border-[1px] border-solid border-blue-300 px-4 text-slate-100 font-pp-rg bg-dark-100 text-[13px] "
             placeholder="https://benrobo.notion.site/Portfolio-f8dec7f670154145a0a0dc04fd07961f"
             onChange={handleInput}
-            defaultValue={pageInfo?.notionPage}
+            // defaultValue={inpVal}
+            // value={pageInfo?.notionPage}
+            value={inpVal}
+            data-name="notionPage"
           />
           <button
             onClick={verifyNotionUrl}
-            disabled={loading}
+            disabled={verifyNotionMutation?.isLoading}
             className="w-[150px] flex flex-col items-center justify-center px-5 py-[12px] border-solid border-[.9px] border-blue-300 rounded-r-[10px] bg-blue-300"
           >
-            {loading ? (
+            {verifyNotionMutation?.isLoading ? (
               <Spinner color="#fff" />
             ) : (
               <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
@@ -100,16 +202,37 @@ function AddNotionPage({ savePageInfo, pageInfo }: PageProps) {
           <br />
           {/* Portfolio Type */}
           {pageInfo?.type === "portfolio" && (
-            <div className="w-full min-h-[90px] flex gap-5 flex-wrap items-start justify-start">
-              <p className="text-slate-200 font-pp-sb text-[13px]">Name</p>
-              <p className="text-slate-200 font-pp-sb text-[13px]">
+            <div
+              className={`w-full min-h-[90px] flex gap-5 flex-wrap items-start justify-start ${
+                verifyNotionMutation?.isLoading
+                  ? "animate-pulse"
+                  : "animate-none"
+              } `}
+            >
+              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+                Name
+                <ValidIconState valid={validPortfolioData?.name} />
+              </p>
+              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Description
+                <ValidIconState valid={validPortfolioData?.description} />
               </p>
-              <p className="text-slate-200 font-pp-sb text-[13px]">Tags</p>
-              <p className="text-slate-200 font-pp-sb text-[13px]">
+              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+                Tags
+                <ValidIconState valid={validPortfolioData?.tags} />
+              </p>
+              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Github Url
+                <ValidIconState valid={validPortfolioData?.ghUrl} />
               </p>
-              <p className="text-slate-200 font-pp-sb text-[13px]">Live Url</p>
+              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+                Live Url
+                <ValidIconState valid={validPortfolioData?.lvUrl} />
+              </p>
+              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+                Image
+                <ValidIconState valid={validPortfolioData?.image} />
+              </p>
             </div>
           )}
         </div>
@@ -119,3 +242,19 @@ function AddNotionPage({ savePageInfo, pageInfo }: PageProps) {
 }
 
 export default AddNotionPage;
+
+interface ValidIconState {
+  valid: boolean;
+}
+
+function ValidIconState({ valid }: ValidIconState) {
+  return (
+    <>
+      {valid ? (
+        <ImCheckboxChecked color="#05ff82" className="ml-2" size={12} />
+      ) : (
+        <IoClose color="#ff0000" className="ml-2" size={12} />
+      )}
+    </>
+  );
+}
