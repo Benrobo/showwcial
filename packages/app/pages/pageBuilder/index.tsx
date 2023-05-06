@@ -20,14 +20,15 @@ import { useMutation } from "react-query";
 import { createSite } from "../../http";
 import { HandlePageBuilderResponse } from "../../util/response";
 import { Spinner } from "../../components/Loader";
+import AllSites from "./allSites";
 
 function PortfolioBuilder() {
   const [openModal, setOpenModal] = useState(false);
 
   return (
     <MainDashboardLayout activeTab="pageBuilder">
-      <div className="w-full h-full flex items-start justify-center">
-        <div className="w-full h-full flex flex-col items-start justify-start py-5 px-4 border-r-solid border-r-[1px] border-r-white-600 overflow-y-scroll hideScrollBar border-b-[.5px] border-b-white-600 border-b-solid">
+      <div className="w-full h-auto flex flex-col items-start justify-center">
+        <div className="w-full h-auto flex flex-col items-start justify-start py-3 px-4 border-b-solid border-b-[1px] border-b-white-600 overflow-y-scroll hideScrollBar border-b-solid">
           <div className="flex items-center justify-start gap-5">
             {/* <BsDiscord className="text-blue-300" size={25} /> */}
             <p className="text-white-100 font-pp-eb text-[20px]">
@@ -48,6 +49,8 @@ function PortfolioBuilder() {
             Create Site
           </button>
         </div>
+        <Gap height={20} />
+        <AllSites />
         {openModal && <CreateSite closeModal={() => setOpenModal(false)} />}
       </div>
     </MainDashboardLayout>
