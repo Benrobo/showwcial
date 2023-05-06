@@ -112,7 +112,7 @@ export const deleteVariant = async (variantId: string) => {
   }
 };
 
-// Page Builer
+// Page Builder
 export const verifyNotionPage = async (pageId: string) => {
   try {
     const res = await $http.post(`/pageBuilder/verifyNotion`, pageId);
@@ -122,6 +122,16 @@ export const verifyNotionPage = async (pageId: string) => {
   }
 };
 
+export const createSite = async (data: any) => {
+  try {
+    const res = await $http.post(`/pageBuilder/createSite`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+// Setting
 export const addNotionIntegrationToken = async (data: string) => {
   try {
     const res = await $http.post(`/settings/addToken`, data);
