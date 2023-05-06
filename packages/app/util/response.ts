@@ -311,7 +311,25 @@ export function HandlePageBuilderResponse(
   returnData: (data) => any,
   successfull?: () => void | any
 ) {
+  if (response?.code === "--pageBuilder/invalid-fields") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/slug-exists") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
   if (response?.code === "--pageBuilder/invalid-notion-page") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/verify-notion-page") {
     toast.error(response?.message);
     resetState();
     return;
@@ -356,6 +374,13 @@ export function HandlePageBuilderResponse(
     successfull && successfull();
     const data = response?.data;
     returnData(Object.keys(data?.properties));
+    return;
+  }
+
+  if (response?.code === "--pageBuilder/success") {
+    toast.success(response?.message);
+    resetState();
+    successfull && successfull();
     return;
   }
 
