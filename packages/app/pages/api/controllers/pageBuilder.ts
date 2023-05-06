@@ -22,6 +22,15 @@ export default class PageBuilderController extends BaseController {
     this.siteSchema = SiteSchema;
   }
 
+  private convertUidToUUID(str: string) {
+    if (isEmpty(str)) return str;
+    const uuid = `${str.substr(0, 8)}-${str.substr(8, 4)}-${str.substr(
+      12,
+      4
+    )}-${str.substr(16, 4)}-${str.substr(20)}`;
+    return uuid;
+  }
+
   public async verifyNotionPage(req: NextApiRequest, res: NextApiResponse) {
     const payload = req.body;
     const uId = req["user"]?.id;
@@ -127,17 +136,17 @@ export default class PageBuilderController extends BaseController {
     }
 
     // create new one.
-    // await prisma.site.create({
-    //   data: {
-    //     id: uuidv4(),
-    //     notionDatabaseId: databaseId,
-    //     name: "",
-    //     slug: "",
-    //     pageType: "",
-    //     themeName: "",
-    //     userId: uId,
-    //   },
-    // });
+    await prisma.site.create({
+      data: {
+        id: uuidv4(),
+        notionDatabaseId: databaseId,
+        name: "",
+        slug: "",
+        pageType: "",
+        themeName: "",
+        userId: uId,
+      },
+    });
 
     this.success(
       res,
@@ -221,7 +230,7 @@ export default class PageBuilderController extends BaseController {
 
     // check if notion Id exits
     const notionExists = await prisma.site.findFirst({
-      where: { notionDatabaseId: notionPageId },
+      where: { notionDatabaseId: this.convertUidToUUID(notionPageId) },
       include: { user: true },
     });
 
@@ -271,7 +280,7 @@ export default class PageBuilderController extends BaseController {
       }
 
       // update site
-      const createdSite = await prisma.site.update({
+      await prisma.site.update({
         where: { id: notionExists?.id },
         data: {
           name,
