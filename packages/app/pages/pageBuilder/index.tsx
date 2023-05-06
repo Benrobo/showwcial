@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainDashboardLayout from "../../components/Layout/mainDashboard";
 import Gap from "../../components/Gap";
 import Modal from "../../components/Modal";
@@ -16,6 +16,10 @@ import Themes from "./theme";
 import AddNotionPage from "./notionPage";
 import { toast } from "react-hot-toast";
 import { isEmpty } from "../../util";
+import { useMutation } from "react-query";
+import { createSite } from "../../http";
+import { HandlePageBuilderResponse } from "../../util/response";
+import { Spinner } from "../../components/Loader";
 
 function PortfolioBuilder() {
   const [openModal, setOpenModal] = useState(false);
@@ -63,8 +67,11 @@ function CreateSite({ closeModal }: CreateSiteProps) {
     slug: "",
     type: "",
     themeName: "",
-    notionPage: "",
+    notionPageId: "",
   });
+  const createSiteMutation = useMutation(
+    async (data) => await createSite(data)
+  );
 
   let component = null;
   let controlButton = null;
@@ -74,7 +81,7 @@ function CreateSite({ closeModal }: CreateSiteProps) {
     | "slug"
     | "type"
     | "themeName"
-    | "notionPage"
+    | "notionPageId"
     | "";
 
   const savePageInfo = (name: ValidPagePropInfo, value: string) => {
@@ -106,7 +113,7 @@ function CreateSite({ closeModal }: CreateSiteProps) {
       return true;
     }
     if (step === 2) {
-      if (isEmpty(pageInfo?.notionPage)) {
+      if (isEmpty(pageInfo?.notionPageId)) {
         toast.error("Notion page can't be empty.");
         return false;
       }
@@ -115,18 +122,19 @@ function CreateSite({ closeModal }: CreateSiteProps) {
   };
 
   const next = () => {
+    if (createSiteMutation.isLoading) return;
     const successfulVerification = handlePageVerification(step);
     if (!successfulVerification) return;
     if (step <= 1) setStep((prev: number) => (prev += 1));
     if (step === 2 && !isNotionVerified) {
       toast.error("Please verify notion page first.");
+      return;
     }
-    if (step === 2 && isNotionVerified) {
-      toast.success("Verificatio");
-    }
+    if (step === 2 && isNotionVerified) createShowwcialPage();
   };
 
   const prev = () => {
+    if (createSiteMutation.isLoading) return;
     if (step > 0) {
       setStep((prev: number) => (prev -= 1));
     }
@@ -158,6 +166,10 @@ function CreateSite({ closeModal }: CreateSiteProps) {
     return component;
   };
 
+  function createShowwcialPage() {
+    createSiteMutation.mutate(pageInfo as any);
+  }
+
   const renderControlButton = (step: number, nextFunc, prevFunc) => {
     const contBtn = (
       <Button
@@ -179,10 +191,18 @@ function CreateSite({ closeModal }: CreateSiteProps) {
         _hover={{
           bg: "#258dfd",
         }}
-        rightIcon={<BsArrowRightShort />}
+        rightIcon={!createSiteMutation.isLoading && <BsArrowRightShort />}
         onClick={nextFunc}
+        disabled={createSiteMutation.isLoading}
+        cursor={createSiteMutation.isLoading && "not-allowed"}
       >
-        {step === 2 ? "Finish" : "Next"}
+        {step === 2 ? (
+          <div className="flex items-center justify-center">
+            {createSiteMutation.isLoading ? <Spinner color="#fff" /> : "Finish"}
+          </div>
+        ) : (
+          "Next"
+        )}
       </Button>
     );
     const prevBtn = (
@@ -194,6 +214,8 @@ function CreateSite({ closeModal }: CreateSiteProps) {
         }}
         leftIcon={<BsArrowLeftShort />}
         onClick={prevFunc}
+        disabled={createSiteMutation.isLoading}
+        cursor={createSiteMutation.isLoading && "not-allowed"}
       >
         Prev
       </Button>
@@ -222,6 +244,19 @@ function CreateSite({ closeModal }: CreateSiteProps) {
     }
     return controlButton;
   };
+
+  useEffect(() => {
+    const { data, error } = createSiteMutation;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandlePageBuilderResponse(
+        response,
+        () => {},
+        () => {},
+        () => closeModal()
+      );
+    }
+  }, [createSiteMutation.data]);
 
   return (
     <Modal isOpen isBlurBg onClose={closeModal} showCloseIcon>
