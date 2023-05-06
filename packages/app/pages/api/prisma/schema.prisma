@@ -122,18 +122,26 @@ model BotPrevPosts {
 }
 
 model Site {
-    id          String  @id
-    userId      String
-    name        String
-    slug        String  @unique
-    pageType    String
-    themeName   String
-    notionPage  String?
-    socialLinks Json?
+    id           String  @id
+    userId       String
+    name         String
+    slug         String  @unique
+    pageType     String
+    themeName    String
+    notionPageId String?
+    socialLinks  Json?
 
     createdAt DateTime @default(now())
 
     user Users @relation(fields: [userId], references: [id])
 
     @@index([userId])
+}
+
+model Settings {
+    id                     String @id
+    userId                 String
+    notionIntegrationToken String @db.Text
+
+    createdAt DateTime @default(now())
 }
