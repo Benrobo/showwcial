@@ -1,7 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import BaseController from "./base";
-import { notion } from "../config";
+import { Client } from "@notionhq/client";
 import { isEmpty } from "../../../util";
+
+function notion(token: string) {
+  const notion = new Client({
+    auth: token,
+  });
+  return notion;
+}
 
 export default class PageBuilderController extends BaseController {
   constructor() {
@@ -21,8 +28,10 @@ export default class PageBuilderController extends BaseController {
       return;
     }
     try {
-      const result = await notion.pages.retrieve({
-        page_id: payload?.id,
+      const result = await notion(
+        "secret_rNbwHpvjXaj0HZkpxBSwM4lyhYmiyIsuEFTQFj7xX4V"
+      ).databases.retrieve({
+        database_id: payload?.id,
       });
       //   https://www.notion.so/benrobo/Portfolio-f8dec7f670154145a0a0dc04fd07961f?pvs=4
       //   if(result?.code)
