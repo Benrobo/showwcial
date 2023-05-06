@@ -131,6 +131,27 @@ export const createSite = async (data: any) => {
   }
 };
 
+export const getCreatedSites = async () => {
+  try {
+    const res = await $http.get(`/pageBuilder/getSites?t=${genRandNum(10)}`);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const getCreatedSiteBySlug = async (data: any) => {
+  try {
+    const res = await $http.post(
+      `/pageBuilder/getSiteBySlug?t=${genRandNum(10)}`,
+      data
+    );
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
 // Setting
 export const addNotionIntegrationToken = async (data: string) => {
   try {
