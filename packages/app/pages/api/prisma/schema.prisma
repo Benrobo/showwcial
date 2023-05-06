@@ -110,26 +110,23 @@ model BotNotifier {
 
 model BotPrevPosts {
     id     String @unique
-    type   String // thread, shows, jobs
+    type   String
     postId String
 
-    // action String
     createdAt DateTime @default(now())
 
-    // notifier BotNotifier @relation(fields: [id], references: [id])
-
-    // @@index([id])
+    @@index([id])
 }
 
 model Site {
-    id           String  @id
-    userId       String
-    name         String
-    slug         String  @unique
-    pageType     String
-    themeName    String
-    notionPageId String?
-    socialLinks  Json?
+    id               String  @id
+    userId           String
+    name             String
+    slug             String  @unique
+    pageType         String
+    themeName        String
+    notionDatabaseId String?
+    socialLinks      Json?
 
     createdAt DateTime @default(now())
 
