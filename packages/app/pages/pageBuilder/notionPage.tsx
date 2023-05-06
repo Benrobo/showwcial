@@ -211,27 +211,45 @@ function AddNotionPage({
             >
               <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Name
-                <ValidIconState valid={validPortfolioData?.name} />
+                <ValidIconState
+                  valid={validPortfolioData?.name}
+                  verified={verified}
+                />
               </p>
               <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Description
-                <ValidIconState valid={validPortfolioData?.description} />
+                <ValidIconState
+                  valid={validPortfolioData?.description}
+                  verified={verified}
+                />
               </p>
               <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Tags
-                <ValidIconState valid={validPortfolioData?.tags} />
+                <ValidIconState
+                  valid={validPortfolioData?.tags}
+                  verified={verified}
+                />
               </p>
               <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Github Url
-                <ValidIconState valid={validPortfolioData?.ghUrl} />
+                <ValidIconState
+                  valid={validPortfolioData?.ghUrl}
+                  verified={verified}
+                />
               </p>
               <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Live Url
-                <ValidIconState valid={validPortfolioData?.lvUrl} />
+                <ValidIconState
+                  valid={validPortfolioData?.lvUrl}
+                  verified={verified}
+                />
               </p>
               <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
                 Image
-                <ValidIconState valid={validPortfolioData?.image} />
+                <ValidIconState
+                  valid={validPortfolioData?.image}
+                  verified={verified}
+                />
               </p>
             </div>
           )}
@@ -245,15 +263,24 @@ export default AddNotionPage;
 
 interface ValidIconState {
   valid: boolean;
+  verified: boolean;
 }
 
-function ValidIconState({ valid }: ValidIconState) {
+function ValidIconState({ valid, verified }: ValidIconState) {
   return (
     <>
       {valid ? (
-        <ImCheckboxChecked color="#05ff82" className="ml-2" size={12} />
+        <ImCheckboxChecked
+          color={verified !== null ? (valid ? "#05ff82" : "#777") : "#777"}
+          className="ml-2"
+          size={12}
+        />
       ) : (
-        <IoClose color="#ff0000" className="ml-2" size={12} />
+        <IoClose
+          color={verified !== null ? (valid ? "#ff0000" : "#7777") : "#7777"}
+          className="ml-2"
+          size={12}
+        />
       )}
     </>
   );
