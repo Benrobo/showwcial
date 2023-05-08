@@ -301,7 +301,7 @@ export default class PageBuilderController extends BaseController {
               about,
               email: notionExists?.user?.email,
               resumeUrl,
-              stacks,
+              stacks: stacks ?? JSON.stringify([]),
               ghRepo: JSON.stringify(githubRepoData),
             },
           },
@@ -320,10 +320,15 @@ export default class PageBuilderController extends BaseController {
     this.error(
       res,
       "--pageBuilder/verify-notion-page",
-      "Please verify notion page first.",
+      "Missing Notion Page. Please verify notion page first.",
       400
     );
   }
+
+  public async refetchPortfolioData(
+    req: NextApiRequest,
+    res: NextApiResponse
+  ) {}
 
   public async getCreatedSites(req: NextApiRequest, res: NextApiResponse) {
     const uId = req["user"]?.id;
@@ -386,6 +391,105 @@ export default class PageBuilderController extends BaseController {
       "sites fetched successfully.",
       200,
       { sites: createdSites }
+    );
+  }
+
+  public async updateSite(req: NextApiRequest, res: NextApiResponse) {
+    const payload = req.body;
+    const uId = req["user"]?.id;
+    if (isEmpty(payload?.slug)) {
+      this.error(
+        res,
+        "--updateSite/invalid-fields",
+        "Slug can't be empty.",
+        400
+      );
+      return;
+    }
+    if (isEmpty(payload?.tagline)) {
+      this.error(
+        res,
+        "--updateSite/invalid-fields",
+        "Tagline can't be empty.",
+        400
+      );
+      return;
+    }
+    if (isEmpty(payload?.headline)) {
+      this.error(
+        res,
+        "--updateSite/invalid-fields",
+        "Headline can't be empty.",
+        400
+      );
+      return;
+    }
+
+    const { slug, tagline, headline } = payload;
+
+    // check if slug is valid
+    const slugValid = await prisma.site.findMany({
+      where: { slug, userId: uId },
+    });
+
+    if (slugValid.length === 0) {
+      this.error(res, "--updateSite/invalid-slug", "Slug is invalid.", 400);
+      return;
+    }
+
+    await prisma.site.update({
+      where: { slug },
+      data: {
+        portfolioData: {
+          update: {
+            tagline,
+            headline,
+          },
+        },
+      },
+    });
+
+    this.success(
+      res,
+      "--updateSite/success",
+      "site updated successfully.",
+      200
+    );
+  }
+
+  public async deleteSite(req: NextApiRequest, res: NextApiResponse) {
+    const uId = req["user"]?.id;
+    const params = req.query;
+
+    if (isEmpty(params?.slug as string)) {
+      this.error(res, "--deleteSite/invalid-fields", "Slug is missing.", 400);
+      return;
+    }
+
+    // check if slug is valid
+    const siteExists = await prisma.site.findFirst({
+      where: { userId: uId, slug: params?.slug as string },
+    });
+
+    if (siteExists === null) {
+      this.error(
+        res,
+        "--deleteSite/failed",
+        "Unauthorised or Site not found.",
+        400
+      );
+      return;
+    }
+
+    await prisma.site.delete({
+      where: { id: siteExists?.id },
+    });
+
+    this.success(
+      res,
+      "--deleteSite/success",
+      "site deleted successfully.",
+      200
     );
   }
 }
