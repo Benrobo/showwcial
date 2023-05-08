@@ -152,6 +152,24 @@ export const getCreatedSiteBySlug = async (data: any) => {
   }
 };
 
+export const updateSite = async (data: any) => {
+  try {
+    const res = await $http.put(`/pageBuilder/updateSite`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const deleteSite = async (slug: string) => {
+  try {
+    const res = await $http.delete(`/pageBuilder/deleteSite/${slug}`);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
 // Setting
 export const addNotionIntegrationToken = async (data: string) => {
   try {
