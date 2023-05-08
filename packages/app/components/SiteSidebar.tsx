@@ -2,14 +2,20 @@ import { IconButton, Input } from "@chakra-ui/react";
 import Modal from "./Modal";
 import { IoClose } from "react-icons/io5";
 import Gap from "./Gap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isEmpty } from "../util";
+import { useMutation } from "react-query";
+import { deleteSite, updateSite } from "../http";
+import { HandlePageBuilderResponse } from "../util/response";
+import { Spinner } from "./Loader";
+import { toast } from "react-hot-toast";
 
 interface SiteSidebarProps {
   closeSidebar: () => void;
   visible: boolean;
   siteId: string;
   selectedSite: any;
+  refetchSites: () => void;
 }
 
 export default function SiteSideBar({
@@ -17,7 +23,9 @@ export default function SiteSideBar({
   visible,
   siteId,
   selectedSite,
+  refetchSites,
 }: SiteSidebarProps) {
+  // const
   const createdSiteId = siteId;
   const siteData = selectedSite?.portfolioData;
   const tagline = siteData?.tagline;
@@ -27,6 +35,12 @@ export default function SiteSideBar({
     tagline: tagline,
     headline: headline,
   });
+  const updateSiteMutation = useMutation(async (data) =>
+    updateSite(data as any)
+  );
+  const deleteSiteMutation = useMutation(async (data) =>
+    deleteSite(data as any)
+  );
 
   const handleInput = (e: any) => {
     const dataset = e?.target?.dataset;
@@ -36,8 +50,55 @@ export default function SiteSideBar({
     setInpData((prev: any) => ({ ...prev, [name]: value }));
   };
 
+  useEffect(() => {
+    const { data, error } = updateSiteMutation;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandlePageBuilderResponse(
+        response,
+        () => {},
+        () => {},
+        () => refetchSites()
+      );
+    }
+  }, [updateSiteMutation?.data]);
+
+  useEffect(() => {
+    const { data, error } = deleteSiteMutation;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandlePageBuilderResponse(
+        response,
+        () => {},
+        () => {},
+        () => {
+          refetchSites();
+          closeSidebar();
+        }
+      );
+    }
+  }, [deleteSiteMutation?.data]);
+
   function saveChanges() {
-    console.log(inpData);
+    const userInp = inpData;
+    if (userInp?.headline === headline && userInp?.tagline === tagline) {
+      toast.error("No changes were made.");
+      return;
+    }
+    const updatedData = {
+      tagline: userInp.tagline,
+      headline: userInp.headline,
+      slug: selectedSite?.slug,
+    };
+    updateSiteMutation.mutate(updatedData as any);
+  }
+
+  function deleteCreatedSite() {
+    const confirm = window.confirm(
+      "Are you sure about this? This is irreversible"
+    );
+    if (!confirm) return;
+    deleteSiteMutation.mutate(selectedSite?.slug as any);
   }
 
   return (
@@ -74,6 +135,7 @@ export default function SiteSideBar({
             value={inpData?.tagline}
             // value={tagline}
             data-name="tagline"
+            maxLength={MAX_CHAR}
           />
           <br />
           <div className="w-full flex items-start justify-start mb-1">
@@ -89,42 +151,41 @@ export default function SiteSideBar({
             // value={pageInfo?.notionPageId}
             // value={headline}
             data-name="headline"
+            maxLength={MAX_CHAR}
           />
           <br />
           <Gap height={60} />
           <div className="w-full flex items-center justify-between">
             <button
               onClick={saveChanges}
-              // disabled={verifyNotionMutation?.isLoading}
+              disabled={
+                updateSiteMutation?.isLoading ?? deleteSiteMutation.isLoading
+              }
               className="w-[150px] flex flex-col items-center justify-center px-5 py-[12px] border-solid border-[.9px] border-blue-300 rounded-[10px] bg-blue-300"
             >
-              {/* {verifyNotionMutation?.isLoading ? (
-              <Spinner color="#fff" />
-            ) : (
-              <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
-                Verify Page
-              </span>
-            )} */}
-              <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
-                Save Changes
-              </span>
+              {updateSiteMutation?.isLoading ? (
+                <Spinner color="#fff" />
+              ) : (
+                <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
+                  Save Changes
+                </span>
+              )}
             </button>
 
             <button
-              // onClick={verifyNotionUrl}
-              // disabled={verifyNotionMutation?.isLoading}
+              onClick={deleteCreatedSite}
+              disabled={
+                updateSiteMutation?.isLoading ?? deleteSiteMutation?.isLoading
+              }
               className="w-[150px] flex flex-col items-center justify-center px-5 py-[12px] border-solid border-[.9px] border-red-200 rounded-[10px] bg-red-100"
             >
-              {/* {verifyNotionMutation?.isLoading ? (
-              <Spinner color="#fff" />
-            ) : (
-              <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
-                Verify Page
-              </span>
-            )} */}
-              <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
-                Delete Site
-              </span>
+              {deleteSiteMutation?.isLoading ? (
+                <Spinner color="#fff" />
+              ) : (
+                <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
+                  Delete Site
+                </span>
+              )}
             </button>
           </div>
         </div>
