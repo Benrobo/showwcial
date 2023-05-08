@@ -168,19 +168,27 @@ export default class PageBuilderController extends BaseController {
     };
     try {
       const userData = await axios
-        .get(`https://cache.showwcase.com/user/${username}`)
+        .get(`https://cache.showwcase.com/user/${username}?t=${uuidv4()}`)
         .then((r) => r?.data);
       const experiences = await axios
-        .get(`https://cache.showwcase.com/user/${username}/experiences`)
+        .get(
+          `https://cache.showwcase.com/user/${username}/experiences?t=${uuidv4()}`
+        )
         .then((r) => r?.data);
       const stacks = await axios
-        .get(`https://cache.showwcase.com/user/${username}/stacks`)
+        .get(
+          `https://cache.showwcase.com/user/${username}/stacks?t=${uuidv4()}`
+        )
         .then((r) => r?.data);
       const ghRepo = await axios
-        .get(`https://cache.showwcase.com/user/${username}/github_repos`)
+        .get(
+          `https://cache.showwcase.com/user/${username}/github_repos?t=${uuidv4()}`
+        )
         .then((r) => r?.data);
       const socials = await axios
-        .get(`https://cache.showwcase.com/user/${username}/socials`)
+        .get(
+          `https://cache.showwcase.com/user/${username}/socials?t=${uuidv4()}`
+        )
         .then((r) => r?.data);
 
       const result = Promise.all([
@@ -325,10 +333,123 @@ export default class PageBuilderController extends BaseController {
     );
   }
 
-  public async refetchPortfolioData(
-    req: NextApiRequest,
-    res: NextApiResponse
-  ) {}
+  public async refetchPortfolioData(req: NextApiRequest, res: NextApiResponse) {
+    const uId = req["user"]?.id;
+    const params = req.query;
+
+    if (isEmpty(params?.slug as string)) {
+      this.error(
+        res,
+        "--refetchSiteData/invalid-fields",
+        `Slug is empty.`,
+        400
+      );
+      return;
+    }
+
+    const slug = params?.slug as string;
+
+    // check if slug exists.
+    const siteExists = await prisma.site.findFirst({
+      where: { userId: uId, slug: slug },
+    });
+
+    if (siteExists === null) {
+      this.error(
+        res,
+        "--refetchSiteData/site-not-found",
+        "Site not found.",
+        400
+      );
+      return;
+    }
+
+    const userData = await prisma.users.findFirst({ where: { id: uId } });
+
+    // fetch portfolio data from showwcase.
+    const { about, experiences, repo, resumeUrl, socials, stacks } =
+      await this.fetchUserDetails(userData?.username);
+
+    if (
+      about === null ||
+      repo === null ||
+      experiences === null ||
+      stacks === null ||
+      resumeUrl === null
+    ) {
+      this.error(
+        res,
+        "--refetchSiteData/something-went-wrong",
+        "Something went wrong... please try again.",
+        400
+      );
+      return;
+    }
+
+    const githubRepoData = [];
+    const socialLinks = [];
+    const formatedExperiences = [];
+
+    if (repo !== null) {
+      repo.forEach((rp) => {
+        if (rp?.pinned) {
+          const repoInfo = {
+            name: rp?.name,
+            description: rp?.description,
+            url: rp?.htmlUrl,
+            tags: Object.keys(rp?.languages),
+          };
+          githubRepoData.push(repoInfo);
+        }
+      });
+    }
+    if (socials !== null && socials?.length > 0) {
+      socials.forEach((s) => {
+        let links = {
+          label: s?.label,
+          url: s?.value,
+        };
+        socialLinks.push(links);
+      });
+    }
+    if (experiences !== null && experiences?.length > 0) {
+      experiences.forEach((e) => {
+        let exp = {
+          title: e?.title,
+          companyName: e?.companyName,
+          startDate: e?.startDate,
+          endDate: e?.endDate,
+          current: e?.current,
+          description: e?.description,
+        };
+        formatedExperiences.push(exp);
+      });
+    }
+
+    // update site
+    await prisma.site.update({
+      where: { id: siteExists?.id },
+      data: {
+        portfolioData: {
+          update: {
+            experiences: JSON.stringify(formatedExperiences),
+            socialLinks: JSON.stringify(socialLinks),
+            about,
+            resumeUrl,
+            stacks: stacks ?? JSON.stringify([]),
+            ghRepo: JSON.stringify(githubRepoData),
+          },
+        },
+      },
+    });
+
+    this.success(
+      res,
+      "--refetchSiteData/siteData-updated",
+      "Site data updated successfully.",
+      200
+    );
+  }
 
   public async getCreatedSites(req: NextApiRequest, res: NextApiResponse) {
     const uId = req["user"]?.id;
