@@ -311,7 +311,13 @@ export function HandlePageBuilderResponse(
   returnData: (data) => any,
   successfull?: () => void | any
 ) {
-  if (response?.code === "--pageBuilder/invalid-fields") {
+  if (
+    [
+      "--pageBuilder/invalid-fields",
+      "--deleteSite/invalid-fields",
+      "--updateSite/invalid-fields",
+    ].includes(response?.code)
+  ) {
     toast.error(response?.message);
     resetState();
     return;
@@ -368,6 +374,18 @@ export function HandlePageBuilderResponse(
     return;
   }
 
+  if (response?.code === "--updateSite/invalid-slug") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--deleteSite/failed") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
   if (response?.code === "--pageBuilder/notion-verified") {
     toast.success(response?.message);
     resetState();
@@ -377,7 +395,13 @@ export function HandlePageBuilderResponse(
     return;
   }
 
-  if (response?.code === "--pageBuilder/success") {
+  if (
+    [
+      "--pageBuilder/success",
+      "--updateSite/success",
+      "--deleteSite/success",
+    ].includes(response?.code)
+  ) {
     toast.success(response?.message);
     resetState();
     successfull && successfull();
