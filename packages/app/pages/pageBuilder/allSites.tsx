@@ -53,7 +53,7 @@ function AllSites() {
       const response = data;
       HandlePageBuilderResponse(
         response,
-        () => {},
+        () => refreshSiteDataMutation.reset(),
         () => {},
         () => refetchSites()
       );
@@ -145,7 +145,7 @@ function CreatedSites({
   return (
     <button
       key={id}
-      className={`w-auto h-auto flex items-start justify-start ${SelectedStyle} py-4 px-3 rounded-lg`}
+      className={`w-auto h-auto flex items-start justify-start ${SelectedStyle} py-4 px-3 rounded-lg cursor-default `}
     >
       <div className="w-[70px] h-full flex items-center justify-center p-4 rounded-lg border-solid border-[.5px] border-white-600 ">
         <span className="text-2xl">🎉</span>
