@@ -256,7 +256,10 @@ function CreateSite({ closeModal }: CreateSiteProps) {
         response,
         () => {},
         () => {},
-        () => closeModal()
+        () => {
+          closeModal();
+          location && location.reload();
+        }
       );
     }
   }, [createSiteMutation.data]);
