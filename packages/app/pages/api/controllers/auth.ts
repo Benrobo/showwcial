@@ -264,13 +264,13 @@ export default class Authentication extends BaseController {
         return;
       }
 
-      const showwcaseUserInfo = await this.fetchShowwcaseUserDetails(username);
+      // const showwcaseUserInfo = await this.fetchShowwcaseUserDetails(username);
       const validUserData = {
         username,
         email,
         id,
-        fullname: showwcaseUserInfo?.displayName ?? "",
-        image: showwcaseUserInfo?.profilePictureKey ?? "",
+        fullname: dbUser?.fullname,
+        image: dbUser?.image,
       };
 
       // create new user in database.
