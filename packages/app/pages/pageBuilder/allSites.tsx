@@ -18,6 +18,8 @@ function AllSites() {
     queryKey: ["fetchedCreatedSites"],
   });
 
+  const refetchSites = () => allSitesQuery.refetch();
+
   const handleSelectedSite = (e: any) => {
     const dataset = e?.target?.dataset;
     const id = dataset?.id;
@@ -73,6 +75,7 @@ function AllSites() {
           closeSidebar={() => setSidebarVisibility(false)}
           siteId={selectedSiteId}
           selectedSite={selectedSite}
+          refetchSites={refetchSites}
         />
       )}
     </div>
@@ -145,7 +148,7 @@ function CreatedSites({
         className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
         // onClick={copyToken}
       >
-        <BiRefresh color="#ccc" />
+        <BiRefresh color="#ccc" className={`animate-spin`} />
       </button>
       <button
         className="px-3 py-[10px] flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
