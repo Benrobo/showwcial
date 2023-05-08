@@ -3,8 +3,8 @@ import { copyToClipboard, isEmpty } from "../../util";
 import { BiCopy, BiPencil, BiRefresh } from "react-icons/bi";
 import SiteSideBar from "../../components/SiteSidebar";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
-import { getCreatedSites } from "../../http";
+import { useMutation, useQuery } from "react-query";
+import { getCreatedSites, refreshSiteData } from "../../http";
 import { HandlePageBuilderResponse } from "../../util/response";
 import { Spinner } from "../../components/Loader";
 
@@ -13,10 +13,14 @@ function AllSites() {
   const [selectedSiteId, setSelectedSiteId] = useState("");
   const [selectedSite, setSelectedSite] = useState<any>({});
   const [createdSites, setCreatedSites] = useState<any[]>([]);
+  const [shouldRefreshSiteData, setShouldRefreshSiteData] = useState(false);
   const allSitesQuery = useQuery({
     queryFn: async () => await getCreatedSites(),
     queryKey: ["fetchedCreatedSites"],
   });
+  const refreshSiteDataMutation = useMutation(
+    async (slug: string) => await refreshSiteData(slug)
+  );
 
   const refetchSites = () => allSitesQuery.refetch();
 
@@ -43,6 +47,27 @@ function AllSites() {
     }
   }, [allSitesQuery.data]);
 
+  useEffect(() => {
+    const { data, error } = refreshSiteDataMutation;
+    if (typeof data !== "undefined" || error !== null) {
+      const response = data;
+      HandlePageBuilderResponse(
+        response,
+        () => {},
+        () => {},
+        () => refetchSites()
+      );
+    }
+  }, [refreshSiteDataMutation.data]);
+
+  function refreshData(slug: string) {
+    if (isEmpty(slug)) {
+      toast.error("site slug is missing.");
+      return;
+    }
+    refreshSiteDataMutation.mutate(slug);
+  }
+
   return (
     <div className="w-full h-full flex flex-wrap items-start justify-start px-4 py-3 gap-2">
       {allSitesQuery?.isLoading ? (
@@ -65,6 +90,8 @@ function AllSites() {
             slug={d?.slug}
             themeName={d?.themeName}
             key={d?.id}
+            refreshSiteData={refreshData}
+            isRefreshing={refreshSiteDataMutation?.isLoading}
           />
         ))
       )}
@@ -91,6 +118,8 @@ interface CreatedSitesProps {
   onSelected: (e: any) => void;
   selectedSite: string;
   themeName: string;
+  refreshSiteData: (slug: string) => void;
+  isRefreshing: boolean;
 }
 
 function CreatedSites({
@@ -100,6 +129,8 @@ function CreatedSites({
   selectedSite,
   slug,
   themeName,
+  refreshSiteData,
+  isRefreshing,
 }: CreatedSitesProps) {
   const copyToken = () => {
     const url =
@@ -146,9 +177,14 @@ function CreatedSites({
       </button>
       <button
         className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
-        // onClick={copyToken}
+        onClick={() => {
+          if (!isRefreshing) refreshSiteData(slug);
+        }}
       >
-        <BiRefresh color="#ccc" className={`animate-spin`} />
+        <BiRefresh
+          color="#ccc"
+          className={`${isRefreshing ? "animate-spin" : "animate-none"}`}
+        />
       </button>
       <button
         className="px-3 py-[10px] flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
