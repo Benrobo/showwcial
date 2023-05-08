@@ -506,15 +506,18 @@ export default class PageBuilderController extends BaseController {
       include: { portfolioData: true },
     });
 
+    const userData = await prisma.users.findFirst({
+      where: { id: createdSites?.userId },
+    });
+
     if (createdSites.portfolioData !== null) {
       const portfolio = createdSites?.portfolioData;
 
-      delete createdSites["themeName"];
       delete createdSites["createdAt"];
       delete createdSites["id"];
-      delete createdSites["pageType"];
-      delete createdSites["slug"];
       delete createdSites["userId"];
+
+      createdSites.portfolioData["userImage"] = userData?.image;
 
       if (typeof portfolio?.ghRepo === "string") {
         createdSites.portfolioData["ghRepo"] = JSON.parse(portfolio?.ghRepo);
@@ -571,10 +574,15 @@ export default class PageBuilderController extends BaseController {
 
     this.success(
       res,
-      "--pageBuilder/success",
+      "--siteBySlug/success",
       "sites fetched successfully.",
       200,
-      { sites: { ...createdSites, portfolioProjects } }
+      {
+        sites: {
+          ...createdSites,
+          portfolioProjects,
+        },
+      }
     );
   }
 

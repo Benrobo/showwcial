@@ -140,11 +140,10 @@ export const getCreatedSites = async () => {
   }
 };
 
-export const getCreatedSiteBySlug = async (data: any) => {
+export const getCreatedSiteBySlug = async (slug: any) => {
   try {
-    const res = await $http.post(
-      `/pageBuilder/getSiteBySlug?t=${genRandNum(10)}`,
-      data
+    const res = await $http.get(
+      `/pageBuilder/getSiteBySlug/${slug}?t=${genRandNum(10)}`
     );
     return res?.data ?? (res as any)?.response?.data;
   } catch (e: any) {
