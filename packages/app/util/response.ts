@@ -316,6 +316,7 @@ export function HandlePageBuilderResponse(
       "--pageBuilder/invalid-fields",
       "--deleteSite/invalid-fields",
       "--updateSite/invalid-fields",
+      "--refetchSiteData/invalid-fields",
     ].includes(response?.code)
   ) {
     toast.error(response?.message);
@@ -324,6 +325,18 @@ export function HandlePageBuilderResponse(
   }
 
   if (response?.code === "--pageBuilder/slug-exists") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--refetchSiteData/site-not-found") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--refetchSiteData/something-went-wrong") {
     toast.error(response?.message);
     resetState();
     return;
@@ -400,6 +413,7 @@ export function HandlePageBuilderResponse(
       "--pageBuilder/success",
       "--updateSite/success",
       "--deleteSite/success",
+      "--refetchSiteData/siteData-updated",
     ].includes(response?.code)
   ) {
     toast.success(response?.message);
