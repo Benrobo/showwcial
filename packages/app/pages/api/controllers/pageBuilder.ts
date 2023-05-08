@@ -31,6 +31,34 @@ export default class PageBuilderController extends BaseController {
     return uuid;
   }
 
+  public catchNotionError(err: any, res: NextApiResponse) {
+    if (err?.code === "unauthorized") {
+      this.error(
+        res,
+        "--pageBuilder/invalid-notion-token",
+        "Token is invalid, please update notion token.",
+        500
+      );
+      return;
+    }
+    if (err?.code === "object_not_found") {
+      this.error(
+        res,
+        "--pageBuilder/invalid-notion-url",
+        `Notion page isn't connected to integration.${err.message}`,
+        500
+      );
+      return;
+    }
+    this.error(
+      res,
+      "--pageBuilder/server-error",
+      `Someting went wrong: ${err.message}`,
+      500
+    );
+    return;
+  }
+
   public async verifyNotionPage(req: NextApiRequest, res: NextApiResponse) {
     const payload = req.body;
     const uId = req["user"]?.id;
@@ -58,30 +86,7 @@ export default class PageBuilderController extends BaseController {
 
       pageContent = result;
     } catch (e: any) {
-      if (e?.code === "unauthorized") {
-        this.error(
-          res,
-          "--pageBuilder/invalid-notion-token",
-          "Token is invalid, please update notion token.",
-          500
-        );
-        return;
-      }
-      if (e?.code === "object_not_found") {
-        this.error(
-          res,
-          "--pageBuilder/invalid-notion-url",
-          `Notion page isn't connected to integration.${e.message}`,
-          500
-        );
-        return;
-      }
-      this.error(
-        res,
-        "--pageBuilder/server-error",
-        `Someting went wrong: ${e.message}`,
-        500
-      );
+      this.catchNotionError(e, res);
       return;
     }
 
@@ -483,35 +488,93 @@ export default class PageBuilderController extends BaseController {
   }
 
   public async getCreatedSiteBySlug(req: NextApiRequest, res: NextApiResponse) {
-    const payload = req.body;
-    const slug = payload["slug"];
+    const param = req.query;
+    const slug = param["slug"] as string;
 
-    const createdSites = await prisma.site.findMany({
+    // check if slug exists
+    const slugExists = await prisma.site.findFirst({
+      where: { slug },
+    });
+
+    if (slugExists === null) {
+      this.error(res, "--siteBySlug/notfound", "site doesn't exist", 404);
+      return;
+    }
+
+    const createdSites = await prisma.site.findFirst({
       where: { slug },
       include: { portfolioData: true },
     });
 
-    createdSites.forEach((d) => {
-      if (d?.portfolioData !== null) {
-        const portfolio = d?.portfolioData;
-        if (typeof portfolio?.ghRepo === "string") {
-          d.portfolioData["ghRepo"] = JSON.parse(portfolio?.ghRepo);
-        }
-        if (typeof portfolio?.experiences === "string") {
-          d.portfolioData["experiences"] = JSON.parse(portfolio?.experiences);
-        }
-        if (typeof portfolio?.socialLinks === "string") {
-          d.portfolioData["socialLinks"] = JSON.parse(portfolio?.socialLinks);
-        }
+    if (createdSites.portfolioData !== null) {
+      const portfolio = createdSites?.portfolioData;
+
+      delete createdSites["themeName"];
+      delete createdSites["createdAt"];
+      delete createdSites["id"];
+      delete createdSites["pageType"];
+      delete createdSites["slug"];
+      delete createdSites["userId"];
+
+      if (typeof portfolio?.ghRepo === "string") {
+        createdSites.portfolioData["ghRepo"] = JSON.parse(portfolio?.ghRepo);
       }
-    });
+      if (typeof portfolio?.experiences === "string") {
+        createdSites.portfolioData["experiences"] = JSON.parse(
+          portfolio?.experiences
+        );
+      }
+      if (typeof portfolio?.socialLinks === "string") {
+        createdSites.portfolioData["socialLinks"] = JSON.parse(
+          portfolio?.socialLinks
+        );
+      }
+    }
+
+    // get users portfolio projects from notion page.
+    const userId = createdSites?.userId;
+    const userSetting = await prisma.settings.findFirst({ where: { userId } });
+    const userNotionToken = userSetting?.notionIntegrationToken;
+    const databaseId = createdSites?.notionDatabaseId;
+    const portfolioProjects = [];
+
+    try {
+      const result = await notion(userNotionToken).databases.query({
+        database_id: databaseId,
+      });
+
+      const page = result?.results;
+      page.forEach((page) => {
+        const portfolioData = (page as any).properties;
+        const NAME = portfolioData?.Name?.title[0]?.plain_text ?? null;
+        const GH_URL = portfolioData["Github Url"]?.url ?? null;
+        const Description =
+          portfolioData?.Description?.rich_text[0]?.plain_text ?? null;
+        const IMAGE = portfolioData?.Image?.url ?? null;
+        const LIVE_URL = portfolioData["Live Url"]?.url ?? null;
+
+        portfolioProjects.push({
+          name: NAME,
+          ghUrl: GH_URL,
+          description: Description,
+          image: IMAGE,
+          live_url: LIVE_URL,
+        });
+      });
+    } catch (e: any) {
+      console.log(
+        `Error: failed to load portfolio data from notion page: ${e.message}`
+      );
+    }
+
+    delete createdSites["notionDatabaseId"];
 
     this.success(
       res,
       "--pageBuilder/success",
       "sites fetched successfully.",
       200,
-      { sites: createdSites }
+      { sites: { ...createdSites, portfolioProjects } }
     );
   }
 
