@@ -148,7 +148,7 @@ model PortfolioData {
     resumeUrl   String?
     ghRepo      Json?
 
-    site Site @relation(fields: [siteId], references: [id])
+    site Site @relation(fields: [siteId], references: [id], onDelete: Cascade)
 }
 
 model Settings {
