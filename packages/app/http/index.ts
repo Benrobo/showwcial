@@ -170,6 +170,15 @@ export const deleteSite = async (slug: string) => {
   }
 };
 
+export const refreshSiteData = async (slug: string) => {
+  try {
+    const res = await $http.get(`/pageBuilder/refreshSiteData/${slug}`);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
 // Setting
 export const addNotionIntegrationToken = async (data: string) => {
   try {
