@@ -1,0 +1,23 @@
+{
+  "name": "showwcial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "",
+    "start": "cd packages/app && yarn dev",
+    "app": "yarn workspace app run dev",
+    "bot": "yarn workspace bot run dev",
+    "dev": "yarn workspace app run dev",
+    "build": "yarn workspaces run build",
+    "dbPush": "yarn workspace app run dbPush",
+    "watch": "yarn workspaces run watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
