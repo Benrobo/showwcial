@@ -6,9 +6,10 @@ import { v4 as uuidv4 } from "uuid";
 import prisma from "../config/prisma";
 import bcrypt from "bcryptjs";
 import memcache from "memory-cache";
-import { sendMail } from "../helper/sendMail";
 import JsonWebToken from "../helper/jwt";
 import { isEmpty } from "../../../util";
+import sendCustomMail from "../helper/sendEmail";
+// import { sendMail } from "../helper/sendMail";
 
 interface AuthData {
   username?: string;
@@ -154,7 +155,8 @@ export default class Authentication extends BaseController {
     </br>
     <h3>Please reset your default password after first time use.</h3>
     `;
-    await sendMail(userData?.email, "Verify Account", mailBody);
+    // await sendMail(userData?.email, "Verify Account", mailBody);
+    await sendCustomMail(userData?.email, "Verify Account", mailBody);
 
     this.success(res, "--auth/verify-email", `Verify your email.`, 200);
     return;
@@ -197,7 +199,8 @@ export default class Authentication extends BaseController {
     </br>
     <h3>Please reset your default password after first time use.</h3>
     `;
-    await sendMail(email, "Verify Account", mailBody);
+    // await sendMail(email, "Verify Account", mailBody);
+    await sendCustomMail(email, "Verify Account", mailBody);
 
     // restore the default password in cache.
     const cacheTime = 30 * 60 * 1000;
