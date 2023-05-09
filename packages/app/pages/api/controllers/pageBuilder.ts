@@ -281,6 +281,7 @@ export default class PageBuilderController extends BaseController {
       if (experiences !== null && experiences?.length > 0) {
         experiences.forEach((e) => {
           let exp = {
+            id: e?.id,
             title: e?.title,
             companyName: e?.companyName,
             startDate: e?.startDate,
@@ -420,6 +421,7 @@ export default class PageBuilderController extends BaseController {
     if (experiences !== null && experiences?.length > 0) {
       experiences.forEach((e) => {
         let exp = {
+          id: e?.id,
           title: e?.title,
           companyName: e?.companyName,
           startDate: e?.startDate,
