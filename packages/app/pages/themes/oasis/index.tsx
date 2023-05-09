@@ -163,7 +163,8 @@ export default function OasisTheme({
               </li>
               <li className="flex items-center justify-center gap-2 m-2">
                 <a
-                  href={resumeUrl ?? "#"}
+                  href={resumeUrl}
+                  target="_blank"
                   className="w-auto px-5 py-2 rounded-md border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all font-pp-rg text-[13px]"
                 >
                   Resume
@@ -355,7 +356,7 @@ export default function OasisTheme({
                   key={i}
                   githubUrl={p.ghUrl}
                   description={p.description}
-                  image={p?.image}
+                  image={p.image}
                   liveUrl={p?.live_url}
                   tags={p?.tags}
                   title={p?.name}
@@ -535,14 +536,16 @@ function PortfolioCards({
   title,
   image,
 }: PortfolioCardsProp) {
-  // console.log({ image });
+  const id = title.toLowerCase().replaceAll(" ", "-");
   return (
     <div className="w-full max-w-[300px] h-full max-h-[500px] rounded-[15px] bg-dark-100 p-4 mt-4 ">
-      <div className="relative w-full max-h-[250px] bg-white-100 h-[250px] rounded-[15px] project-image ">
+      <div
+        className={`relative w-full max-h-[250px] bg-white-100 h-[250px] rounded-[15px] project-image ${id} `}
+      >
         <style>{`
-          .project-image{
-            background-image: url(${image});
+          .${id}{
             background-position: center;
+            background-image: url('${image}');
             background-repeat: no-repeat;
             background-size: cover;
           }

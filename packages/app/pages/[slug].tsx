@@ -103,8 +103,6 @@ function UserPortfolio() {
       } = siteData?.portfolioData as OasisProps;
       const portfolioProjects = siteData?.portfolioProjects;
 
-      console.log(socialLinks);
-
       userRenderedSiteTheme = (
         <OasisTheme
           about={{ content: about, image: userImage }}
