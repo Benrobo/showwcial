@@ -13,6 +13,10 @@ import { FiExternalLink } from "react-icons/fi";
 import { HiOutlineFolder } from "react-icons/hi2";
 import ShowwcialBanner from "../comp/banner";
 import { isEmpty } from "../../../util";
+import { useRouter } from "next/router";
+import PreviewOasisTheme from "./preview";
+import { useState } from "react";
+import moment from "moment";
 
 interface OasisProps {
   resumeUrl?: string;
@@ -35,6 +39,7 @@ interface OasisProps {
   };
   stacks?: string[];
   workExperience?: {
+    id: number | string;
     companyName?: string;
     title?: string;
     startDate?: string;
@@ -73,6 +78,21 @@ export default function OasisTheme({
   userImage,
   workExperience,
 }: OasisProps) {
+  const router = useRouter();
+  const params = router.query;
+  const previewMode = Boolean(params["preview"]) ?? false;
+
+  if (previewMode) {
+    return <PreviewOasisTheme />;
+  }
+
+  const formattedAboutCont = about?.content
+    .replace(" ", "")
+    .split("\n")
+    .filter((s) => s?.length > 0);
+
+  console.log(workExperience);
+
   return (
     <div className="w-full h-screen font-pp-sb flex flex-col items-start justify-start bg-dark-300 scroll-smooth transition-all  overflow-y-scroll hideScrollBar2">
       {/* Top Navbar */}
@@ -218,24 +238,38 @@ export default function OasisTheme({
           <div className="w-full grid grid-cols-2 ">
             <div className="w-full ml-2 flex flex-col items-start justify-start">
               <div className="w-full max-w-[450px] flex flex-col items-start justify-start gap-5 ">
-                <p className="text-slate-200 font-pp-rg text-[14px] ">
-                  17+ years of experience in Software Development and User
-                  Interface Engineering. Bringing forth expertise in the design,
-                  development, and delivery of software systems. Equipped with a
-                  diverse and promising skill-set. Proficient in various
-                  platforms, and languages. Able to effectively self-manage
-                  during independent projects, as well as collaborate as part of
-                  a productive team.
-                </p>
-                <p className="text-slate-200 font-pp-rg text-[14px] ">
-                  A passionate content creator who wrote over 200 articles on
-                  his own blog and many other freelancing engagements like
-                  freeCodeCamp, CSS-Tricks, and many more. Always up for
-                  knowledge sharing with tips and tricks on Twitter and recently
-                  launched YouTube channel. An open-source enthusiast created
-                  several projects in the areas of web development to create
-                  tools, mentoring resources, and guides.
-                </p>
+                {!isEmpty(about?.content) ? (
+                  formattedAboutCont.map((cnt, i) => (
+                    <p
+                      key={i}
+                      className="text-slate-200 font-pp-rg text-[14px] "
+                    >
+                      {cnt}
+                    </p>
+                  ))
+                ) : (
+                  <>
+                    <p className="text-slate-200 font-pp-rg text-[14px] ">
+                      17+ years of experience in Software Development and User
+                      Interface Engineering. Bringing forth expertise in the
+                      design, development, and delivery of software systems.
+                      Equipped with a diverse and promising skill-set.
+                      Proficient in various platforms, and languages. Able to
+                      effectively self-manage during independent projects, as
+                      well as collaborate as part of a productive team.
+                    </p>
+                    <p className="text-slate-200 font-pp-rg text-[14px] ">
+                      A passionate content creator who wrote over 200 articles
+                      on his own blog and many other freelancing engagements
+                      like freeCodeCamp, CSS-Tricks, and many more. Always up
+                      for knowledge sharing with tips and tricks on Twitter and
+                      recently launched YouTube channel. An open-source
+                      enthusiast created several projects in the areas of web
+                      development to create tools, mentoring resources, and
+                      guides.
+                    </p>
+                  </>
+                )}
                 <p className="text-slate-200 font-pp-rg text-[14px]">
                   Here are a few technologies I’ve been working with recently:
                 </p>
@@ -278,7 +312,7 @@ export default function OasisTheme({
         {/* Experience / Job Section */}
         <section
           id="experience"
-          className="w-full max-w-[700px] h-full my-10 mb-10"
+          className="w-full max-w-[900px] h-full my-10 mb-10"
         >
           <div className="w-full flex items-center justify-start">
             <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['02.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
@@ -289,48 +323,7 @@ export default function OasisTheme({
           <div id="experience"></div>
           <div className="w-full  px-[20px] flex items-start justify-start">
             {workExperience?.length > 0 ? (
-              <>
-                <div className="w-[150px] h-full flex flex-col items-start justify-start">
-                  <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-blue-301 text-blue-301 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
-                    Company Name
-                  </button>
-                  <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-white-600 text-white-200 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
-                    Company Name
-                  </button>
-                  <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-white-600 text-white-200 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
-                    Company Name
-                  </button>
-                  <button className="w-full outline-none rounded-[0px] border-l-solid border-l-[2px] border-l-white-600 text-white-200 font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 ">
-                    Company Name
-                  </button>
-                </div>
-                <div className="w-full min-h-[340px] h-full flex flex-col items-start justify-start px-4">
-                  <div className="flex items-center justify-center gap-4">
-                    <h2 className="text-slate-100 font-pp-rg text-[17px] ">
-                      User Interface Architect & Senior Manager UX
-                    </h2>
-                    <h2 className="text-blue-301 font-pp-sb text-[17px] ">
-                      @ Company
-                    </h2>
-                  </div>
-                  <div className="flex items-center justify-center gap-4">
-                    <p className="text-slate-200 text-[13px] font-mono">
-                      July - December 2017
-                    </p>
-                  </div>
-                  <div className="mt-3 flex flex-col items-start justify-start">
-                    <p className="relative w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
-                      - Developed and styled interactive web applications for
-                      Apple Music using Ember and SCSS
-                    </p>
-                    <p className="relative w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
-                      - Built and shipped the Apple Music Extension for Facebook
-                      Messenger leveraging third-party and internal API
-                      integrations
-                    </p>
-                  </div>
-                </div>
-              </>
+              <WorkExperience workexp={workExperience} />
             ) : (
               <p className="relative opacity-[.4] w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
                 I probably dont have any work experience yet, but would surely
@@ -428,6 +421,99 @@ export default function OasisTheme({
   );
 }
 
+interface WorkexpProps {
+  workexp?: {
+    id: number | string;
+    companyName?: string;
+    title?: string;
+    startDate?: string;
+    endDate?: string;
+    current?: boolean;
+    description?: string;
+  }[];
+}
+
+function WorkExperience({ workexp }: WorkexpProps) {
+  const [selectedExp, setSelectedExp] = useState<any>(workexp[0]);
+  const [firstJobId, setFirstJobId] = useState<string | number>(workexp[0]?.id);
+
+  const handleSelectedJob = (id: string) => {
+    const filteredJob = workexp.filter((j) => j.id === id)[0];
+    setSelectedExp(filteredJob);
+    setFirstJobId(id);
+  };
+
+  function splitDescription(description) {
+    const lines = description.split("\n").map((line) => line.trim());
+    const result = [];
+    let currentLine = "";
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      if (line !== "") {
+        currentLine += (currentLine !== "" ? " " : "") + line;
+      }
+
+      if (line === "" || i === lines.length - 1) {
+        result.push(currentLine);
+        currentLine = "";
+      }
+    }
+
+    return result;
+  }
+
+  return (
+    <>
+      <div className="w-[250px] h-full flex flex-col items-start justify-start">
+        {workexp?.map((j) => (
+          <button
+            key={j.id}
+            data-id={j.id}
+            className={`w-full outline-none rounded-[0px] border-l-solid border-l-[2px] ${
+              firstJobId === j?.id
+                ? "border-l-blue-301 text-blue-301"
+                : "border-l-white-600 text-slate-200"
+            }  font-mono px-2 py-3 transition-all text-[13px] hover:bg-dark-900 `}
+            onClick={() => handleSelectedJob(j?.id as string)}
+          >
+            {j.companyName}
+          </button>
+        ))}
+      </div>
+      <div className="w-full min-h-[340px] h-full flex flex-col items-start justify-start px-4">
+        <div className="flex items-center justify-center gap-4">
+          <h2 className="text-slate-100 font-pp-rg text-[17px] ">
+            {selectedExp?.title}
+          </h2>
+          <h2 className="text-blue-301 font-pp-sb text-[17px] ">
+            @{selectedExp?.companyName}
+          </h2>
+        </div>
+        <div className="flex items-center justify-center gap-4">
+          <p className="text-slate-200 text-[13px] font-mono">
+            {moment(selectedExp?.startDate).format("MMMM")} -{" "}
+            {selectedExp?.current
+              ? "Present"
+              : moment(selectedExp?.endDate).format("MMMM")}{" "}
+            {moment(selectedExp?.endDate).format("YYYY")}
+          </p>
+        </div>
+        <div className="mt-3 flex flex-col items-start justify-start">
+          {selectedExp?.description.length > 0
+            ? splitDescription(selectedExp?.description).map((d) => (
+                <p className="relative w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
+                  - {d}
+                </p>
+              ))
+            : null}
+        </div>
+      </div>
+    </>
+  );
+}
+
 interface PortfolioCardsProp {
   title?: string;
   description?: string;
@@ -447,7 +533,7 @@ function PortfolioCards({
 }: PortfolioCardsProp) {
   return (
     <div className="w-full max-w-[300px] h-full max-h-[500px] rounded-[15px] bg-dark-100 p-4 mt-4 ">
-      <div className="relative w-full max-h-[250px] bg-red-200 h-[250px] rounded-[15px] project-image ">
+      <div className="relative w-full max-h-[250px] bg-white-100 h-[250px] rounded-[15px] project-image ">
         <style>{`
           .project-image{
             background-image: url(${image ?? "/images/themes/demo1.webp"});
