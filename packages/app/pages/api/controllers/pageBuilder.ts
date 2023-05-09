@@ -521,6 +521,10 @@ export default class PageBuilderController extends BaseController {
 
       createdSites.portfolioData["userImage"] = userData?.image;
 
+      createdSites[
+        "showwcaseProfile"
+      ] = `https://www.showwcase.com/${userData?.username}`;
+
       if (typeof portfolio?.ghRepo === "string") {
         createdSites.portfolioData["ghRepo"] = JSON.parse(portfolio?.ghRepo);
       }
@@ -557,6 +561,8 @@ export default class PageBuilderController extends BaseController {
           portfolioData?.Description?.rich_text[0]?.plain_text ?? null;
         const IMAGE = portfolioData?.Image?.url ?? null;
         const LIVE_URL = portfolioData["Live Url"]?.url ?? null;
+        const TAGS =
+          portfolioData["Tags"]?.multi_select?.map((d) => d?.name) ?? null;
 
         portfolioProjects.push({
           name: NAME,
@@ -564,6 +570,7 @@ export default class PageBuilderController extends BaseController {
           description: Description,
           image: IMAGE,
           live_url: LIVE_URL,
+          tags: TAGS,
         });
       });
     } catch (e: any) {
