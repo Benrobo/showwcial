@@ -165,4 +165,6 @@ model PageTracker {
     ipAddress String
     views     Int
     userId    String
+
+    createdAt DateTime @default(now())
 }
