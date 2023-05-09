@@ -143,7 +143,12 @@ export const getCreatedSites = async () => {
 export const getCreatedSiteBySlug = async (slug: any) => {
   try {
     const res = await $http.get(
-      `/pageBuilder/getSiteBySlug/${slug}?t=${genRandNum(10)}`
+      `/pageBuilder/getSiteBySlug/${slug}?t=${genRandNum(10)}`,
+      {
+        headers: {
+          "X-Tracker-ID": "SAKCSDJCKBC23EKBKB",
+        },
+      }
     );
     return res?.data ?? (res as any)?.response?.data;
   } catch (e: any) {
