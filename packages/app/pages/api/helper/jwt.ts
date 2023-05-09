@@ -12,7 +12,7 @@ class JsonWebToken {
 
   public generateAccessToken(payload: any) {
     const token = jwt.sign(payload, this.secret, {
-      expiresIn: "7hr",
+      expiresIn: "30d",
     });
     return token;
   }
