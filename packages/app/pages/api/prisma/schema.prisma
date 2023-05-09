@@ -155,6 +155,7 @@ model Settings {
     id                     String @id
     userId                 String
     notionIntegrationToken String @db.Text
+    showwcaseToken         String @db.Text
 
     createdAt DateTime @default(now())
 }
