@@ -686,6 +686,10 @@ export default class PageBuilderController extends BaseController {
       where: { id: siteExists?.id },
     });
 
+    await prisma.pageTracker.deleteMany({
+      where: { slug: siteExists?.slug },
+    });
+
     this.success(
       res,
       "--deleteSite/success",
