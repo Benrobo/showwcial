@@ -19,6 +19,7 @@ import { useState } from "react";
 import moment from "moment";
 import { TbWorld } from "react-icons/tb";
 
+// types
 interface OasisProps {
   resumeUrl?: string;
   userImage?: string;
