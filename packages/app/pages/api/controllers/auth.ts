@@ -333,7 +333,7 @@ export default class Authentication extends BaseController {
       email,
       id: _userId,
       fullname: showwcaseUserInfo?.displayName ?? "",
-      image: dbUser?.image ?? "",
+      image: showwcaseUserInfo?.profilePictureKey,
     };
 
     // create new user in database.

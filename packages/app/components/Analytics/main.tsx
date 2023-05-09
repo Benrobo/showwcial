@@ -59,7 +59,7 @@ function MainCardAnalytics() {
             Icon={
               <TbClick className="p-1 text-white-400 text-3xl rounded-md" />
             }
-            count={selectedSite?.views}
+            count={selectedSite?.views ?? 0}
           />
         </div>
       </div>
@@ -103,7 +103,7 @@ function AnalyticsCard({
                 {data.length > 0 ? (
                   data.map((d) => <option value={d.slug}>{d.slug}</option>)
                 ) : (
-                  <option value="">Select Slug</option>
+                  <option value="">No Site Found</option>
                 )}
               </Select>
             </FormControl>

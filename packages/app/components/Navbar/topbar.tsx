@@ -39,6 +39,8 @@ function TopBar() {
     location.href = "/auth/login";
   };
 
+  console.log({ userInfo });
+
   return (
     <div
       className={`w-full h-auto px-7 py-3 border-b-[1px] border-b-white-600 fixed top-0 left-0 z-[200] bg-dark-100 backdrop-blur bg-opacity-75 `}
