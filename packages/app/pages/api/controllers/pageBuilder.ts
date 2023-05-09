@@ -308,9 +308,9 @@ export default class PageBuilderController extends BaseController {
             create: {
               id: uuidv4(),
               experiences: JSON.stringify(formatedExperiences),
-              headline: "I solve problem for a living.",
+              tagline: "I solve problem for a living.",
               socialLinks: JSON.stringify(socialLinks),
-              tagline:
+              headline:
                 "Mission driven software engineer, with a passion for thoughtful UI design, collaboration, and teaching.",
               about,
               email: notionExists?.user?.email,
@@ -722,12 +722,8 @@ export default class PageBuilderController extends BaseController {
     const trackerViews = await prisma.pageTracker.findMany({
       where: { slug },
     });
-    const accumulatedViews =
-      trackerViews.length > 0
-        ? trackerViews.reduce((total, acc) => {
-            return total + acc?.views;
-          }, 0)
-        : 0;
+
+    const accumulatedViews = trackerViews.reduce((t, acc) => t + acc.views, 0);
 
     const returnedData = {
       page: slug,
@@ -740,6 +736,40 @@ export default class PageBuilderController extends BaseController {
       "Page views successfully fetched",
       200,
       returnedData
+    );
+  }
+
+  public async getAllSitesViews(req: NextApiRequest, res: NextApiResponse) {
+    const uId = req["user"]?.id as string;
+
+    const trackPages = await prisma.pageTracker.findMany({
+      where: { userId: uId },
+    });
+
+    const groupedSites = [];
+    for (let i = 0; i < trackPages.length; i++) {
+      const site = trackPages[i];
+      // Check if the current site's slug is already in the groupedSites array
+      const existingSite = groupedSites.find((s) => s.slug === site.slug);
+      if (existingSite) {
+        // If the slug already exists, add the current site's views to the total
+        existingSite.views += site.views;
+      } else {
+        // Otherwise, add a new entry to the groupedSites array with the current site's slug and views
+        groupedSites.push({
+          slug: site.slug,
+          views: site.views,
+          date: site.createdAt,
+        });
+      }
+    }
+
+    this.success(
+      res,
+      "--pageViews/success",
+      "Page views successfully fetched",
+      200,
+      groupedSites
     );
   }
 }
