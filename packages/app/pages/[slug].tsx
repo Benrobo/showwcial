@@ -42,7 +42,7 @@ interface OasisProps {
     name?: string;
     decsription?: string;
     tags?: string[];
-    githubUrl?: string;
+    url?: string;
   }[];
 }
 

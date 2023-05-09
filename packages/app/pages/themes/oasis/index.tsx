@@ -58,7 +58,7 @@ interface OasisProps {
     name?: string;
     description?: string;
     tags?: string[];
-    githubUrl?: string;
+    url?: string;
   }[];
 }
 
@@ -373,7 +373,7 @@ export default function OasisTheme({
               <div className="grid grid-cols-2 gap-5 mt-9 p-[40px]">
                 {githubRepo.map((r, i) => (
                   <GithubRepoCards
-                    githubUrl={r.githubUrl}
+                    githubUrl={r.url}
                     description={r.description}
                     tags={r.tags}
                     title={r.name}
@@ -502,7 +502,7 @@ function WorkExperience({ workexp }: WorkexpProps) {
         <div className="mt-3 flex flex-col items-start justify-start">
           {selectedExp?.description.length > 0
             ? splitDescription(selectedExp?.description).map((d) => (
-                <p className="relative w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
+                <p className="relative w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-[-8px] before:text-[20px] mb-5 ">
                   - {d}
                 </p>
               ))
@@ -596,7 +596,9 @@ function GithubRepoCards({
     <div className="w-full h-auto p-8 rounded-[10px] flex flex-col items-start justify-start bg-dark-100 shadow-lg ">
       <div className="w-full flex items-center justify-between mb-5">
         <HiOutlineFolder size={25} className="text-blue-301" />
-        <IoLogoOctocat size={25} className="text-blue-301" />
+        <a href={githubUrl}>
+          <IoLogoOctocat size={25} className="text-blue-301" />
+        </a>
       </div>
       <div className="w-full flex flex-col items-start justify-start gap-3 mb-0">
         <p className="text-slate-100 font-pp-sb text-[18px] hover:text-blue-301 transition-all ">

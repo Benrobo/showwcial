@@ -693,4 +693,53 @@ export default class PageBuilderController extends BaseController {
       200
     );
   }
+
+  public async getPageViews(req: NextApiRequest, res: NextApiResponse) {
+    const slug = req.query["slug"] as string;
+
+    if (isEmpty(slug)) {
+      this.error(
+        res,
+        "--pageViews/slug-notfound",
+        "Page slug can't be empty",
+        400
+      );
+    }
+
+    // check if slug exists
+    const slugExists = await prisma.site.findFirst({ where: { slug } });
+
+    if (slugExists === null) {
+      this.error(
+        res,
+        "--pageViews/slug-notfound",
+        "Site you're looking for doesn't exist.",
+        404
+      );
+      return;
+    }
+
+    const trackerViews = await prisma.pageTracker.findMany({
+      where: { slug },
+    });
+    const accumulatedViews =
+      trackerViews.length > 0
+        ? trackerViews.reduce((total, acc) => {
+            return total + acc?.views;
+          }, 0)
+        : 0;
+
+    const returnedData = {
+      page: slug,
+      views: accumulatedViews,
+    };
+
+    this.success(
+      res,
+      "--pageViews/success",
+      "Page views successfully fetched",
+      200,
+      returnedData
+    );
+  }
 }
