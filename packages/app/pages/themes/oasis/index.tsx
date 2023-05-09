@@ -119,13 +119,7 @@ export default function OasisTheme({
       <div className="w-full h-auto z-[100] fixed top-0 p-2 bg-dark-900 backdrop-blur ">
         <div className=" flex items-center justify-between ">
           <div className="w-full ml-8">
-            <ImageTag
-              className="w-[40px] rounded-[50%]"
-              src={
-                userImage ??
-                "https://profile-assets.showwcase.com/102662/1683311191679-1683311188721-DSC_1744.jpeg"
-              }
-            />
+            <ImageTag className="w-[40px] rounded-[50%]" src={about?.image} />
           </div>
           <div className="w-auto flex items-center justify-start mr-8 ">
             <ul className="w-full flex items-center justify-start">
