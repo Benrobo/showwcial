@@ -17,18 +17,16 @@ import { useRouter } from "next/router";
 import PreviewOasisTheme from "./preview";
 import { useState } from "react";
 import moment from "moment";
+import { TbWorld } from "react-icons/tb";
 
 interface OasisProps {
   resumeUrl?: string;
   userImage?: string;
   email?: string;
   socialLinks?: {
-    github?: string;
-    linkedin?: string;
-    instagram?: string;
-    twitter?: string;
-    hashnode?: string;
-  };
+    label?: string;
+    url?: string;
+  }[];
   fullname?: string;
   tagline?: string;
   headline?: string;
@@ -49,15 +47,15 @@ interface OasisProps {
   }[];
   projects?: {
     name?: string;
-    decsription?: string;
+    description?: string;
     tags?: string[];
-    githubUrl?: string;
-    liveUrl?: string;
+    ghUrl?: string;
+    live_url?: string;
     image: string;
   }[];
   githubRepo?: {
     name?: string;
-    decsription?: string;
+    description?: string;
     tags?: string[];
     githubUrl?: string;
   }[];
@@ -91,7 +89,29 @@ export default function OasisTheme({
     .split("\n")
     .filter((s) => s?.length > 0);
 
-  console.log(workExperience);
+  function renderSocialLinkIcon(label: string) {
+    console.log(label);
+    let icon = null;
+    if (label === "hashnode") {
+      icon = <SiHashnode className="text-blue-301" size={25} />;
+    }
+    if (label === "github") {
+      icon = <RiGithubLine className="text-blue-301" size={25} />;
+    }
+    if (label === "instagram") {
+      icon = <AiFillInstagram className="text-blue-301" size={25} />;
+    }
+    if (label === "twitter") {
+      icon = <AiOutlineTwitter className="text-blue-301" size={25} />;
+    }
+    if (label === "linkedin") {
+      icon = <AiFillLinkedin className="text-blue-301" size={25} />;
+    }
+    if (label === "website") {
+      icon = <TbWorld className="text-blue-301" size={25} />;
+    }
+    return icon;
+  }
 
   return (
     <div className="w-full h-screen font-pp-sb flex flex-col items-start justify-start bg-dark-300 scroll-smooth transition-all  overflow-y-scroll hideScrollBar2">
@@ -159,31 +179,15 @@ export default function OasisTheme({
         className="w-[40px] h-full max-h-[335px] fixed left-[40px] right-auto bottom-0 z-[10] "
       >
         <ul className="w-full h-full max-h-[220px] flex flex-col items-center justify-end gap-6 after:fixed after:left-[60px] after:bottom-0 after:w-[1px] after:h-[90px] after:contents-[''] after:bg-white-400 ">
-          <li className="flex flex-col items-center justify-center">
-            <a href={socialLinks?.github ?? "#"}>
-              <RiGithubLine className="text-blue-301" size={25} />
-            </a>
-          </li>
-          <li className="flex flex-col items-center justify-center">
-            <a href={socialLinks?.twitter ?? "#"}>
-              <AiOutlineTwitter className="text-blue-301" size={25} />
-            </a>
-          </li>
-          <li className="flex flex-col items-center justify-center">
-            <a href={socialLinks?.linkedin ?? "#"}>
-              <AiFillLinkedin className="text-blue-301" size={25} />
-            </a>
-          </li>
-          <li className="flex flex-col items-center justify-center">
-            <a href={socialLinks?.instagram ?? "#"}>
-              <AiFillInstagram className="text-blue-301" size={25} />
-            </a>
-          </li>
-          <li className="flex flex-col items-center justify-center">
-            <a href={socialLinks?.hashnode ?? "#"}>
-              <SiHashnode className="text-blue-301" size={25} />
-            </a>
-          </li>
+          {socialLinks?.length > 0
+            ? socialLinks.map((d) => (
+                <li className="flex flex-col items-center justify-center">
+                  <a href={d.url}>
+                    {renderSocialLinkIcon(d.label.toLowerCase())}
+                  </a>
+                </li>
+              ))
+            : null}
         </ul>
       </div>
       <div
@@ -218,7 +222,7 @@ export default function OasisTheme({
               design, collaboration, and teaching.`}
             </p>
             <a
-              href={showcaseprofile ?? "#"}
+              href={showcaseprofile}
               target="_blank"
               className="w-auto flex items-center justfy-center px-6 py-5 rounded-[5px] border-solid border-[2px] border-blue-301 text-blue-301 mt-10 text-[13px] font-mono"
             >
@@ -343,18 +347,18 @@ export default function OasisTheme({
           <div
             className={`w-full ${
               projects?.length > 0 ? "min-h-[740px]" : "h-auto"
-            } flex flex-wrap items-center justify-center gap-2`}
+            } flex flex-wrap items-start justify-center gap-2`}
           >
             {projects?.length > 0 ? (
               projects.map((p, i) => (
                 <PortfolioCards
                   key={i}
-                  githubUrl={p.githubUrl}
-                  description={p.decsription}
-                  image={p.image}
-                  liveUrl={p?.liveUrl}
-                  tags={p.tags}
-                  title={p.name}
+                  githubUrl={p.ghUrl}
+                  description={p.description}
+                  image={p?.image}
+                  liveUrl={p?.live_url}
+                  tags={p?.tags}
+                  title={p?.name}
                 />
               ))
             ) : (
@@ -375,7 +379,7 @@ export default function OasisTheme({
                 {githubRepo.map((r, i) => (
                   <GithubRepoCards
                     githubUrl={r.githubUrl}
-                    description={r.decsription}
+                    description={r.description}
                     tags={r.tags}
                     title={r.name}
                     key={i}
@@ -531,53 +535,47 @@ function PortfolioCards({
   title,
   image,
 }: PortfolioCardsProp) {
+  // console.log({ image });
   return (
     <div className="w-full max-w-[300px] h-full max-h-[500px] rounded-[15px] bg-dark-100 p-4 mt-4 ">
       <div className="relative w-full max-h-[250px] bg-white-100 h-[250px] rounded-[15px] project-image ">
         <style>{`
           .project-image{
-            background-image: url(${image ?? "/images/themes/demo1.webp"});
+            background-image: url(${image});
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
           }
         `}</style>
         <div className="w-auto flex items-center justify-center bg-white-500 backdrop-blur-[10px] p-2 absolute top-0 right-0 gap-3 rounded-t-[15px] rounded-l-[0px] ">
-          <a href={githubUrl ?? "#"}>
-            <IoLogoOctocat className="text-dark-100" size={20} />
+          <a href={githubUrl}>
+            <IoLogoOctocat className="text-blue-301" size={20} />
           </a>
-          <a href={liveUrl ?? "#"}>
-            <FiExternalLink className="text-dark-100" size={20} />
-          </a>
+          {liveUrl !== null && (
+            <a href={liveUrl}>
+              <FiExternalLink className="text-blue-301" size={20} />
+            </a>
+          )}
         </div>
       </div>
       <div className="w-full flex flex-col items-start justify-start py-2 mt-2">
-        <p className="text-white-100 font-pp-eb text-[24px] mb-2 ">AI App</p>
+        <p className="text-white-100 font-pp-eb text-[24px] mb-2 ">{title}</p>
         <p className="text-slate-100 font-pp-rg text-[13px] mb-5 ">
           {description ??
             `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero
           corrupti explicabo blanditiis ipsum rerum hic!`}
         </p>
         <div className="flex items-start justify-start flex-wrap gap-2">
-          {tags?.length > 0 ? (
-            tags.map((t) => (
-              <span
-                key={t}
-                className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 "
-              >
-                Reactjs
-              </span>
-            ))
-          ) : (
-            <>
-              <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
-                Reactjs
-              </span>
-              <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
-                Reactjs
-              </span>
-            </>
-          )}
+          {tags?.length > 0
+            ? tags.map((t) => (
+                <span
+                  key={t}
+                  className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 "
+                >
+                  {t}
+                </span>
+              ))
+            : null}
         </div>
       </div>
     </div>
