@@ -45,6 +45,19 @@ export default function TrackVisitor(
         console.log(
           `\n Site "${slug}" has ${incrementedViews}views. from ip: ${ipAddress}\n`
         );
+
+        const cacheTime = 1 * 60 * 1000; // 1min
+
+        memcache.put(
+          ipAddress,
+          JSON.stringify({
+            slug,
+            ipAddress,
+          }),
+          cacheTime
+        );
+
+        return;
       }
 
       const cacheTime = 1 * 60 * 1000; // 1min
