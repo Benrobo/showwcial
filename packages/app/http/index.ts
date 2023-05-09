@@ -201,3 +201,24 @@ export const getNotionToken = async () => {
     return e.response?.data ?? { message: e.message, code: e?.code };
   }
 };
+
+// Dashboard
+export const getSiteViewsBySlug = async (slug: string) => {
+  try {
+    const res = await $http.get(`/pageBuilder/getViews/${slug}`);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const getAllSiteViews = async () => {
+  try {
+    const res = await $http.get(
+      `/pageBuilder/getViews/all?id=${genRandNum(20)}`
+    );
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
