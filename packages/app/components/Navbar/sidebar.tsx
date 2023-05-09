@@ -114,7 +114,7 @@ function SideBar({ active }: SidebarProps) {
 
         <li className="w-full text-white-400 text-[14px] pp-SB ">ADVANCED</li>
 
-        <Link href="#" className="w-full">
+        {/* <Link href="#" className="w-full">
           <li
             className={`${returnActiveStyle(
               active,
@@ -133,7 +133,7 @@ function SideBar({ active }: SidebarProps) {
           >
             <MdStyle className="ml-2 text-2xl " /> Themes
           </li>
-        </Link>
+        </Link> */}
         <Link href="/settings" className="w-full">
           <li
             className={`${returnActiveStyle(
