@@ -158,3 +158,11 @@ model Settings {
 
     createdAt DateTime @default(now())
 }
+
+model PageTracker {
+    id        String @id
+    slug      String
+    ipAddress String
+    views     Int
+    userId    String
+}
