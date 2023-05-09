@@ -18,7 +18,7 @@ interface OasisProps {
   fullname?: string;
   tagline?: string;
   headline?: string;
-  showcaseprofile?: string;
+  showwcaseProfile?: string;
   about?: string;
   stacks?: string[];
   experiences?: {
@@ -87,7 +87,7 @@ function UserPortfolio() {
   }
 
   if (siteData !== null) {
-    if (siteData.themeName === "oasis") {
+    if (siteData?.themeName === "oasis") {
       const {
         about,
         email,
@@ -95,7 +95,6 @@ function UserPortfolio() {
         ghRepo,
         headline,
         resumeUrl,
-        showcaseprofile,
         socialLinks,
         stacks,
         tagline,
@@ -103,6 +102,8 @@ function UserPortfolio() {
         experiences,
       } = siteData?.portfolioData as OasisProps;
       const portfolioProjects = siteData?.portfolioProjects;
+
+      console.log(socialLinks);
 
       userRenderedSiteTheme = (
         <OasisTheme
@@ -113,8 +114,8 @@ function UserPortfolio() {
           headline={headline}
           tagline={tagline}
           resumeUrl={resumeUrl}
-          showcaseprofile={showcaseprofile}
-          // socialLinks={socialLinks}
+          showcaseprofile={siteData?.showwcaseProfile}
+          socialLinks={socialLinks}
           stacks={stacks}
           workExperience={experiences}
           projects={portfolioProjects}
