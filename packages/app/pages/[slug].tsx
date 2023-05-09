@@ -22,6 +22,7 @@ interface OasisProps {
   about?: string;
   stacks?: string[];
   experiences?: {
+    id: string | number;
     companyName?: string;
     title?: string;
     startDate?: string;
@@ -67,15 +68,26 @@ function UserPortfolio() {
       const response = data;
       if (response?.errorStatus) {
         const { msg, notfound } = handleServerError(response, resetQuery);
-        if (notfound) setNotfound(notfound);
-        if (!notfound) setNotfound(notfound);
+        setNotfound(notfound);
         if (msg !== null) setError(msg);
         return;
       }
 
       setError(null);
+      setNotfound(false);
 
       const themeData = response?.data?.sites;
+      setSiteData(themeData);
+      // console.log(themeData);
+    }
+  }, [portfolioDataQuery.data]);
+
+  if (portfolioDataQuery?.isLoading) {
+    return <LoaderModal />;
+  }
+
+  if (siteData !== null) {
+    if (siteData.themeName === "oasis") {
       const {
         about,
         email,
@@ -89,22 +101,25 @@ function UserPortfolio() {
         tagline,
         userImage,
         experiences,
-      } = themeData?.portfolioData as OasisProps;
-      const portfolioProjects = themeData?.portfolioProjects;
+      } = siteData?.portfolioData as OasisProps;
+      const portfolioProjects = siteData?.portfolioProjects;
 
-      setSiteData(themeData);
-
-      console.log(themeData);
-    }
-  }, [portfolioDataQuery.data]);
-
-  if (portfolioDataQuery?.isLoading) {
-    return <LoaderModal />;
-  }
-
-  if (siteData !== null) {
-    if (siteData.themeName === "oasis") {
-      userRenderedSiteTheme = <OasisTheme />;
+      userRenderedSiteTheme = (
+        <OasisTheme
+          about={{ content: about, image: userImage }}
+          email={email}
+          fullname={fullname}
+          githubRepo={ghRepo}
+          headline={headline}
+          tagline={tagline}
+          resumeUrl={resumeUrl}
+          showcaseprofile={showcaseprofile}
+          // socialLinks={socialLinks}
+          stacks={stacks}
+          workExperience={experiences}
+          projects={portfolioProjects}
+        />
+      );
     }
   }
 
