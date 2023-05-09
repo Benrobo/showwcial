@@ -58,8 +58,6 @@ function UserPortfolio() {
   });
   const [siteData, setSiteData] = useState<null | any>(null);
 
-  const resetQuery = () => portfolioDataQuery.remove();
-
   let userRenderedSiteTheme = null;
 
   useEffect(() => {
@@ -67,7 +65,7 @@ function UserPortfolio() {
     if (typeof data !== "undefined" || error !== null) {
       const response = data;
       if (response?.errorStatus) {
-        const { msg, notfound } = handleServerError(response, resetQuery);
+        const { msg, notfound } = handleServerError(response, null);
         setNotfound(notfound);
         if (msg !== null) setError(msg);
         return;
@@ -78,7 +76,6 @@ function UserPortfolio() {
 
       const themeData = response?.data?.sites;
       setSiteData(themeData);
-      // console.log(themeData);
     }
   }, [portfolioDataQuery.data]);
 
