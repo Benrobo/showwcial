@@ -17,7 +17,7 @@ export default function TrackVisitor(
 
       const visitorExistsInCache = JSON.parse(memcache.get(ipAddress));
 
-      // ! make sure vistor page visist has expired before adding new one.
+      // ! make sure vistor page visit has expired before adding new one.
 
       if (visitorExistsInCache !== null) {
         console.info(
