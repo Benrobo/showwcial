@@ -435,3 +435,33 @@ export function HandlePageBuilderResponse(
   checkServerError(response, resetState);
   checkInvalidToken(response, resetState);
 }
+
+// Dashboard
+export function HandleDashboardResponse(
+  response: any,
+  resetState: () => void,
+  returnData: (data) => any,
+  successfull?: () => void | any
+) {
+  if (
+    ["--pageViews/slug-notfound", "--pageViews/slug-notfound"].includes(
+      response?.code
+    )
+  ) {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--pageViews/success") {
+    resetState();
+    successfull && successfull();
+    const data = response?.data;
+    returnData(data);
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}

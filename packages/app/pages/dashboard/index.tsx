@@ -7,8 +7,8 @@ import withAuth from "../../util/withAuth";
 function Dashboard() {
   return (
     <MainDashboardLayout activeTab="dashboard">
-      {/* <DashboardHeader /> */}
-      {/* <DashboardAnalytics /> */}
+      <DashboardHeader />
+      <DashboardAnalytics />
     </MainDashboardLayout>
   );
 }

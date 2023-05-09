@@ -34,14 +34,7 @@ function AddNotionPage({
   const [verified, setVerified] = useState<null | boolean>(null);
 
   const handleInput = (e: any) => {
-    const dataset = e.target?.dataset;
-    const name = dataset?.name as ValidPagePropInfo;
     const value = e.target?.value;
-    if (typeof name === "undefined") return;
-    const id = extractIdFromUrl(value);
-    if (id !== null) {
-      savePageInfo(name, id);
-    }
     setInpVal(value);
   };
   const [validPortfolioData, setValidPortfolioData] = useState({
@@ -135,17 +128,18 @@ function AddNotionPage({
     }
   }, [verifyNotionMutation.data]);
 
-  useEffect(() => {
-    if (verified !== null) {
-      // console.log({ verified });
-    }
-  }, [verified]);
-
   function verifyNotionUrl() {
     try {
       const url = new URL(inpVal);
-      const pathname = url?.pathname.replaceAll("/", "").split("-");
-      const notionId = pathname[pathname.length - 1];
+      const pathname = url?.pathname
+        .split("/")
+        .map((d) => (d.includes("-") ? d.split("-") : d));
+      let hasWeirdString = pathname.length > 2 ? pathname[2] : pathname[1];
+      const notionId =
+        typeof hasWeirdString === "string"
+          ? hasWeirdString
+          : hasWeirdString[hasWeirdString?.length - 1];
+      savePageInfo("notionPageId", notionId);
       setValidPortfolioData({
         description: false,
         ghUrl: false,
@@ -157,6 +151,7 @@ function AddNotionPage({
       setVerified(null);
       verifyNotionMutation.mutate({ id: notionId } as any);
     } catch (e: any) {
+      console.log(e);
       toast.error("invalid url");
     }
   }
