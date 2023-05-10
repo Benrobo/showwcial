@@ -72,8 +72,6 @@ function Settings() {
     addNotionTokenMutation.mutate({ token: token[type], type } as any);
   }
 
-  console.log({ appCredentials });
-
   return (
     <MainDashboardLayout activeTab="settings">
       {getNotionTokenQuery.isLoading && <LoaderModal />}
