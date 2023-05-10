@@ -9,10 +9,14 @@ export default class SettingsController extends BaseController {
     super();
   }
 
-  public async addNotionToken(req: NextApiRequest, res: NextApiResponse) {
+  public async addExternalCredentials(
+    req: NextApiRequest,
+    res: NextApiResponse
+  ) {
     const payload = req.body;
     const uId = req["user"]?.id;
-    if (isEmpty(payload?.token)) {
+
+    if (isEmpty(payload["token"])) {
       this.error(
         res,
         "--settings/invalid-field",
@@ -22,42 +26,88 @@ export default class SettingsController extends BaseController {
       return;
     }
 
-    const { token } = payload;
+    if (isEmpty(payload["type"])) {
+      this.error(
+        res,
+        "--settings/invalid-field",
+        "Expected valid type but got none",
+        400
+      );
+      return;
+    }
 
-    // check if token exists
-    const tokenExists = await prisma.settings.findFirst({
+    const validTypes = ["notion", "showwcase"];
+
+    if (!validTypes.includes(payload["type"])) {
+      this.error(
+        res,
+        "--settings/invalid-field",
+        "Invalid type provided. expected notion or showwcase type.",
+        400
+      );
+      return;
+    }
+
+    const { token, type } = payload;
+    let availableTokens = await prisma.settings.findFirst({
       where: { userId: uId },
     });
 
-    if (tokenExists !== null) {
-      // update previous token
-      await prisma.settings.update({
-        where: { id: tokenExists?.id },
-        data: { notionIntegrationToken: token },
-      });
+    if (availableTokens === null) {
+      if (type === "notion") {
+        await prisma.settings.create({
+          data: {
+            id: uuidv4(),
+            notionIntegrationToken: token,
+            showwcaseToken: "",
+            userId: uId,
+          },
+        });
+      }
+      if (type === "showwcase") {
+        await prisma.settings.create({
+          data: {
+            id: uuidv4(),
+            notionIntegrationToken: "",
+            showwcaseToken: token,
+            userId: uId,
+          },
+        });
+      }
+
       this.success(
         res,
-        "--settings/token-updated",
-        "Notion integration updated successfully",
+        "--settings/token-added",
+        "Notion integration added successfully",
         200
       );
       return;
     }
 
-    await prisma.settings.create({
-      data: {
-        id: uuidv4(),
-        notionIntegrationToken: token,
-        userId: uId,
-      },
-    });
-
-    this.success(
-      res,
-      "--settings/token-added",
-      "Notion integration added successfully",
-      200
-    );
+    if (availableTokens !== null) {
+      // update previous token
+      if (type === "showwcase") {
+        await prisma.settings.update({
+          where: { id: availableTokens?.id },
+          data: { showwcaseToken: token },
+        });
+      }
+      if (type === "notion") {
+        await prisma.settings.update({
+          where: { id: availableTokens?.id },
+          data: { notionIntegrationToken: token },
+        });
+      }
+      this.success(
+        res,
+        "--settings/token-updated",
+        `${
+          type === "showwcase" ? "Showwcase token" : "Notion integration"
+        } updated successfully`,
+        200
+      );
+      return;
+    }
   }
 
   public async getToken(req: NextApiRequest, res: NextApiResponse) {
@@ -69,9 +119,9 @@ export default class SettingsController extends BaseController {
     this.success(
       res,
       "--settings/token-fetched",
-      "Token fetched successfully",
+      `Token fetched successfully"`,
       200,
-      token ?? []
+      token
     );
   }
 }
