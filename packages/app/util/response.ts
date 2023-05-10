@@ -291,11 +291,7 @@ export function HandleSettingsResponse(
     resetState();
     successfull && successfull();
     const data = response?.data;
-    returnData(
-      data?.notionIntegrationToken?.length > 0
-        ? data?.notionIntegrationToken
-        : ""
-    );
+    returnData(data);
     return;
   }
 
