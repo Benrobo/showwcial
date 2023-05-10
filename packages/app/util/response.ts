@@ -144,7 +144,11 @@ export function HandleThreadResponse(
   if (response?.code === "--createThread/invalid-fields") {
     toast.error("Some thread input are empty");
     resetState();
-    console.log("hey");
+    return;
+  }
+  if (response?.code === "--createThread/token-missing") {
+    toast.error(response?.message);
+    resetState();
     return;
   }
   if (response?.code === "--createThread/failed-replying-thread") {
@@ -159,6 +163,11 @@ export function HandleThreadResponse(
   }
   if (response?.code === "--bookmarkThread/thread-exists") {
     toast.error(`Thread already bookmarked.`);
+    resetState();
+    return;
+  }
+  if (response?.code === "--bookmarkThread/token-missing") {
+    toast.error(response?.message);
     resetState();
     return;
   }
