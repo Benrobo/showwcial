@@ -66,7 +66,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               "dashboard"
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-start justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-start justify-start`}
           >
             <MdSpaceDashboard className="ml-2 text-2xl " /> Dashboard
           </li>
@@ -76,7 +76,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               "chat"
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <MdWebStories className="ml-2 text-2xl " /> Chat
           </li>
@@ -86,7 +86,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               "thread"
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <MdWebStories className="ml-2 text-2xl " /> Threads
           </li>
@@ -96,7 +96,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               "notifier"
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <BsRobot className="ml-2 text-2xl " /> Notifier
           </li>
@@ -106,7 +106,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               "pageBuilder"
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <CgWebsite className="ml-2 text-2xl " /> Page Builder
           </li>
@@ -119,7 +119,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               "domain"
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <TbWorld className="ml-2 text-2xl " /> Domain
           </li>
@@ -129,7 +129,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               ""
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <MdStyle className="ml-2 text-2xl " /> Themes
           </li>
@@ -139,7 +139,7 @@ function SideBar({ active }: SidebarProps) {
             className={`${returnActiveStyle(
               active,
               "settings"
-            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB transition-all gap-3 flex items-center justify-start`}
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <FaCog className="ml-2 text-2xl " /> Settings
           </li>
