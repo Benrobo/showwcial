@@ -6,6 +6,7 @@ import prisma from "../config/prisma";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import bcryptjs from "bcryptjs";
+import { isEmpty } from "../../../util";
 
 const pwd = "1234";
 const hash = bcryptjs.hashSync(pwd, 10);
@@ -98,9 +99,33 @@ export default class BookmarkController extends BaseController {
     const threadUrl = `https://www.showwcase.com/thread/${threadId}`;
     const bookmarkId = uuidv4();
 
+    // check if user has configured their api key.
+    const userTokens = await prisma.settings.findFirst({
+      where: { userId: reqUser?.id },
+    });
+    const showwcaseApiToken = userTokens?.showwcaseToken;
+
+    if (isEmpty(showwcaseApiToken)) {
+      this.error(
+        res,
+        "--bookmarkThread/token-missing",
+        `Please integrate showwcase api key, to continue.`,
+        400
+      );
+      return;
+    }
+
     // try saving thread first on showwcase
     await $axios
-      .post("/bookmarks", { threadId, projectId: "" })
+      .post(
+        "/bookmarks",
+        { threadId, projectId: "" },
+        {
+          headers: {
+            "X-API-KEY": showwcaseApiToken,
+          },
+        }
+      )
       .then(async (r) => {
         if (r.data?.success) {
           const bookmarkData = await prisma.bookMarks.create({
