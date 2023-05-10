@@ -8,7 +8,7 @@ const $axios: AxiosInstance = axios.create({
     "Content-Type": "application/json",
     "Access-Control-Allow-Origin": "*",
     // "X-API-KEY": ENV.showwcaseAPIKey,
-    Authorization: `Bearer ${ENV.showwcaseToken}`,
+    // Authorization: `Bearer ${ENV.showwcaseToken}`,
   },
   withCredentials: true,
 });
