@@ -15,8 +15,14 @@ function Settings() {
   const addNotionTokenMutation = useMutation(async (data) =>
     addNotionIntegrationToken(data as any)
   );
-  const [notionToken, setNotionToken] = useState("");
-  const [token, setToken] = useState("");
+  const [appCredentials, setAppCredentials] = useState({
+    notion: "",
+    showwcase: "",
+  });
+  const [token, setToken] = useState({
+    notion: "",
+    showwcase: "",
+  });
 
   useEffect(() => {
     const { data, error } = getNotionTokenQuery;
@@ -25,7 +31,11 @@ function Settings() {
       HandleSettingsResponse(
         response,
         () => {},
-        (data) => setNotionToken(data)
+        (data) =>
+          setAppCredentials({
+            notion: data?.notionIntegrationToken,
+            showwcase: data?.showwcaseToken,
+          })
       );
     }
   }, [getNotionTokenQuery.data]);
@@ -43,13 +53,26 @@ function Settings() {
     }
   }, [addNotionTokenMutation.data]);
 
-  function addNotionToken() {
-    if (token === notionToken || token.length === 0) {
+  function addNotionToken(type: "notion" | "showwcase") {
+    if (
+      (type === "notion" && token?.notion === appCredentials?.notion) ||
+      token?.notion.length === 0
+    ) {
       toast.error("Token hasn't changed or is empty.");
       return;
     }
-    addNotionTokenMutation.mutate({ token } as any);
+    if (
+      (type === "showwcase" &&
+        token?.showwcase === appCredentials?.showwcase) ||
+      token?.showwcase.length === 0
+    ) {
+      toast.error("Token hasn't changed or is empty.");
+      return;
+    }
+    addNotionTokenMutation.mutate({ token: token[type], type } as any);
   }
+
+  console.log({ appCredentials });
 
   return (
     <MainDashboardLayout activeTab="settings">
@@ -61,7 +84,7 @@ function Settings() {
             Manage Showccial Config.
           </p>
         </div>
-        <div className="w-full flex flex-col items-start justify-start px-5 py-4">
+        <div className="w-full flex flex-col items-start justify-start px-5 py-2">
           {/* Notion Integration */}
           <div className="w-full max-w-[450px] flex flex-col items-start justify-start">
             <p className="text-white-100 font-pp-sb text-[18px] ">
@@ -80,14 +103,56 @@ function Settings() {
                 type="text"
                 className="w-full px-4 py-4 text-[12px] rounded-md bg-dark-300 font-pp-rg text-white-100 border-none outline-none "
                 placeholder="secret_7JuYFMeNMdssGSgzcdWm8wD4hDxcKXlaaJFFVTQXZQez"
-                defaultValue={notionToken}
-                onChange={(e) => setToken(e.target.value)}
+                defaultValue={appCredentials?.notion}
+                onChange={(e) =>
+                  setToken((prev) => ({ ...prev, ["notion"]: e.target.value }))
+                }
               />
               <button
                 className="w-full max-w-[135px] rounded-md px-5 py-[16px] font-pp-sb text-white-100 bg-blue-300 text-[10px] flex items-center justify-center"
-                onClick={addNotionToken}
+                onClick={() => addNotionToken("notion")}
               >
-                {notionToken.length > 0 && !addNotionTokenMutation.isLoading
+                {appCredentials?.notion?.length > 0 &&
+                !addNotionTokenMutation.isLoading
+                  ? "Update Token"
+                  : "Add Token"}
+                {addNotionTokenMutation.isLoading && <Spinner color="#fff" />}
+              </button>
+            </div>
+          </div>
+
+          {/* Showwcase */}
+          <div className="w-full mt-[40px] max-w-[450px] flex flex-col items-start justify-start">
+            <p className="text-white-100 font-pp-sb text-[18px] ">
+              Showwcase Integration
+            </p>
+            <p className="text-white-300 font-pp-rg text-[13px] ">
+              Add your personal showwcase api token. Dont know where to find
+              one, follow this guide
+              <a href="#" className="textwhite-100 underline">
+                Here
+              </a>
+            </p>
+            <br />
+            <div className="w-full flex items-start justify-start gap-3">
+              <input
+                type="text"
+                className="w-full px-4 py-4 text-[12px] rounded-md bg-dark-300 font-pp-rg text-white-100 border-none outline-none "
+                placeholder="8f24d64ed20a134bdcdcf7df6b6f437dd129fff2ac1a4c6d814c34"
+                defaultValue={appCredentials?.showwcase}
+                onChange={(e) =>
+                  setToken((prev) => ({
+                    ...prev,
+                    ["showwcase"]: e.target.value,
+                  }))
+                }
+              />
+              <button
+                className="w-full max-w-[135px] rounded-md px-5 py-[16px] font-pp-sb text-white-100 bg-blue-300 text-[10px] flex items-center justify-center"
+                onClick={() => addNotionToken("showwcase")}
+              >
+                {appCredentials?.showwcase?.length > 0 &&
+                !addNotionTokenMutation.isLoading
                   ? "Update Token"
                   : "Add Token"}
                 {addNotionTokenMutation.isLoading && <Spinner color="#fff" />}
