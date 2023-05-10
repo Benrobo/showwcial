@@ -3,6 +3,7 @@ import BaseController from "./base";
 import { BookmarkThreadSchema, PostThreadSchema } from "../helper/validator";
 import $axios from "../config/axios";
 import prisma from "../config/prisma";
+import { isEmpty } from "../../../util";
 
 export default class ThreadController extends BaseController {
   protected postThreadSchema;
@@ -15,17 +16,26 @@ export default class ThreadController extends BaseController {
     res: NextApiResponse,
     content: string,
     title: string,
-    image: string
+    image: string,
+    showwcaseApiToken: string
   ) {
     try {
       let parentId = null;
       const parentThread = await $axios
-        .post("/threads", {
-          title,
-          message: content,
-          gif: image ?? "",
-          videoUrl: "",
-        })
+        .post(
+          "/threads",
+          {
+            title,
+            message: content,
+            gif: image ?? "",
+            videoUrl: "",
+          },
+          {
+            headers: {
+              "X-API-KEY": showwcaseApiToken,
+            },
+          }
+        )
         .then((r) => r.data);
       parentId = parentThread?.id;
       return { parentId };
@@ -45,17 +55,26 @@ export default class ThreadController extends BaseController {
     res: NextApiResponse,
     content: string,
     image: string,
-    parentId: string
+    parentId: string,
+    showwcaseApiToken: string
   ) {
     try {
       const parentThread = await $axios
-        .post("/threads", {
-          title: "",
-          message: content,
-          gif: image ?? "",
-          videoUrl: "",
-          parentId,
-        })
+        .post(
+          "/threads",
+          {
+            title: "",
+            message: content,
+            gif: image ?? "",
+            videoUrl: "",
+            parentId,
+          },
+          {
+            headers: {
+              "X-API-KEY": showwcaseApiToken,
+            },
+          }
+        )
         .then((r) => r.data);
       return true;
     } catch (e: any) {
@@ -81,10 +100,30 @@ export default class ThreadController extends BaseController {
     }
 
     const { content, title, image } = payload;
+    const userTokens = await prisma.settings.findFirst({
+      where: { userId: reqUser?.id },
+    });
+    const showwcaseApiToken = userTokens?.showwcaseToken;
+
+    if (isEmpty(showwcaseApiToken)) {
+      this.error(
+        res,
+        "--createThread/token-missing",
+        `Please integrate showwcase api key, to continue.`,
+        400
+      );
+      return;
+    }
 
     if (content.length === 1) {
       // * single thread
-      await this.postParentThread(res, content[0], title, image);
+      await this.postParentThread(
+        res,
+        content[0],
+        title,
+        image,
+        showwcaseApiToken
+      );
       this.success(
         res,
         "--createThread/success",
@@ -102,7 +141,8 @@ export default class ThreadController extends BaseController {
         res,
         content[0],
         title,
-        image
+        image,
+        showwcaseApiToken
       );
       if (postedThread === null || typeof postedThread === "undefined") return;
       parentId = postedThread?.parentId;
@@ -113,7 +153,8 @@ export default class ThreadController extends BaseController {
           res,
           thread,
           image,
-          parentId
+          parentId,
+          showwcaseApiToken
         );
         if (childThread) counter += 1;
       }
