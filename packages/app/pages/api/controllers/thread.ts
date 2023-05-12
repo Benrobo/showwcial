@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import BaseController from "./base";
-import { BookmarkThreadSchema, PostThreadSchema } from "../helper/validator";
+import { PostThreadSchema } from "../helper/validator";
 import $axios from "../config/axios";
 import prisma from "../config/prisma";
 import { isEmpty } from "../../../util";
