@@ -161,21 +161,6 @@ export function HandleThreadResponse(
     resetState();
     return;
   }
-  if (response?.code === "--bookmarkThread/thread-exists") {
-    toast.error(`Thread already bookmarked.`);
-    resetState();
-    return;
-  }
-  if (response?.code === "--bookmarkThread/token-missing") {
-    toast.error(response?.message);
-    resetState();
-    return;
-  }
-  if (response?.code === "--bookmarkThread/successfull") {
-    toast.success(`Thread bookmarked.`);
-    resetState();
-    return;
-  }
   if (response?.code === "--createThread/success") {
     toast.success(`Thread created successfully`, {
       duration: 3000,
@@ -196,6 +181,27 @@ export function HandleBookmarkResponse(
   successfull: () => void,
   returnData: (data) => any
 ) {
+  if (response?.code === "--bookmarkData/invalid-fields") {
+    toast.error(response.message);
+    resetState();
+    return;
+  }
+  if (response?.code === "--bookmarkData/bookmark-exists") {
+    toast.error(`You already have this bookmarked.`);
+    resetState();
+    return;
+  }
+  if (response?.code === "--bookmarkData/token-missing") {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+  if (response?.code === "--bookmarkData/successfull") {
+    toast.success(`Saved to bookmark.`);
+    resetState();
+    return;
+  }
+
   if (response?.code === "--bookmarks/all-bookmarks") {
     resetState();
     successfull();

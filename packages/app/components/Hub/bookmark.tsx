@@ -8,8 +8,11 @@ import { toast } from "react-hot-toast";
 import { Spinner } from "../Loader";
 import Gap from "../Gap";
 import { useMutation } from "react-query";
-import { bookmarkThread } from "../../http";
-import { HandleThreadResponse } from "../../util/response";
+import { saveToBookmark } from "../../http";
+import {
+  HandleBookmarkResponse,
+  HandleThreadResponse,
+} from "../../util/response";
 import { isEmpty } from "../../util";
 import ShowwcaseShowStyle from "./showwcaseShowStyle";
 
@@ -24,8 +27,8 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
   const [isUrlValid, setIsUrlValid] = useState<null | boolean>(null);
   const [shakeInp, setShakeInp] = useState<null | boolean>(null);
   const [loadingState, setLoadingState] = useState(false);
-  const bookmarkThreadMutation = useMutation(
-    async (data: any) => await bookmarkThread(data)
+  const bookmarkMutation = useMutation(
+    async (data: any) => await saveToBookmark(data)
   );
 
   const validateUrl = (url) => {
@@ -38,16 +41,17 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
   };
 
   useEffect(() => {
-    const { data, error } = bookmarkThreadMutation;
+    const { data, error } = bookmarkMutation;
     if (typeof data !== "undefined" || error !== null) {
       const response = data;
-      HandleThreadResponse(
+      HandleBookmarkResponse(
         response,
-        () => bookmarkThreadMutation.reset(),
+        () => bookmarkMutation.reset(),
+        () => {},
         () => {}
       );
     }
-  }, [bookmarkThreadMutation.data]);
+  }, [bookmarkMutation.data]);
 
   useEffect(() => {
     // reset shakeInp
@@ -130,8 +134,8 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
 
   async function saveThread() {
     const threadId = (hubInfo as any)?.id;
-    const payload = { threadId };
-    bookmarkThreadMutation.mutate(payload);
+    const payload = { id: threadId, type: hubtype };
+    bookmarkMutation.mutate(payload);
   }
 
   return (
@@ -161,7 +165,7 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
               className="w-full outline-none border-none bg-transparent text-white-100"
               placeholder="https://www.showwcase.com/thread/94146"
               onKeyUp={fetchThreadInfo}
-              disabled={bookmarkThreadMutation.isLoading ?? loadingState}
+              disabled={bookmarkMutation.isLoading ?? loadingState}
             />
           </div>
           <br />
@@ -202,6 +206,7 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
               userImage={(hubInfo as any)?.user?.profilePictureKey}
               coverImg={(hubInfo as any)?.coverImage}
               key={1}
+              readingStats={(hubInfo as any)?.readingStats?.text ?? ""}
             />
           )}
 
@@ -212,9 +217,9 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
               <button
                 className="w-[150px] hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 px-4 py-3 flex items-center justify-center text-[10px] font-pp-sb rounded-[30px] "
                 onClick={saveThread}
-                disabled={bookmarkThreadMutation.isLoading}
+                disabled={bookmarkMutation.isLoading}
               >
-                {bookmarkThreadMutation.isLoading ? (
+                {bookmarkMutation.isLoading ? (
                   <Spinner color="#fff" />
                 ) : (
                   <div className="flex items-center justify-center">
