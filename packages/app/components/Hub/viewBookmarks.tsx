@@ -89,7 +89,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
           </div>
         </div>
         <Gap />
-        <div className="w-full h-full px-5 flex flex-wrap items-start justify-start gap-2">
+        <div className="w-full h-screen hideScrollBar overflow-y-scroll px-2 mb-[40px] flex flex-wrap items-start justify-start gap-1">
           {fetchBookmarkMutation.isLoading && (
             <LoaderModal position="absolute" />
           )}
@@ -99,7 +99,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
             bookmarkData.map((data, i) => {
               if (data?.type === "thread") {
                 return (
-                  <div className="w-[370px]">
+                  <div className="w-[350px]">
                     <ShowwcaseThreadStyle
                       displayName={(data as any)?.displayName}
                       emoji={(data as any)?.emoji}
@@ -127,16 +127,17 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
                 );
               } else {
                 return (
-                  <div className="w-[370px]">
+                  <div className="w-[300px]">
                     <ShowwcaseShowStyle
                       displayName={(data as any)?.displayName}
                       previewState={false}
                       title={(data as any)?.title}
-                      showId={(data as any)?.threadId}
-                      showLink={`https://www.showwcase.com/thread/${data?.threadId}`}
+                      showId={(data as any)?.showId}
+                      showLink={data?.link}
                       userImage={(data as any)?.userImage}
                       coverImg={data?.coverImage}
                       key={i}
+                      readingStats={data?.readingStats}
                     />
                   </div>
                 );
