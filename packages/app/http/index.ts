@@ -62,9 +62,9 @@ export const createThread = async (data: any) => {
   }
 };
 
-export const bookmarkThread = async (data: any) => {
+export const saveToBookmark = async (data: any) => {
   try {
-    const res = await $http.post(`/bookmark/thread`, data);
+    const res = await $http.post(`/bookmark/data`, data);
     return res?.data ?? (res as any)?.response?.data;
   } catch (e: any) {
     return e.response?.data ?? { message: e.message, code: e?.code };
