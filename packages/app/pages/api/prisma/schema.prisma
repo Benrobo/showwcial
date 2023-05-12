@@ -64,21 +64,25 @@ model Message {
 }
 
 model BookMarks {
-    id              String @id
+    id              String  @id
     userId          String
-    threadId        String @unique
-    userImage       String @db.Text
-    title           String @db.Text
+    threadId        String? @unique
+    showId          String? @unique
+    type            String?
+    category        String?
+    coverImage      String?
+    userImage       String  @db.Text
+    title           String  @db.Text
     displayName     String
     emoji           String
-    headline        String @db.Text
-    content         String @db.LongText
-    link            String @db.Text
-    username        String @db.Text
+    headline        String  @db.Text
+    content         String  @db.LongText
+    link            String  @db.Text
+    username        String  @db.Text
     images          Json
-    code            String @db.LongText
+    code            String  @db.LongText
     linkPreviewMeta Json?
-    user            Users  @relation(fields: [userId], references: [id])
+    user            Users   @relation(fields: [userId], references: [id])
 
     @@index([userId])
 }
