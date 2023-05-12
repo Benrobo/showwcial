@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import $axios from "../config/axios";
-import { BookmarkThreadSchema } from "../helper/validator";
+import { BookmarkDataSchema } from "../helper/validator";
 import BaseController from "./base";
 import prisma from "../config/prisma";
 import { v4 as uuidv4 } from "uuid";
@@ -13,18 +13,21 @@ const hash = bcryptjs.hashSync(pwd, 10);
 console.log({ hash });
 
 export default class BookmarkController extends BaseController {
-  protected bookmarkThreadSchema;
+  protected bookmarkDataSchema;
   constructor() {
     super();
-    this.bookmarkThreadSchema = BookmarkThreadSchema;
+    this.bookmarkDataSchema = BookmarkDataSchema;
   }
 
-  public async isThreadIdValid(id: number) {
+  public async isDataIdValid(id: number, type: string) {
     try {
-      const threadInfo = await $axios.get(`/threads/${id}`).then((r) => r.data);
+      const validType = type === "thread" ? "threads" : "projects";
+      const threadInfo = await $axios
+        .get(`/${validType}/${id}`)
+        .then((r) => r.data);
       return { valid: true, info: threadInfo };
     } catch (e: any) {
-      console.error(`Invalid thread id ${id}`);
+      console.error(`Invalid ${type} id ${id}`);
       return { valid: false, info: null };
     }
   }
@@ -39,43 +42,54 @@ export default class BookmarkController extends BaseController {
     }
   }
 
-  public async bookmarkThread(req: NextApiRequest, res: NextApiResponse) {
+  public async bookmarkData(req: NextApiRequest, res: NextApiResponse) {
     const reqUser = req["user"];
     const payload = req.body;
-    const { error, value } = this.bookmarkThreadSchema.validate(payload);
+    const { error, value } = this.bookmarkDataSchema.validate(payload);
 
     if (typeof error !== "undefined") {
       const msg = error.message;
-      return this.error(res, "--bookmarkThread/invalid-fields", msg, 400);
+      return this.error(res, "--bookmarkData/invalid-fields", msg, 400);
     }
 
-    const { threadId } = payload;
-    const { valid, info } = await this.isThreadIdValid(threadId);
+    const validType = ["thread", "show"];
+    const { id: dataId, type } = payload;
+
+    if (!validType.includes(type)) {
+      return this.error(
+        res,
+        "--bookmarkData/invalid-fields",
+        `Invalid type given.`,
+        400
+      );
+    }
+
+    const { valid, info } = await this.isDataIdValid(dataId, type);
     if (!valid) {
       return this.error(
         res,
-        "--bookmarkThread/invalid-thread",
-        `Thread is invalid.. check thread ID.`,
+        "--bookmarkData/invalid-fields",
+        `${type} is invalid.. check ${type} ID.`,
         400
       );
     }
 
     // check if threadId exists
     const availableThread = await prisma.bookMarks.findMany({
-      where: { threadId: threadId.toString() },
+      where: { threadId: dataId.toString(), userId: reqUser["id"] },
     });
 
     if (availableThread?.length > 0) {
       return this.error(
         res,
-        "--bookmarkThread/thread-exists",
-        `Thread with this id ${threadId} already exists..`,
+        "--bookmarkData/thread-exists",
+        `Thread with this id ${dataId} already exists..`,
         400,
         availableThread
       );
     }
 
-    const { message, title, code, id, images } = info;
+    const { message, title, code, images, slug } = info;
     const {
       displayName,
       activity,
@@ -90,13 +104,11 @@ export default class BookmarkController extends BaseController {
 
     userProfilePicture = data?.profilePictureUrl;
 
-    const {
-      title: lpTitle,
-      description: lpDesc,
-      url: lpUrl,
-      images: lpImages,
-    } = info.linkPreviewMeta;
-    const threadUrl = `https://www.showwcase.com/thread/${threadId}`;
+    const threadLinkPreview = info?.linkPreviewMeta;
+    const dataUrl =
+      type === "show"
+        ? `https://www.showwcase.com/show/${dataId}/${slug}`
+        : `https://www.showwcase.com/thread/${dataId}`;
     const bookmarkId = uuidv4();
 
     // check if user has configured their api key.
@@ -108,7 +120,7 @@ export default class BookmarkController extends BaseController {
     if (isEmpty(showwcaseApiToken)) {
       this.error(
         res,
-        "--bookmarkThread/token-missing",
+        "--bookmarkData/token-missing",
         `Please integrate showwcase api key, to continue.`,
         400
       );
@@ -119,7 +131,7 @@ export default class BookmarkController extends BaseController {
     await $axios
       .post(
         "/bookmarks",
-        { threadId, projectId: "" },
+        { threadId: dataId, projectId: "" },
         {
           headers: {
             "X-API-KEY": showwcaseApiToken,
@@ -132,22 +144,26 @@ export default class BookmarkController extends BaseController {
             data: {
               id: bookmarkId,
               userId: reqUser?.id,
-              threadId: threadId.toString(),
+              threadId: type === "thread" ? dataId.toString() : "",
+              showId: type === "show" ? dataId.toString() : "",
               title: title ?? "",
+              type,
+              category: info?.category ?? "",
+              coverImage: info?.coverImage ?? "",
               displayName,
               emoji: activity?.emoji ?? "🔥",
               headline,
-              content: message,
-              link: threadUrl,
+              content: message ?? "",
+              link: dataUrl,
               username,
               userImage: userProfilePicture,
-              images: JSON.stringify(images),
-              code,
+              images: JSON.stringify(images ?? []),
+              code: code ?? "",
               linkPreviewMeta: JSON.stringify({
-                title: lpTitle ?? "",
-                description: lpDesc ?? "",
-                url: lpUrl ?? "",
-                images: typeof lpImages !== "undefined" ? lpImages[0] : "",
+                title: threadLinkPreview?.title ?? "",
+                description: threadLinkPreview?.description ?? "",
+                url: threadLinkPreview?.url ?? "",
+                images: threadLinkPreview?.images[0] ?? "",
                 favicon: "",
               }),
             },
@@ -155,8 +171,8 @@ export default class BookmarkController extends BaseController {
 
           this.success(
             res,
-            "--bookmarkThread/successfull",
-            "Thread successfully bookmarked",
+            "--bookmarkData/successfull",
+            `${type} successfully bookmarked`,
             200,
             bookmarkData
           );
