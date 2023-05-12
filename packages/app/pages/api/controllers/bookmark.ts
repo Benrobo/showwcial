@@ -164,6 +164,7 @@ export default class BookmarkController extends BaseController {
               headline,
               content: message ?? "",
               link: dataUrl,
+              readingStats: info?.readingStats?.text ?? "",
               username,
               userImage: userProfilePicture,
               images: JSON.stringify(images ?? []),
