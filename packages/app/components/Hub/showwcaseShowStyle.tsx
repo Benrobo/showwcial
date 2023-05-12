@@ -50,7 +50,10 @@ export default function ShowwcaseShowStyle({
       <div className={`w-full h-[150px] rounded-t-md p-3 show-${showId} `}>
         <style>{`
           .show-${showId}{
-            background-image:url("https://project-assets.showwcase.com/4190/1657864017758-CnpG44ZQc.webp");
+            background-image:url(${
+              coverImg ??
+              "https://project-assets.showwcase.com/4190/1657864017758-CnpG44ZQc.webp"
+            });
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
