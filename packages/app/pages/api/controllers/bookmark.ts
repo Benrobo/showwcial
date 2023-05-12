@@ -91,8 +91,8 @@ export default class BookmarkController extends BaseController {
     if (availableBookmarks?.length > 0) {
       return this.error(
         res,
-        "--bookmarkData/thread-exists",
-        `Thread with this id ${dataId} already exists..`,
+        "--bookmarkData/bookmark-exists",
+        `bookmark with this id ${dataId} already exists..`,
         400,
         availableBookmarks
       );
@@ -172,7 +172,12 @@ export default class BookmarkController extends BaseController {
                 title: threadLinkPreview?.title ?? "",
                 description: threadLinkPreview?.description ?? "",
                 url: threadLinkPreview?.url ?? "",
-                images: threadLinkPreview?.images[0] ?? "",
+                images:
+                  type === "thread"
+                    ? threadLinkPreview?.images?.length > 0
+                      ? images[0]
+                      : ""
+                    : "",
                 favicon: "",
               }),
             },
