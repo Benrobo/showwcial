@@ -17,8 +17,9 @@ export const PostThreadSchema = Joi.object({
   image: Joi.string().allow(""),
 });
 
-export const BookmarkThreadSchema = Joi.object({
-  threadId: Joi.number().required(),
+export const BookmarkDataSchema = Joi.object({
+  id: Joi.number().required(),
+  type: Joi.string().required(),
 });
 
 export const NotifierVariantSchema = Joi.object({
