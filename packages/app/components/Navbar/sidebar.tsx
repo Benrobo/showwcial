@@ -31,7 +31,7 @@ const returnActiveStyle = (active: string, name: string) => {
     case "chat-chat":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
-    case "thread-thread":
+    case "hub-hub":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
     case "notifier-notifier":
@@ -81,14 +81,14 @@ function SideBar({ active }: SidebarProps) {
             <MdWebStories className="ml-2 text-2xl " /> Chat
           </li>
         </Link>
-        <Link href="/thread" className="w-full">
+        <Link href="/hub" className="w-full">
           <li
             className={`${returnActiveStyle(
               active,
-              "thread"
+              "hub"
             )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
-            <MdWebStories className="ml-2 text-2xl " /> Threads
+            <MdWebStories className="ml-2 text-2xl " /> Hub
           </li>
         </Link>
         <Link href="/notifier" className="w-full">
