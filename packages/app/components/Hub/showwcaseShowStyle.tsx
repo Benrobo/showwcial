@@ -122,7 +122,7 @@ export default function ShowwcaseShowStyle({
             {displayName ?? "John Doe"}
           </span>
           <span className="text-white-200 font-pp-sb ml-2 text-[12px]">
-            {readingStats ?? "4 min read"}
+            {readingStats ?? ""}
           </span>
         </div>
       </div>

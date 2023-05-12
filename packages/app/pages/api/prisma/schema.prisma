@@ -66,11 +66,12 @@ model Message {
 model BookMarks {
     id              String  @id
     userId          String
-    threadId        String? @unique
-    showId          String? @unique
+    threadId        String?
+    showId          String?
     type            String?
     category        String?
     coverImage      String?
+    readingStats    String?
     userImage       String  @db.Text
     title           String  @db.Text
     displayName     String
