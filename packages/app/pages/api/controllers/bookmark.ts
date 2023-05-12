@@ -75,17 +75,26 @@ export default class BookmarkController extends BaseController {
     }
 
     // check if threadId exists
-    const availableThread = await prisma.bookMarks.findMany({
-      where: { threadId: dataId.toString(), userId: reqUser["id"] },
-    });
+    let availableBookmarks;
 
-    if (availableThread?.length > 0) {
+    if (type === "thread") {
+      availableBookmarks = await prisma.bookMarks.findMany({
+        where: { threadId: dataId.toString(), userId: reqUser["id"] },
+      });
+    }
+    if (type === "show") {
+      availableBookmarks = await prisma.bookMarks.findMany({
+        where: { showId: dataId.toString(), userId: reqUser["id"] },
+      });
+    }
+
+    if (availableBookmarks?.length > 0) {
       return this.error(
         res,
         "--bookmarkData/thread-exists",
         `Thread with this id ${dataId} already exists..`,
         400,
-        availableThread
+        availableBookmarks
       );
     }
 
