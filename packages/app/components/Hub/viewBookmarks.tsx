@@ -9,6 +9,7 @@ import { fetchAllBookmarks } from "../../http";
 import { useRouter } from "next/router";
 import { HandleBookmarkResponse } from "../../util/response";
 import { LoaderModal, Spinner } from "../Loader";
+import ShowwcaseShowStyle from "./showwcaseShowStyle";
 
 interface ViewBookmarkThreadProp {
   closeModal: () => void;
@@ -95,33 +96,52 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
 
           {fetchBookmarkMutation.isLoading === false &&
             bookmarkData.length > 0 &&
-            bookmarkData.map((data, i) => (
-              <div className="w-[370px]">
-                <ShowwcaseThreadStyle
-                  displayName={(data as any)?.displayName}
-                  emoji={(data as any)?.emoji}
-                  headline={(data as any)?.headline}
-                  previewState={false}
-                  title={(data as any)?.title}
-                  threadMessage={(data as any)?.content}
-                  threadId={(data as any)?.threadId}
-                  threadLink={`https://www.showwcase.com/thread/${data?.threadId}`}
-                  userImage={(data as any)?.userImage}
-                  username={(data as any)?.username}
-                  threadImages={
-                    typeof data?.images === "string"
-                      ? JSON.parse((data as any)?.images)
-                      : data?.images
-                  }
-                  linkPreviewData={
-                    data?.linkPreviewMeta === "null"
-                      ? null
-                      : data?.linkPreviewMeta
-                  }
-                  key={i}
-                />
-              </div>
-            ))}
+            bookmarkData.map((data, i) => {
+              if (data?.type === "thread") {
+                return (
+                  <div className="w-[370px]">
+                    <ShowwcaseThreadStyle
+                      displayName={(data as any)?.displayName}
+                      emoji={(data as any)?.emoji}
+                      headline={(data as any)?.headline}
+                      previewState={false}
+                      title={(data as any)?.title}
+                      threadMessage={(data as any)?.content}
+                      threadId={(data as any)?.threadId}
+                      threadLink={`https://www.showwcase.com/thread/${data?.threadId}`}
+                      userImage={(data as any)?.userImage}
+                      username={(data as any)?.username}
+                      threadImages={
+                        typeof data?.images === "string"
+                          ? JSON.parse((data as any)?.images)
+                          : data?.images
+                      }
+                      linkPreviewData={
+                        data?.linkPreviewMeta === "null"
+                          ? null
+                          : data?.linkPreviewMeta
+                      }
+                      key={i}
+                    />
+                  </div>
+                );
+              } else {
+                return (
+                  <div className="w-[370px]">
+                    <ShowwcaseShowStyle
+                      displayName={(data as any)?.displayName}
+                      previewState={false}
+                      title={(data as any)?.title}
+                      showId={(data as any)?.threadId}
+                      showLink={`https://www.showwcase.com/thread/${data?.threadId}`}
+                      userImage={(data as any)?.userImage}
+                      coverImg={data?.coverImage}
+                      key={i}
+                    />
+                  </div>
+                );
+              }
+            })}
           {fetchBookmarkMutation.isLoading === false &&
           bookmarkData.length === 0 ? (
             <div className="w-full h-full mt-20 flex flex-col items-center justify-center">
