@@ -13,16 +13,14 @@ import { HandleThreadResponse } from "../../util/response";
 import { isEmpty } from "../../util";
 import ShowwcaseShowStyle from "./showwcaseShowStyle";
 
-interface BookmarkThreadProp {
+interface BookmarkProp {
   closeActiveThread: () => void;
 }
 
-export default function BookmarkThread({
-  closeActiveThread,
-}: BookmarkThreadProp) {
+export default function Bookmark({ closeActiveThread }: BookmarkProp) {
   const [hubUrl, setHubUrl] = useState("");
   const [hubtype, setHubType] = useState("");
-  const [threadInfo, setThreadInfo] = useState({});
+  const [hubInfo, setHubInfo] = useState({});
   const [isUrlValid, setIsUrlValid] = useState<null | boolean>(null);
   const [shakeInp, setShakeInp] = useState<null | boolean>(null);
   const [loadingState, setLoadingState] = useState(false);
@@ -61,22 +59,20 @@ export default function BookmarkThread({
   }, [shakeInp]);
 
   const determineUrlType = (url: string) => {
-    // https://www.showwcase.com/show/16030/graphql-for-beginners-setting-up-graphql-server
-    // https://www.showwcase.com/thread/97392
+    let response = { type: null, parentId: null };
     if (!validateUrl(url)) {
       setIsUrlValid(false);
       setShakeInp(true);
-      setThreadInfo({});
-      return;
+      setHubInfo({});
+      return response;
     }
     const { pathname, hostname } = new URL(url);
-    let response = { type: null, parentId: null };
     const splittedUrl = pathname.split("/").filter((s) => s?.length > 0);
 
     if (hostname !== "www.showwcase.com") {
       setIsUrlValid(false);
       setShakeInp(true);
-      return;
+      return response;
     }
 
     // handle shows
@@ -103,7 +99,7 @@ export default function BookmarkThread({
       }
 
       setHubUrl(url);
-      setThreadInfo({});
+      setHubInfo({});
       setHubType(type);
 
       const threadId = parentId;
@@ -123,7 +119,7 @@ export default function BookmarkThread({
         const res = await axios.get(reqUrl);
         const fetchData = res?.data ?? (res as any)?.response?.data;
         setLoadingState(false);
-        // setThreadInfo(fetchData);
+        setHubInfo(fetchData);
         console.log(fetchData);
       } catch (e: any) {
         toast.error(`Failed: ${e.response?.data?.error}.`);
@@ -133,7 +129,7 @@ export default function BookmarkThread({
   }
 
   async function saveThread() {
-    const threadId = (threadInfo as any)?.id;
+    const threadId = (hubInfo as any)?.id;
     const payload = { threadId };
     bookmarkThreadMutation.mutate(payload);
   }
@@ -175,30 +171,43 @@ export default function BookmarkThread({
             </div>
           )}
 
-          {Object.entries(threadInfo).length > 0 && hubtype === "thread" && (
+          {Object.entries(hubInfo).length > 0 && hubtype === "thread" && (
             <ShowwcaseThreadStyle
-              displayName={(threadInfo as any)?.user?.displayName}
-              emoji={(threadInfo as any)?.user.activity?.emoji}
-              headline={(threadInfo as any)?.user?.headline}
+              displayName={(hubInfo as any)?.user?.displayName}
+              emoji={(hubInfo as any)?.user.activity?.emoji}
+              headline={(hubInfo as any)?.user?.headline}
               previewState={true}
-              title={(threadInfo as any)?.title}
-              threadMessage={(threadInfo as any)?.message}
-              threadId={(threadInfo as any)?.id}
+              title={(hubInfo as any)?.title}
+              threadMessage={(hubInfo as any)?.message}
+              threadId={(hubInfo as any)?.id}
               threadLink={hubUrl}
-              userImage={(threadInfo as any)?.user?.profilePictureKey}
-              username={(threadInfo as any)?.user?.username}
-              threadImages={(threadInfo as any)?.images}
+              userImage={(hubInfo as any)?.user?.profilePictureKey}
+              username={(hubInfo as any)?.user?.username}
+              threadImages={(hubInfo as any)?.images}
               key={1}
               linkPreviewData={
-                (threadInfo as any)?.linkPreviewMeta === "null"
+                (hubInfo as any)?.linkPreviewMeta === "null"
                   ? { url: "", title: "", description: "" }
-                  : (threadInfo as any).linkPreviewMeta
+                  : (hubInfo as any).linkPreviewMeta
               }
             />
           )}
-          {true && <ShowwcaseShowStyle />}
-          {(threadInfo as any)?.images?.length > 0 && <Gap height={50} />}
-          {Object.entries(threadInfo).length > 0 && (
+          {Object.entries(hubInfo).length > 0 && hubtype === "show" && (
+            <ShowwcaseShowStyle
+              displayName={(hubInfo as any)?.user?.displayName}
+              previewState={true}
+              title={(hubInfo as any)?.title}
+              showId={(hubInfo as any)?.id}
+              showLink={hubUrl}
+              userImage={(hubInfo as any)?.user?.profilePictureKey}
+              coverImg={(hubInfo as any)?.coverImage}
+              key={1}
+            />
+          )}
+
+          {(hubInfo as any)?.images?.length > 0 && <Gap height={50} />}
+
+          {Object.entries(hubInfo).length > 0 && (
             <div className="w-full h-auto p-4 flex items-center justify-center gap-3">
               <button
                 className="w-[150px] hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 px-4 py-3 flex items-center justify-center text-[10px] font-pp-sb rounded-[30px] "
@@ -210,7 +219,7 @@ export default function BookmarkThread({
                 ) : (
                   <div className="flex items-center justify-center">
                     <IoBookmark size={10} color="#fff" className="mr-2" />{" "}
-                    Bookmark Thread
+                    Bookmark {hubtype === "show" ? "Show" : "Thread"}
                   </div>
                 )}
               </button>
