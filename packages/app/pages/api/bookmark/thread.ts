@@ -7,7 +7,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const bookmarkController = new BookmarkController();
 
   if (req.method === "POST") {
-    await bookmarkController.bookmarkThread(req, res);
+    await bookmarkController.bookmarkData(req, res);
   }
   if (req.method === "GET") {
     await bookmarkController.fetchAllBookmarks(req, res);
