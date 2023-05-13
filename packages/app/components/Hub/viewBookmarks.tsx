@@ -19,7 +19,6 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
   const [activeView, setActiveView] = useState("thread");
   const [bookmarkData, setBookmarkData] = useState([]);
   const [seletedBookmark, setSelectedBookmark] = useState<any[]>([]);
-  const [initFetched, setInitFetched] = useState(true);
   const router = useRouter();
   const queryParam = router.query["type"] ?? activeView;
   const fetchBookmarkMutation = useMutation(
@@ -45,7 +44,6 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
         () => {},
         () => {},
         (data) => {
-          console.log(data);
           setBookmarkData(data);
           filterBookmark(data);
         }
