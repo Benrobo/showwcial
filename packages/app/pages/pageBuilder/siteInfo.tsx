@@ -61,7 +61,7 @@ export function SiteInfo({ savePageInfo, pageInfo }: PageProps) {
       <br />
       <InputGroup border="none" size={"lg"}>
         <InputLeftAddon
-          children="showwcial.vercel.app/portfolio/"
+          children="showwcial.vercel.app/"
           bgColor={"#131418"}
           textColor="#777"
           borderWidth={"1px"}
