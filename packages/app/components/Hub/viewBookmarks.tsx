@@ -18,12 +18,19 @@ interface ViewBookmarkThreadProp {
 function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
   const [activeView, setActiveView] = useState("thread");
   const [bookmarkData, setBookmarkData] = useState([]);
+  const [seletedBookmark, setSelectedBookmark] = useState<any[]>([]);
   const [initFetched, setInitFetched] = useState(true);
   const router = useRouter();
   const queryParam = router.query["type"] ?? activeView;
   const fetchBookmarkMutation = useMutation(
     async (data: string) => await fetchAllBookmarks(data as any)
   );
+
+  const filterBookmark = (data: any[]) => {
+    if (data.length === 0) return;
+    const filteredBookmark = data.filter((d) => d?.type === activeView);
+    setSelectedBookmark(filteredBookmark);
+  };
 
   useEffect(() => {
     fetchBookmarkMutation.mutate(queryParam as string);
@@ -40,6 +47,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
         (data) => {
           console.log(data);
           setBookmarkData(data);
+          filterBookmark(data);
         }
       );
     }
@@ -95,8 +103,8 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
           )}
 
           {fetchBookmarkMutation.isLoading === false &&
-            bookmarkData.length > 0 &&
-            bookmarkData.map((data, i) => {
+            seletedBookmark.length > 0 &&
+            seletedBookmark.map((data, i) => {
               if (data?.type === "thread") {
                 return (
                   <div className="w-[350px]">
@@ -144,7 +152,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
               }
             })}
           {fetchBookmarkMutation.isLoading === false &&
-          bookmarkData.length === 0 ? (
+          seletedBookmark.length === 0 ? (
             <div className="w-full h-full mt-20 flex flex-col items-center justify-center">
               <p className="text-white-200 font-pp-rg">
                 No Bookmark Data Available. 😞
