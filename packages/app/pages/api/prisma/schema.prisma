@@ -41,13 +41,6 @@ model Accounts {
     @@index([userId])
 }
 
-model Verification {
-    id         String   @unique @default(cuid())
-    identifier String
-    token      String
-    expiry     DateTime
-}
-
 model Message {
     id         String   @id
     content    String
