@@ -11,11 +11,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^2.0.22",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.22"
   },
   "dependencies": {
-    "axios": "^1.4.0",
-    "discord.js": "^14.9.0"
+    "axios": "^1.4.0"
   }
 }
