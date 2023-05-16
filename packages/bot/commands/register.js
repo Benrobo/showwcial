@@ -1,5 +1,5 @@
-import { REST, Routes, ApplicationCommandOptionType } from "discord.js";
-import Env from "../config/env";
+const { REST, Routes, ApplicationCommandOptionType } = require("discord.js");
+const Env = require("../config/env");
 
 const commands = [
   {
@@ -31,20 +31,22 @@ const commands = [
   },
 ];
 
-const rest = new REST({ version: "9" }).setToken(Env.discordToken as string);
+const rest = new REST({ version: "9" }).setToken(Env.discordToken);
 
-export default async function registerCommands() {
+async function registerCommands() {
   try {
     console.log("REGISTERING....");
     await rest.put(
-      Routes.applicationGuildCommands(Env.discordClientId as string, Env.botId),
+      Routes.applicationGuildCommands(Env.discordClientId, Env.botId),
       {
         body: commands,
       }
     );
     console.log("SLASH COMMAND REGISTERING....");
-  } catch (e: any) {
+  } catch (e) {
     console.log(e);
     console.log(`Error registering commands: ${e.message}`);
   }
 }
+
+module.exports = registerCommands;

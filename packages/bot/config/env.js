@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
 const Env = {
@@ -7,4 +7,4 @@ const Env = {
   botId: "1100925767740817428",
 };
 
-export default Env;
+module.exports = Env;

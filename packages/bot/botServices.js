@@ -1,9 +1,9 @@
-import $axios from "./config/axios";
+const $axios = require("./config/axios");
 
-export default class BotServices {
-  public constructor() {}
+class BotServices {
+  constructor() {}
 
-  private isEmpty(content: string) {
+  isEmpty(content) {
     if (
       typeof content === "undefined" ||
       content === null ||
@@ -14,28 +14,28 @@ export default class BotServices {
     return false;
   }
 
-  private formatThreadContent(content: string) {}
+  formatThreadContent(content) {}
 
-  private isServerError(res: any) {
+  isServerError(res) {
     return res?.code === "--api/server-error" ? true : false;
   }
-  private isConnectionError(res: any) {
+  isConnectionError(res) {
     return res?.code === "ECONNABORTED" ? true : false;
   }
-  private isNetworkError(res: any) {
+  isNetworkError(res) {
     return res?.message === "Network Error" ? true : false;
   }
 
-  private async request(endpoint: string, body?: any) {
+  async request(endpoint, body) {
     try {
       const req = await $axios.post(endpoint, body);
-      return req?.data ?? (req as any)?.response?.data;
-    } catch (e: any) {
+      return req?.data ?? req?.response?.data;
+    } catch (e) {
       return e.response?.data ?? { message: e.message, code: e?.code };
     }
   }
 
-  public async authenticateBot(token: string, channelId: string) {
+  async authenticateBot(token, channelId) {
     let response = { success: false, message: "" };
     const res = await this.request("/notifier/authenticateBot", {
       token,
@@ -84,7 +84,7 @@ export default class BotServices {
     }
   }
 
-  public async handleThreads(channelId: string) {
+  async handleThreads(channelId) {
     let response = {
       success: false,
       title: null,
@@ -173,7 +173,7 @@ export default class BotServices {
     }
   }
 
-  public async handleShows(channelId: string) {
+  async handleShows(channelId) {
     let response = {
       success: false,
       title: null,
@@ -255,3 +255,5 @@ export default class BotServices {
     }
   }
 }
+
+module.exports = BotServices;

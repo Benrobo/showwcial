@@ -1,15 +1,15 @@
 // import { REST, Routes } from "discord.js"
-import Env from "./config/env";
-import { Client, IntentsBitField as Intents, EmbedBuilder } from "discord.js";
-import registerCommand from "./commands/register";
-import BotServices from "./botServices";
+const Env = require("./config/env");
+const { Client, IntentsBitField, EmbedBuilder } = require("discord.js");
+const registerCommand = require("./commands/register");
+const BotServices = require("./botServices");
 
 registerCommand();
 
 const botServices = new BotServices();
 
 const client = new Client({
-  intents: [Intents.Flags.Guilds],
+  intents: [IntentsBitField.Flags.Guilds],
 });
 
 client.on("ready", async () => {
@@ -25,7 +25,7 @@ client.on("interactionCreate", async (interaction) => {
   // handle bot authentication.
   if (commandName === "authenticate") {
     const tokenInput = interaction.options.get("token");
-    const tokenValue = tokenInput.value as string;
+    const tokenValue = tokenInput.value;
 
     // make authentication requests.
     const response = await botServices.authenticateBot(tokenValue, channelId);
@@ -72,7 +72,7 @@ client.on("interactionCreate", async (interaction) => {
           embeds: [embeddMsg],
           ephemeral: false,
         });
-    } catch (e: any) {
+    } catch (e) {
       // console.log(e);
       const embeddMsg = embed
         .setTitle(`❌ **Failed Fetching Thread**`)
@@ -107,7 +107,7 @@ client.on("interactionCreate", async (interaction) => {
           embeds: [embeddMsg],
           ephemeral: false,
         });
-    } catch (e: any) {
+    } catch (e) {
       // console.log(e);
       const embeddMsg = embed
         .setTitle(`❌ **Failed Fetching Thread**`)

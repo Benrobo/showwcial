@@ -1,4 +1,4 @@
-import axios from "axios";
+const axios = require("axios");
 
 const ShowwcialBackend = `http://localhost:3000/api`;
 
@@ -14,4 +14,4 @@ const $axios = axios.create({
   withCredentials: true,
 });
 
-export default $axios;
+module.exports = $axios;
