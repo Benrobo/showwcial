@@ -1,5 +1,7 @@
 // ! this was commented out due to agenda reliability of connecting to mongodb server.
 
+// to prevent typrscript error during compilation
+export const a = "b";
 // import env from "../config/env";
 // import nodemailer from "nodemailer";
 // import agendaConfig from "../config/agenda";
