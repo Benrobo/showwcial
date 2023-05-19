@@ -9,3 +9,6 @@
 // );
 
 // export default agendaConfig;
+
+// just to prevent typrscript error when compiling
+export const a = "b";
