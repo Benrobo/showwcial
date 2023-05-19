@@ -12,7 +12,7 @@ function Home() {
   const toggleVideoPreview = () => setIsVideoPreview(!isVideoPreview);
 
   return (
-    <div className="w-full h-screen bg-dark-100 overflow-x-hidden ">
+    <div className="w-full h-screen bg-dark-100 overflow-x-hidden scroll-smooth pattern-bg">
       {/* header */}
       <div className="relative w-full min-h-[400px] max-h-[700px] bg-dark-200 ">
         <div className="w-full flex items-center justify-around h-auto px-2 py-4">
@@ -30,10 +30,17 @@ function Home() {
             <a href="#" className="text-white-100 font-pp-rg text-[12px]">
               Why Showwcial
             </a>
-            <a href="#" className="text-white-100 font-pp-rg text-[12px]">
+            <a
+              href="#features"
+              className="text-white-100 font-pp-rg text-[12px]"
+            >
               Features
             </a>
-            <a href="#" className="text-white-100 font-pp-rg text-[12px]">
+            <a
+              href="mailto:alumonabenaiah71@gmail.com"
+              target="_blank"
+              className="text-white-100 font-pp-rg text-[12px]"
+            >
               Contact
             </a>
           </div>
@@ -84,6 +91,7 @@ function Home() {
 
       {/* <Gap height={50} /> */}
       {/* Features */}
+      <a id="features"></a>
       <div className="w-full h-auto flex flex-col items-center justify-center">
         <p className="text-white-100 font-pp-eb text-[35px] mb-5">Features</p>
         <p className="text-white-200 max-w-[600px] text-center font-pp-rg text-[13px] ">
@@ -147,7 +155,7 @@ function Home() {
           </p>
           <Gap height={50} />
           <div className="w-full flex items-center justify-around">
-            <div className="w-[200px] rounded-md border-solid border-[.5px] border-white-600 p-5 flex flex-col items-center justify-center">
+            <div className="w-[200px] rounded-md border-solid border-[.5px] border-white-600 p-5 flex flex-col items-center justify-center bg-dark-300 z-[10]">
               <div className="ack-image w-[100px] h-[100px] rounded-[50%] ">
                 <style>{`
                 .ack-image{
@@ -173,7 +181,7 @@ function Home() {
                 <span className="text-white-200 text-[12px]">@benrobo</span>
               </a>
             </div>
-            <div className="w-[200px] rounded-md border-solid border-[.5px] border-white-600 p-5 flex flex-col items-center justify-center">
+            <div className="w-[200px] bg-dark-300 z-[10] rounded-md border-solid border-[.5px] border-white-600 p-5 flex flex-col items-center justify-center">
               <div className="ack-image-2 w-[100px] h-[100px] rounded-[50%] ">
                 <style>{`
                 .ack-image-2{
@@ -200,7 +208,7 @@ function Home() {
           </div>
         </div>
         {/* Get started */}
-        <div className="w-full h-full min-h-[300px] py-8 bg-dark-300 flex flex-col items-center justify-center">
+        <div className="w-full h-full z-[10] min-h-[300px] py-8 bg-dark-300 flex flex-col items-center justify-center">
           <h1 className="text-[40px] font-pp-eb text-white-100">
             It&apos;s easy to get started.
           </h1>
@@ -259,7 +267,7 @@ function FeaturesContent({
   return (
     <>
       {align === "l-r" ? (
-        <div className="w-full max-w-[90%] mt-8 grid grid-cols-2 gap-7 px-8">
+        <div className="w-full max-w-[90%] mt-8 grid grid-cols-2 gap-7 px-8 z-[10]">
           <div className="w-full h-auto flex flex-col items-start justify-center">
             <h1 className="text-white-100 font-pp-sb">{title}</h1>
             <p className="text-white-200 font-pp-rg text-[14px] mt-5 ">
@@ -271,7 +279,7 @@ function FeaturesContent({
           </div>
         </div>
       ) : (
-        <div className="w-full max-w-[90%] mt-8 grid grid-cols-2 gap-7 px-8">
+        <div className="w-full max-w-[90%] mt-8 grid grid-cols-2 gap-7 px-8 z-[10] ">
           <div className="w-full max-w-[750px]">
             <ImageTag src={imagePath} className="rounded-[10px]" />
           </div>
