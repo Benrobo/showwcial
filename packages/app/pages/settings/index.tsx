@@ -54,20 +54,24 @@ function Settings() {
   }, [addNotionTokenMutation.data]);
 
   function addNotionToken(type: "notion" | "showwcase") {
-    if (
-      (type === "notion" && token?.notion === appCredentials?.notion) ||
-      token?.notion.length === 0
-    ) {
-      toast.error("Token hasn't changed or is empty.");
-      return;
+    // return console.log(token.notion, appCredentials.notion);
+    if (type === "notion") {
+      if (
+        token?.notion === appCredentials?.notion ||
+        token?.notion.length === 0
+      ) {
+        toast.error("Token hasn't changed or is empty.");
+        return;
+      }
     }
-    if (
-      (type === "showwcase" &&
-        token?.showwcase === appCredentials?.showwcase) ||
-      token?.showwcase.length === 0
-    ) {
-      toast.error("Token hasn't changed or is empty.");
-      return;
+    if (type === "showwcase") {
+      if (
+        token?.showwcase === appCredentials?.showwcase ||
+        token?.showwcase.length === 0
+      ) {
+        toast.error("Token hasn't changed or is empty.");
+        return;
+      }
     }
     addNotionTokenMutation.mutate({ token: token[type], type } as any);
   }
@@ -91,7 +95,10 @@ function Settings() {
             <p className="text-white-300 font-pp-rg text-[13px] ">
               Add your notion integration token. Dont know where to find one,
               follow this guide
-              <a href="#" className="textwhite-100 underline">
+              <a
+                href="https://gist.github.com/Benrobo/e2cba898bdeb786ab73812aa84b8481a"
+                className="textwhite-100 underline ml-1"
+              >
                 Here
               </a>
             </p>
@@ -127,7 +134,10 @@ function Settings() {
             <p className="text-white-300 font-pp-rg text-[13px] ">
               Add your personal showwcase api token. Dont know where to find
               one, follow this guide
-              <a href="#" className="textwhite-100 underline">
+              <a
+                href="https://gist.github.com/Benrobo/e2cba898bdeb786ab73812aa84b8481a"
+                className="textwhite-100 underline ml-1"
+              >
                 Here
               </a>
             </p>
