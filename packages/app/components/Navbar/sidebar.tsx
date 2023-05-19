@@ -71,7 +71,7 @@ function SideBar({ active }: SidebarProps) {
             <MdSpaceDashboard className="ml-2 text-2xl " /> Dashboard
           </li>
         </Link>
-        <Link href="/chat" className="w-full">
+        {/* <Link href="/chat" className="w-full">
           <li
             className={`${returnActiveStyle(
               active,
@@ -80,7 +80,7 @@ function SideBar({ active }: SidebarProps) {
           >
             <MdWebStories className="ml-2 text-2xl " /> Chat
           </li>
-        </Link>
+        </Link> */}
         <Link href="/hub" className="w-full">
           <li
             className={`${returnActiveStyle(
