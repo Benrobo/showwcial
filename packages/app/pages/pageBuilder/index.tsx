@@ -40,7 +40,18 @@ function PortfolioBuilder() {
             <kbd className="bg-dark-200 font-pp-sb ml-2 mr-2 p-1 text-white-200 rounded-md">
               portfolio
             </kbd>
-            site that impress potential clients & customers
+            site that impress potential clients & customers.
+          </p>
+          <p className="text-white-300 font-pp-rg text-[13px] mt-2 ">
+            Follow this
+            <a
+              href="https://gist.github.com/Benrobo/e2cba898bdeb786ab73812aa84b8481a"
+              target="_blank"
+              className="underline ml-1 mr-1 font-pp-sb text-white-100"
+            >
+              Guide
+            </a>
+            on how to setup a site on showwcial from scratch.
           </p>
           <button
             className="px-6 py-3 mt-2 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
