@@ -98,6 +98,7 @@ function Settings() {
               <a
                 href="https://gist.github.com/Benrobo/e2cba898bdeb786ab73812aa84b8481a"
                 className="textwhite-100 underline ml-1"
+                target="_blank"
               >
                 Here
               </a>
@@ -136,6 +137,7 @@ function Settings() {
               one, follow this guide
               <a
                 href="https://gist.github.com/Benrobo/e2cba898bdeb786ab73812aa84b8481a"
+                target="_blank"
                 className="textwhite-100 underline ml-1"
               >
                 Here
