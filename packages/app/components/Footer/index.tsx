@@ -1,6 +1,5 @@
 import React from "react";
 import { AiOutlineMail, AiOutlineTwitter } from "react-icons/ai";
-import socialLinks from "../../data/socials.json";
 
 function Footer() {
   return (
@@ -12,12 +11,12 @@ function Footer() {
           </small>
         </div>
         <div className="w-full px-[2rem] flex items-end justify-end gap-5">
-          <a href={socialLinks.socials["twitter"]} target="__blank">
+          {/* <a href={socialLinks.socials["twitter"]} target="__blank">
             <AiOutlineTwitter className=" text-[1.2rem] text-white-200 " />
           </a>
           <a href={socialLinks.socials["email"]} target="__blank">
             <AiOutlineMail className=" text-[1.2rem] text-white-200 " />
-          </a>
+          </a> */}
         </div>
       </div>
     </div>
