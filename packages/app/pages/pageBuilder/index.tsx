@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { BsArrowLeftShort, BsArrowRightShort } from "react-icons/bs";
-import { SiteInfo } from "./siteInfo";
+import SiteInfo from "./siteInfo";
 import Themes from "./theme";
 import AddNotionPage from "./notionPage";
 import { toast } from "react-hot-toast";

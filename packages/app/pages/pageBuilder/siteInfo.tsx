@@ -21,7 +21,7 @@ interface PageProps {
   pageInfo: any;
 }
 
-export function SiteInfo({ savePageInfo, pageInfo }: PageProps) {
+export default function SiteInfo({ savePageInfo, pageInfo }: PageProps) {
   const handleInput = (e: any) => {
     const dataset = e.target?.dataset;
     const name = dataset?.name as ValidPagePropInfo;
