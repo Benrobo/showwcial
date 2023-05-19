@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import prisma from "../config/prisma";
 import bcrypt from "bcryptjs";
 import memcache from "memory-cache";
-import { sendMail } from "../helper/sendMail";
+// import { sendMail } from "../helper/sendMail";
 import JsonWebToken from "../helper/jwt";
 
 export default class ChatController extends BaseController {
