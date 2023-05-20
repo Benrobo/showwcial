@@ -26,6 +26,7 @@ export default class NotifierController extends BaseController {
       response["success"] = true;
       return response;
     } catch (e: any) {
+      console.log(e);
       response["data"] = e.response?.data ?? {
         message: e.message,
         code: e?.code,
@@ -307,13 +308,19 @@ export default class NotifierController extends BaseController {
       if (typeof d?.community !== "undefined") {
         PostsWithCommunities.push(d);
       }
+      console.log(d?.community);
     }
 
     const combinedPosts = PostsWithoutCommunities.concat(PostsWithCommunities);
     const selectedPosts =
-      combinedPosts[Math.floor(Math.random() * combinedPosts.length)];
+      combinedPosts.length > 0
+        ? combinedPosts[Math.floor(Math.random() * combinedPosts.length)]
+        : combinedPosts;
 
-    if (Object.entries(selectedPosts).length === 0) {
+    if (
+      selectedPosts.length === 0 ||
+      Object.entries(selectedPosts).length === 0
+    ) {
       return this.error(
         res,
         "--botThreads/insufficient-thread",
@@ -427,9 +434,14 @@ export default class NotifierController extends BaseController {
 
     const combinedPosts = PostsWithoutTags.concat(PostsWithTags);
     const selectedPosts =
-      combinedPosts[Math.floor(Math.random() * combinedPosts.length)];
+      combinedPosts.length > 0
+        ? combinedPosts[Math.floor(Math.random() * combinedPosts.length)]
+        : combinedPosts;
 
-    if (Object.entries(selectedPosts).length === 0) {
+    if (
+      selectedPosts.length === 0 ||
+      Object.entries(selectedPosts).length === 0
+    ) {
       return this.error(
         res,
         "--botThreads/insufficient-shows",

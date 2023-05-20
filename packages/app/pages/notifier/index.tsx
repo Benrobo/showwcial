@@ -28,6 +28,8 @@ function Notifier() {
     async (id: string) => await deleteVariant(id)
   );
 
+  const AUTH_BOT_URL = `https://discord.com/oauth2/authorize?client_id=1100946925106233434&scope=bot`;
+
   useEffect(() => {
     if (selectedVariantId.length > 0) {
       const filterSelected = allVariants.filter(
@@ -91,12 +93,22 @@ function Notifier() {
             channel. Get started by creating a new notifier variant below.
           </p>
           <br />
-          <button
-            className="px-6 py-3 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
-            onClick={() => setShowCreateVariant(!showCreateVariant)}
-          >
-            Create Variant
-          </button>
+          <div className="w-full flex items-center justify-start gap-2">
+            <button
+              className="px-6 py-3 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+              onClick={() => setShowCreateVariant(!showCreateVariant)}
+            >
+              Create Variant
+            </button>
+            <a
+              href={AUTH_BOT_URL}
+              target="_blank"
+              className="px-6 py-3 flex items-center justify-center text-white-100 bg-green-700 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+            >
+              <BsDiscord size={20} className="text-white-100 mr-2" /> Install
+              Bot.
+            </a>
+          </div>
           <br />
           <Gap />
           <div className="w-full flex flex-col items-start justify-start gap-3">
