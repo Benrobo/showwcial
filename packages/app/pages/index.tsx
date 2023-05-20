@@ -11,6 +11,21 @@ function Home() {
 
   const toggleVideoPreview = () => setIsVideoPreview(!isVideoPreview);
 
+  const userProfileImageStyle = {
+    backgroundImage: `url("./images/ack/me.jpeg")`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  };
+
+  const showwcaseImageStyle = {
+    background: "#fff",
+    backgroundImage: `url("./images/ack/showwcase.png")`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+  };
+
   return (
     <div className="w-full h-screen bg-dark-100 overflow-x-hidden scroll-smooth pattern-bg">
       {/* header */}
@@ -46,7 +61,7 @@ function Home() {
           </div>
           <div className="w-auto flex items-start justify-center gap-2">
             <a
-              href=""
+              href="/auth/login"
               className="px-7 py-2 flex items-center justify-center text-[13px] font-pp-sb text-white-100 bg-white-600 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur "
             >
               Try Now
@@ -77,7 +92,7 @@ function Home() {
         </div>
         <div className="w-full h-auto  mt-5 py-9 flex flex-col items-center">
           <div className="w-full max-w-[60%] flex flex-col items-center text-center">
-            <p className="text-white-200 font-pp-rg text-[13px] ">
+            <p className="text-white-200 font-pp-rg text-[13px] z-[10] ">
               Discover, connect, and thrive with Showwcial. Harness the power of
               threads and shows tailored to your interests and communities.
               Create professional portfolio sites with ease, personalize your
@@ -93,8 +108,10 @@ function Home() {
       {/* Features */}
       <a id="features"></a>
       <div className="w-full h-auto flex flex-col items-center justify-center">
-        <p className="text-white-100 font-pp-eb text-[35px] mb-5">Features</p>
-        <p className="text-white-200 max-w-[600px] text-center font-pp-rg text-[13px] ">
+        <p className="text-white-100 font-pp-eb text-[35px] mb-5 z-[20]">
+          Features
+        </p>
+        <p className="text-white-200 max-w-[600px] text-center font-pp-rg text-[13px] z-[20] ">
           Discover, Engage, and Grow: Showwcial Revolutionizes How You Showcase
           and Connect with Your Audience. Here are the lists of features offered
           by Showwcial.
@@ -142,7 +159,7 @@ function Home() {
           <Gap height={100} />
         </div>
         {/* Team */}
-        <div className="w-full h-full min-h-[350px] mt-8 mb-6 flex flex-col items-center justify-center">
+        <div className="w-full h-full min-h-[350px] mt-8 mb-6 flex flex-col items-center justify-center z-[20] ">
           <p className="text-white-100 text-center font-pp-eb text-[35px] mb-5">
             Acknowlegement
           </p>
@@ -156,18 +173,10 @@ function Home() {
           <Gap height={50} />
           <div className="w-full flex items-center justify-around">
             <div className="w-[200px] rounded-md border-solid border-[.5px] border-white-600 p-5 flex flex-col items-center justify-center bg-dark-300 z-[10]">
-              <div className="ack-image w-[100px] h-[100px] rounded-[50%] ">
-                <style>{`
-                .ack-image{
-                  // width: 100%;
-                  // height: 100%;
-                  background-image: url("./images/ack/me.jpeg");
-                  background-size: cover;
-                  background-repeat: no-repeat;
-                  background-position: center;
-                }
-              `}</style>
-              </div>
+              <div
+                className="ack-image w-[100px] h-[100px] rounded-[50%] "
+                style={userProfileImageStyle}
+              ></div>
               <br />
               <p className="text-white-400 font-pp-rg text-[12px] italic ">
                 Built By:
@@ -182,17 +191,10 @@ function Home() {
               </a>
             </div>
             <div className="w-[200px] bg-dark-300 z-[10] rounded-md border-solid border-[.5px] border-white-600 p-5 flex flex-col items-center justify-center">
-              <div className="ack-image-2 w-[100px] h-[100px] rounded-[50%] ">
-                <style>{`
-                .ack-image-2{
-                  background: #fff;
-                  background-image: url("./images/ack/showwcase.png");
-                  background-size: cover;
-                  background-repeat: no-repeat;
-                  background-position: center;
-                }
-              `}</style>
-              </div>
+              <div
+                className="ack-image-2 w-[100px] h-[100px] rounded-[50%] "
+                style={showwcaseImageStyle}
+              ></div>
               <br />
               <p className="text-white-400 font-pp-rg text-[12px] italic ">
                 Powered By:
