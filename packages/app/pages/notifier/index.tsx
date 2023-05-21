@@ -28,7 +28,7 @@ function Notifier() {
     async (id: string) => await deleteVariant(id)
   );
 
-  const AUTH_BOT_URL = `https://discord.com/oauth2/authorize?client_id=1100946925106233434&scope=bot`;
+  const AUTH_BOT_URL = `https://discord.com/oauth2/authorize?client_id=1109733408600506529&scope=bot`;
 
   useEffect(() => {
     if (selectedVariantId.length > 0) {
