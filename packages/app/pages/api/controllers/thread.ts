@@ -17,30 +17,34 @@ export default class ThreadController extends BaseController {
     content: string,
     title: string,
     image: string,
-    showwcaseApiToken: string
+    showwcaseApiToken: string,
+    communityId?: string
   ) {
     try {
       let parentId = null;
+      const payload = {
+        title,
+        message: content,
+        gif: image ?? "",
+        videoUrl: "",
+      };
+
+      if (!isEmpty(communityId)) {
+        payload["communityId"] = communityId;
+      }
+
       const parentThread = await $axios
-        .post(
-          "/threads",
-          {
-            title,
-            message: content,
-            gif: image ?? "",
-            videoUrl: "",
+        .post("/threads", payload, {
+          headers: {
+            "X-API-KEY": showwcaseApiToken,
           },
-          {
-            headers: {
-              "X-API-KEY": showwcaseApiToken,
-            },
-          }
-        )
+        })
         .then((r) => r.data);
       parentId = parentThread?.id;
       return { parentId };
     } catch (e: any) {
-      console.log(`Error posting thread: ${e}`);
+      console.log(e);
+      // console.log(`Error posting thread: ${e}`);
       this.error(
         res,
         "--createThread/failed-creating-thread",
@@ -99,7 +103,7 @@ export default class ThreadController extends BaseController {
       return this.error(res, "--createThread/invalid-fields", msg, 400);
     }
 
-    const { content, title, image } = payload;
+    const { content, title, image, communityId } = payload;
     const userTokens = await prisma.settings.findFirst({
       where: { userId: reqUser?.id },
     });
@@ -122,7 +126,8 @@ export default class ThreadController extends BaseController {
         content[0],
         title,
         image,
-        showwcaseApiToken
+        showwcaseApiToken,
+        communityId
       );
       this.success(
         res,
@@ -142,8 +147,10 @@ export default class ThreadController extends BaseController {
         content[0],
         title,
         image,
-        showwcaseApiToken
+        showwcaseApiToken,
+        communityId
       );
+      console.log({ postedThread });
       if (postedThread === null || typeof postedThread === "undefined") return;
       parentId = postedThread?.parentId;
       counter += 1;
