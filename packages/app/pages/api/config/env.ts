@@ -14,8 +14,8 @@ const ENV = {
   emailPassword: process.env.EMAIL_PASSWORD,
   clientUrl:
     process.env.NODE_ENV === "development"
-      ? "http://localhost:3002"
-      : `https://paycode.co`,
+      ? "http://localhost:3000"
+      : `https://showwcase.vercel.app`,
   showwcaseAPIKey: process.env.SHOWWCASE_API_KEY,
   showwcaseToken: process.env.SHOWWCASE_TOKEN,
   notionApiToken: process.env.NOTION_API_KEY,
