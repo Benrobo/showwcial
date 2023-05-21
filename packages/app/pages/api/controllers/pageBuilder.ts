@@ -520,6 +520,7 @@ export default class PageBuilderController extends BaseController {
       delete createdSites["userId"];
 
       createdSites.portfolioData["userImage"] = userData?.image;
+      createdSites.portfolioData["fullname"] = userData?.fullname;
 
       createdSites[
         "showwcaseProfile"
