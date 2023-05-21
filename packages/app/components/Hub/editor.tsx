@@ -3,14 +3,21 @@ import ImageTag from "../Image";
 import DataContext from "../../context/DataContext";
 import { BsTrash } from "react-icons/bs";
 import { IoAddSharp, IoClose } from "react-icons/io5";
-import { replaceTagsWithNewLine, sleep, splitThread } from "../../util";
+import {
+  isEmpty,
+  replaceTagsWithNewLine,
+  sleep,
+  splitThread,
+} from "../../util";
 import Gap from "../Gap";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { createThread } from "../../http";
 import { Spinner } from "../Loader";
 import { toast } from "react-hot-toast";
 import { HandleThreadResponse } from "../../util/response";
 import { MdSubtitles } from "react-icons/md";
+import { Select } from "@chakra-ui/react";
+import axios from "axios";
 
 interface ThreadEditorProp {
   closeActiveThread: () => void;
@@ -21,10 +28,29 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
   const createThreadMutation = useMutation(
     async (data: any) => await createThread(data)
   );
+  const fetchCommunitiesQuery = useQuery({
+    queryFn: async () => await fetchAllCommunities(),
+    queryKey: ["fetchCommunities"],
+  });
   const [posts, setPosts] = useState([{ id: 0, value: "" }]);
   const [threadTitle, setThreadTitle] = useState("");
   const [clearInput, setClearInput] = useState(false);
+  const [communities, setCommunities] = useState([]);
+  const [selectedCommunity, setSelectedCommunity] = useState("");
   const MAX_CHAR = 1000;
+
+  async function fetchAllCommunities() {
+    try {
+      const res = await axios.get(
+        `https://cache.showwcase.com/communities/featured?limit=100`
+      );
+      const result = res.data;
+      setCommunities(result);
+    } catch (e: any) {
+      console.log(`Something went wrong fetching community: ${e}`);
+      setCommunities([]);
+    }
+  }
 
   //! work on this later.
   function handleSplittingOfThread() {
@@ -80,6 +106,7 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
           setPosts([{ id: 0, value: "" }]);
           setClearInput(true);
           setThreadTitle("");
+          setSelectedCommunity("");
         }
       );
     }
@@ -95,6 +122,9 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
       content: posts.map((p) => p.value),
       title: threadTitle,
     };
+    if (!isEmpty(selectedCommunity)) {
+      payload["communityId"] = +selectedCommunity;
+    }
     createThreadMutation.mutate(payload);
   }
 
@@ -122,6 +152,18 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
         </button>
       </div>
       <div className="w-[450px] h-auto relative">
+        <div className="w-full flex flex-col items-start justify-start">
+          <select
+            className="bg-transparent border-[1px] border-solid border-white-600 p-2 rounded-md text-white-200 outline-none mb-2 "
+            disabled={fetchCommunitiesQuery.isLoading}
+            onChange={(e) => setSelectedCommunity(e.target.value)}
+          >
+            <option value="">Communities</option>
+            {communities?.length > 0
+              ? communities.map((d) => <option value={d?.id}>{d?.name}</option>)
+              : null}
+          </select>
+        </div>
         <div className="w-full flex items-center justify-center">
           <div className="flex flex-col items-center justify-center bg-dark-200 p-2 rounded-md">
             <MdSubtitles color="#ccc" />
