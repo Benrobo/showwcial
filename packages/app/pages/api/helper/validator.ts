@@ -15,6 +15,7 @@ export const PostThreadSchema = Joi.object({
   content: Joi.array().items(Joi.string().required()),
   title: Joi.string().allow(""),
   image: Joi.string().allow(""),
+  communityId: Joi.number().allow(""),
 });
 
 export const BookmarkDataSchema = Joi.object({
