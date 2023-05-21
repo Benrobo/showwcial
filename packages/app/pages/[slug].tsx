@@ -102,13 +102,13 @@ function UserPortfolio() {
 
       userRenderedSiteTheme = (
         <OasisTheme
-          about={{ content: about, image: userImage }}
+          about={{ content: about ?? "", image: userImage }}
           email={email}
           fullname={fullname}
           githubRepo={ghRepo}
           headline={headline}
           tagline={tagline}
-          resumeUrl={resumeUrl}
+          resumeUrl={resumeUrl ?? "#"}
           showcaseprofile={siteData?.showwcaseProfile}
           socialLinks={socialLinks}
           stacks={stacks}

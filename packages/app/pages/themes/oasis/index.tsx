@@ -249,23 +249,8 @@ export default function OasisTheme({
                 ) : (
                   <>
                     <p className="text-slate-200 font-pp-rg text-[14px] ">
-                      17+ years of experience in Software Development and User
-                      Interface Engineering. Bringing forth expertise in the
-                      design, development, and delivery of software systems.
-                      Equipped with a diverse and promising skill-set.
-                      Proficient in various platforms, and languages. Able to
-                      effectively self-manage during independent projects, as
-                      well as collaborate as part of a productive team.
-                    </p>
-                    <p className="text-slate-200 font-pp-rg text-[14px] ">
-                      A passionate content creator who wrote over 200 articles
-                      on his own blog and many other freelancing engagements
-                      like freeCodeCamp, CSS-Tricks, and many more. Always up
-                      for knowledge sharing with tips and tricks on Twitter and
-                      recently launched YouTube channel. An open-source
-                      enthusiast created several projects in the areas of web
-                      development to create tools, mentoring resources, and
-                      guides.
+                      Opps, I have no about details available, would add this
+                      soon!.
                     </p>
                   </>
                 )}
