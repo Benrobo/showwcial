@@ -105,7 +105,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
             seletedBookmark.map((data, i) => {
               if (data?.type === "thread") {
                 return (
-                  <div className="w-[350px]">
+                  <div className="w-[350px] max-h-[700px]">
                     <ShowwcaseThreadStyle
                       displayName={(data as any)?.displayName}
                       emoji={(data as any)?.emoji}

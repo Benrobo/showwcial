@@ -19,12 +19,10 @@ model Users {
     createdAt DateTime @default(now())
     isOnline  Boolean? @default(false)
 
-    accounts         Accounts?
-    threadBookmarks  BookMarks[]
-    botNotifier      BotNotifier[]
-    sites            Site[]
-    messagesSent     Message[]     @relation("sentMessages")
-    messagesReceived Message[]     @relation("receivedMessages")
+    accounts        Accounts?
+    threadBookmarks BookMarks[]
+    botNotifier     BotNotifier[]
+    sites           Site[]
 
     @@unique([id])
 }
@@ -39,21 +37,6 @@ model Accounts {
 
     @@unique([id])
     @@index([userId])
-}
-
-model Message {
-    id         String   @id
-    content    String
-    senderId   String
-    receiverId String
-    createdAt  DateTime @default(now())
-
-    sender   Users @relation("sentMessages", fields: [senderId], references: [id])
-    receiver Users @relation("receivedMessages", fields: [receiverId], references: [id])
-
-    @@index([id])
-    @@index([senderId])
-    @@index([receiverId])
 }
 
 model BookMarks {

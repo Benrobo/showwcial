@@ -58,7 +58,7 @@ export default function ShowwcaseThreadStyle({
       id="triangleUp"
       key={key}
       data-id={threadId}
-      className="w-full h-auto overflow-x-hidden flex items-center justify-center flex-col relative bg-dark-300 p-3 rounded-md"
+      className="w-full h-auto flex items-center justify-center flex-col relative bg-dark-300 p-3 rounded-md"
     >
       {previewState && (
         <div className="absolute top-[-20px] w-full flex items-center justify-center">
@@ -135,10 +135,7 @@ export default function ShowwcaseThreadStyle({
             <ImageTag src={threadImage} className="rounded-[5px] mt-4" />
           )}
           {threadImages?.length > 0 && threadImage?.length === 0 && (
-            <ImageTag
-              src={threadImages[0]}
-              className="rounded-[5px] max-w-[325px] mt-4"
-            />
+            <ImageTag src={threadImages[0]} className="rounded-[5px]  mt-4" />
           )}
           {threadImages?.length === 0 && threadImage?.length === 0 && (
             <a href={linkPreviewData?.url} target="_blank" className="w-full">
