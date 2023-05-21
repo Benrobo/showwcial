@@ -15,7 +15,7 @@ interface OasisProps {
     label?: string;
     url?: string;
   }[];
-  fullname?: string;
+  name?: string;
   tagline?: string;
   headline?: string;
   showwcaseProfile?: string;
@@ -88,7 +88,7 @@ function UserPortfolio() {
       const {
         about,
         email,
-        fullname,
+        name,
         ghRepo,
         headline,
         resumeUrl,
@@ -104,7 +104,7 @@ function UserPortfolio() {
         <OasisTheme
           about={{ content: about ?? "", image: userImage }}
           email={email}
-          fullname={fullname}
+          fullname={name}
           githubRepo={ghRepo}
           headline={headline}
           tagline={tagline}
