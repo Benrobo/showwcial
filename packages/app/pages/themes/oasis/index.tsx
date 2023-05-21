@@ -393,7 +393,7 @@ export default function OasisTheme({
           </p>
           <br />
           <a
-            href="mailto:johndoe@mail.com"
+            href={`mailto:${email}`}
             className="w-auto px-8 py-4 rounded-[1px] border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all font-pp-rg text-[14px]"
           >
             Say Hello
