@@ -14,7 +14,7 @@ import {
   AiOutlineTwitter,
   AiOutlineUser,
 } from "react-icons/ai";
-import { BiHomeAlt } from "react-icons/bi";
+import { BiBook, BiHomeAlt } from "react-icons/bi";
 import { BsCalendar } from "react-icons/bs";
 import { FiExternalLink } from "react-icons/fi";
 import { IoIosMail, IoLogoOctocat, IoMdMenu } from "react-icons/io";
@@ -27,11 +27,41 @@ import { HiOutlineFolder } from "react-icons/hi2";
 import { useState } from "react";
 import ImageTag from "../../../components/Image";
 import moment from "moment";
+import { NuroThemeProps } from "../../../@types";
+import { isEmpty } from "../../../util";
+import { useRouter } from "next/router";
+import PreviewNuroTheme from "./preview";
 
 type validPageName = "home" | "about" | "experiences" | "projects";
 
-export default function NuroTheme() {
+export default function NuroTheme({
+  about,
+  fullname,
+  ghRepo,
+  projects,
+  socialLinks,
+  tagline,
+  userImage,
+  experiences,
+  email,
+  showcaseprofile,
+  resumeUrl,
+}: NuroThemeProps) {
   const [activePage, setActivePage] = useState<validPageName>("home");
+  const router = useRouter();
+  const params = router.query;
+  const previewMode = Boolean(params["preview"]) ?? false;
+
+  if (previewMode) {
+    return <PreviewNuroTheme />;
+  }
+
+  if (typeof location !== "undefined") {
+    const pathName = location.pathname;
+    const splitPath = pathName.split("/");
+    const themeName = splitPath[splitPath.length - 1];
+    if (themeName === "nuro") return <PreviewNuroTheme />;
+  }
 
   const handleActivePage = (page: validPageName) => setActivePage(page);
 
@@ -39,23 +69,31 @@ export default function NuroTheme() {
 
   function renderPage(activePage: validPageName) {
     if (activePage === "home") {
-      renderedPage = <HomeSection />;
+      renderedPage = <HomeSection tagline={tagline} fullname={fullname} />;
     }
     if (activePage === "experiences") {
-      renderedPage = <Experiences />;
+      renderedPage = <Experiences workExperience={experiences} />;
     }
     if (activePage === "about") {
-      renderedPage = <AboutSection />;
+      renderedPage = (
+        <AboutSection content={about.content} stacks={about?.stacks} />
+      );
     }
     if (activePage === "projects") {
-      renderedPage = <ProjectSection />;
+      renderedPage = <ProjectSection projects={projects} githubRepo={ghRepo} />;
     }
     return renderedPage;
   }
 
   return (
     <div className="w-full h-screen bg-gradient-to-br from-black via-gray-800 to-black from-20% to-80% font-inter text-gray-500 selection:bg-white-600 selection:text-white-300 overflow-auto scroll-smooth hideScrollBar">
-      <TopNavBar handleActivePage={handleActivePage} />
+      <TopNavBar
+        handleActivePage={handleActivePage}
+        userImage={userImage}
+        socialLinks={socialLinks}
+        email={email}
+        resumeUrl={resumeUrl}
+      />
       <main className="w-full md:max-w-[900px] mx-auto h-auto min-h-full transition-all px-8 py-12 flex flex-col items-center justify-center scroll-smooth">
         {renderPage(activePage)}
       </main>
@@ -68,8 +106,30 @@ export default function NuroTheme() {
 interface NavbarProps {
   handleActivePage: (pageName: validPageName) => void;
   userImage?: string;
+  socialLinks?: {
+    label?: string;
+    url?: string;
+  }[];
+  email: string;
+  resumeUrl?: string;
 }
-function TopNavBar({ handleActivePage, userImage }: NavbarProps) {
+
+function TopNavBar({
+  handleActivePage,
+  userImage,
+  socialLinks,
+  email,
+  resumeUrl,
+}: NavbarProps) {
+  const allLinks = socialLinks.concat() ?? [];
+
+  if (!isEmpty(email)) {
+    allLinks.push({ label: "email", url: email });
+  }
+  if (!isEmpty(resumeUrl)) {
+    allLinks.push({ label: "resume", url: resumeUrl });
+  }
+
   function renderSocialLinkIcon(label: string) {
     console.log(label);
     let icon = null;
@@ -93,6 +153,9 @@ function TopNavBar({ handleActivePage, userImage }: NavbarProps) {
     }
     if (label === "email") {
       icon = <IoIosMail className="text-white-100" size={20} />;
+    }
+    if (label === "resume") {
+      icon = <BiBook className="text-white-100" size={20} />;
     }
     return icon;
   }
@@ -173,24 +236,33 @@ function TopNavBar({ handleActivePage, userImage }: NavbarProps) {
             <MenuDivider />
             {/* Showwcial Links */}
             <div className="w-full flex flex-col items-start justify-start">
-              {["github", "hashnode", "twitter", "email"].map((item) => (
-                <MenuItem
-                  transition={"all .5s"}
-                  py={3}
-                  _hover={{ bg: "#1E1E22", opacity: "1", color: "#fff" }}
-                  opacity={".6"}
-                  background={"#101014"}
-                  className="font-pp-rg py-4 text-[15px] flex w-full items-center justify-between gap-5"
-                >
-                  <div className="w-full flex items-center justify-start gap-3">
-                    {renderSocialLinkIcon(item)}{" "}
-                    <span className="font-pp-rg">{item}</span>
-                  </div>
-                  <a href="#" className="">
-                    <FiExternalLink />
-                  </a>
-                </MenuItem>
-              ))}
+              {allLinks?.length > 0
+                ? allLinks.map((item) => (
+                    <MenuItem
+                      transition={"all .5s"}
+                      py={3}
+                      _hover={{ bg: "#1E1E22", opacity: "1", color: "#fff" }}
+                      opacity={".6"}
+                      background={"#101014"}
+                      className="font-pp-rg py-4 text-[15px] flex w-full items-center justify-between gap-5"
+                    >
+                      <div className="w-full flex items-center justify-start gap-3">
+                        {renderSocialLinkIcon(item.label.toLowerCase())}
+                        <span className="font-pp-rg">{item.label}</span>
+                      </div>
+                      <a
+                        href={
+                          item.label === "email"
+                            ? `mailto:${item.url}`
+                            : item.url
+                        }
+                        className=""
+                      >
+                        <FiExternalLink />
+                      </a>
+                    </MenuItem>
+                  ))
+                : null}
             </div>
           </MenuList>
         </Menu>
@@ -207,9 +279,6 @@ function TopNavBar({ handleActivePage, userImage }: NavbarProps) {
     </div>
   );
 }
-
-// Theme Pages
-// Home Section
 interface HomeProps {
   fullname?: string;
   tagline?: string;
@@ -223,13 +292,13 @@ function HomeSection({ fullname, tagline }: HomeProps) {
       <h1 className="text-white-100 dark:text-white text-5xl sm:text-6xl md:text-6xl lg:text-8xl tracking-tight font-extrabold font-pp-eb">
         Hey{" "}
         <span className="inline-block origin-70 hover:animate-wave">👋</span>{" "}
-        I'm {firstname ?? "Benaiah"}, <br className="hidden sm:block" />a
+        I'm {firstname ?? ""}, <br className="hidden sm:block" />a
         <div className="inline-flex px-3 lg:px-5 py-2 md:pb-4 bg-blue-705 bg-opacity-15 backdrop-filter backdrop-blur-sm filter saturate-200 text-primary-200 rounded-2xl default-transition default-focus mt-4 text-blue-200 ml-4">
           developer
         </div>
       </h1>
       <p className="max-w-xs mt-4 md:mt-8 mx-auto font-pp-rg text-base text-gray-400 sm:text-md md:text-lg md:max-w-3xl">
-        {tagline ?? "I solve problem for a living."}
+        {tagline ?? ""}
       </p>
       <br />
       <div className="w-full flex items-center justify-between gap-3"></div>
@@ -264,18 +333,25 @@ function Experiences({ workExperience }: ExperienceProp) {
   return (
     <div className="w-full h-full flex flex-col items-center justify-center text-center">
       <div className="w-full max-w-[] flex flex-col items-center justify-start">
-        <JobCards
-          id="axsdc"
-          companyName="Apple Inc"
-          current={true}
-          description={
-            "Improved performance and reliability of databases,\nweb services and other integrations.\n\nDeveloped and maintained backend system which\npowers our skill evaluator matching platform for\nemployees and organizations.\n\nEvaluated and developed new tools and\ntechnologies to help achieve company-level goals."
-          }
-          endDate="2022-12-09T10:12:46.000Z"
-          startDate="2022-10-09T10:12:42.000Z"
-          key={1}
-          title="Backend Engineer"
-        />
+        {workExperience.length > 0 ? (
+          workExperience.map((exp) => (
+            <JobCards
+              id={exp.id}
+              companyName={exp.companyName}
+              current={exp.current}
+              description={exp.description}
+              endDate={exp.endDate}
+              startDate={exp.startDate}
+              key={exp.id}
+              title={exp.title}
+            />
+          ))
+        ) : (
+          <p className="relative opacity-[.4] w-full flex items-center justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-301 before:absolute before:left-0 before:top-0 before:text-[20px] mb-5 ">
+            I probably dont have any work experience yet, but would surely
+            update this when i get one ASAP.
+          </p>
+        )}
       </div>
     </div>
   );
@@ -343,9 +419,14 @@ function JobCards({
 
 // About
 
-interface AboutProps {}
+interface AboutProps {
+  content?: string;
+  stacks?: string[];
+}
 
-function AboutSection() {
+function AboutSection({ content, stacks }: AboutProps) {
+  const formattedAboutCont = content.split("\n").filter((s) => s?.length > 0);
+
   return (
     <div className="w-full h-full">
       <section
@@ -361,34 +442,40 @@ function AboutSection() {
         <div className="w-full md:max-w-[450px] h-auto ">
           <div className="w-full h-full ml-2 flex flex-col items-start justify-start">
             <div className="w-full max-w-[450px] flex flex-col items-start justify-start gap-5 ">
-              <p className="text-white-100 font-pp-rg text-[15px] ">
-                17+ years of experience in Software Development and User
-                Interface Engineering. Bringing forth expertise in the design,
-                development, and delivery of software systems. Equipped with a
-                diverse and promising skill-set. Proficient in various
-                platforms, and languages. Able to effectively self-manage during
-                independent projects, as well as collaborate as part of a
-                productive team.
-              </p>
-              <p className="text-white-100 font-pp-rg text-[15px] ">
-                A passionate content creator who wrote over 200 articles on his
-                own blog and many other freelancing engagements like
-                freeCodeCamp, CSS-Tricks, and many more. Always up for knowledge
-                sharing with tips and tricks on Twitter and recently launched
-                YouTube channel. An open-source enthusiast created several
-                projects in the areas of web development to create tools,
-                mentoring resources, and guides.
-              </p>
+              {!isEmpty(content) ? (
+                formattedAboutCont.map((cnt, i) => (
+                  <p key={i} className="text-slate-200 font-pp-rg text-[14px] ">
+                    {cnt}
+                  </p>
+                ))
+              ) : (
+                <>
+                  <p className="text-slate-200 font-pp-rg text-[14px] ">
+                    Opps, I have no about details available, would add this
+                    soon!.
+                  </p>
+                </>
+              )}
               <p className="text-slate-200 font-pp-rg text-[14px]">
                 Here are a few technologies I’ve been working with recently:
               </p>
               <div className="w-full max-w-[350px] flex flex-wrap items-center justify-start mt-1 gap-3">
-                {["Typescript", "Nodejs", "Mongodb"].map((d) => (
-                  <p className="text-slate-200 opacity-[1] font-mono flex items-center justify-center text-[12px]">
+                {stacks?.length > 0 ? (
+                  stacks.map((st, i) => (
+                    <p
+                      key={i}
+                      className="text-slate-200 font-mono flex items-center justify-center text-[12px]"
+                    >
+                      <AiOutlineStar className="text-blue-301 mr-1" size={14} />
+                      {st}
+                    </p>
+                  ))
+                ) : (
+                  <p className="text-slate-200 opacity-[.4] font-mono flex items-center justify-center text-[12px]">
                     <AiOutlineStar className="text-blue-301 mr-1" size={14} />
-                    {d}
+                    Opps 🙊, I gat no tech stacks.
                   </p>
-                ))}
+                )}
               </div>
             </div>
           </div>
@@ -399,7 +486,24 @@ function AboutSection() {
 }
 
 // Projects
-function ProjectSection() {
+interface ProjectsProps {
+  projects?: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+    ghUrl?: string;
+    live_url?: string;
+    image: string;
+  }[];
+  githubRepo?: {
+    name?: string;
+    description?: string;
+    tags?: string[];
+    url?: string;
+  }[];
+}
+
+function ProjectSection({ githubRepo, projects }: ProjectsProps) {
   return (
     <section className="w-full md:max-w-[700px] h-full my-10 mb-10">
       <div className="w-full flex items-center justify-start">
@@ -408,55 +512,33 @@ function ProjectSection() {
         </h2>
       </div>
       <div
-        className={`w-full p-0 flex flex-wrap items-center justify-start gap-2`}
+        className={`w-full p-0 flex flex-wrap items-start justify-start gap-2`}
       >
-        <PortfolioCards
-          githubUrl={"#"}
-          description={"Project description goes here."}
-          image={"/images/headers/404-2.png"}
-          liveUrl={"#"}
-          tags={["react", "nextjs"]}
-          title={"Project Name"}
-        />
-        <PortfolioCards
-          githubUrl={"#"}
-          description={"Project description goes here."}
-          image={"/images/headers/404-2.png"}
-          liveUrl={"#"}
-          tags={["react", "nextjs"]}
-          title={"Project Name"}
-        />
-        <PortfolioCards
-          githubUrl={"#"}
-          description={"Project description goes here."}
-          image={"/images/headers/404-2.png"}
-          liveUrl={"#"}
-          tags={["react", "nextjs"]}
-          title={"Project Name"}
-        />
-        <PortfolioCards
-          githubUrl={"#"}
-          description={"Project description goes here."}
-          image={"/images/headers/404-2.png"}
-          liveUrl={"#"}
-          tags={["react", "nextjs"]}
-          title={"Project Name"}
-        />
+        {projects.length > 0
+          ? projects.map((proj) => (
+              <PortfolioCards
+                githubUrl={proj.ghUrl}
+                description={proj.description}
+                image={proj.image}
+                liveUrl={proj.live_url}
+                tags={proj.tags}
+                title={proj.name}
+              />
+            ))
+          : null}
       </div>
       <div className="w-full max-w-[600px] ">
         <div className="w-full flex flex-col items-center justify-between gap-5 mt-3 py-[40px]">
-          <GithubRepoCards
-            githubUrl={"#"}
-            description={"project description"}
-            tags={["nodejs", "typrscript"]}
-            title={"Project Name"}
-          />
-          <GithubRepoCards
-            githubUrl={"#"}
-            description={"project description"}
-            tags={["nodejs", "typrscript"]}
-            title={"Project Name"}
-          />
+          {githubRepo.length > 0
+            ? githubRepo.map((gh) => (
+                <GithubRepoCards
+                  githubUrl={gh.url}
+                  description={gh.description}
+                  tags={gh.tags}
+                  title={gh.name}
+                />
+              ))
+            : null}
         </div>
       </div>
     </section>
@@ -480,53 +562,48 @@ function PortfolioCards({
   title,
   image,
 }: PortfolioCardsProp) {
+  const projImageStyle = {
+    backgroundImage: `url(${image ?? "/images/themes/demo1.webp"})`,
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "cover",
+  };
+
   return (
     <div className="w-full max-w-[200px] h-full max-h-[500px] rounded-[15px] bg-dark-100 p-4 mt-4 ">
-      <div className="relative w-full max-h-[200px] h-[150px] bg-white-100 rounded-[15px] project-image ">
-        <style>{`
-              .project-image{
-                background-image: url(${image ?? "/images/themes/demo1.webp"});
-                background-position: center;
-                background-repeat: no-repeat;
-                background-size: cover;
-              }
-            `}</style>
+      <div
+        className="relative w-full max-h-[200px] h-[150px] bg-white-100 rounded-[15px] project-image "
+        style={projImageStyle}
+      >
         <div className="w-auto flex items-center justify-center bg-white-500 backdrop-blur-[10px] p-2 absolute top-0 right-0 gap-3 rounded-t-[15px] rounded-l-[0px] ">
-          <a href={githubUrl ?? "#"}>
-            <IoLogoOctocat className="text-dark-100" size={20} />
-          </a>
-          <a href={liveUrl ?? "#"}>
-            <FiExternalLink className="text-dark-100" size={20} />
-          </a>
+          {!isEmpty(githubUrl) && (
+            <a href={githubUrl ?? "#"}>
+              <IoLogoOctocat className="text-white-400" size={20} />
+            </a>
+          )}
+          {!isEmpty(liveUrl) && (
+            <a href={liveUrl ?? "#"}>
+              <FiExternalLink className="text-white-400" size={20} />
+            </a>
+          )}
         </div>
       </div>
       <div className="w-full flex flex-col items-start justify-start py-2 mt-2">
-        <p className="text-white-100 font-pp-eb text-[18px] mb-2 ">AI App</p>
+        <p className="text-white-100 font-pp-eb text-[18px] mb-2 ">{title}</p>
         <p className="text-white-300 font-pp-rg text-[12px] mb-5 ">
-          {description ??
-            `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero
-              corrupti explicabo blanditiis ipsum rerum hic!`}
+          {description ?? ""}
         </p>
         <div className="flex items-start justify-start flex-wrap gap-2">
-          {tags?.length > 0 ? (
-            tags.map((t) => (
-              <span
-                key={t}
-                className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 "
-              >
-                Reactjs
-              </span>
-            ))
-          ) : (
-            <>
-              <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
-                Reactjs
-              </span>
-              <span className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 ">
-                Reactjs
-              </span>
-            </>
-          )}
+          {tags?.length > 0
+            ? tags.map((t) => (
+                <span
+                  key={t}
+                  className="text-slate-200 font-mono text-[10px] px-2 py-1 rounded-md bg-dark-300 "
+                >
+                  {t}
+                </span>
+              ))
+            : null}
         </div>
       </div>
     </div>
@@ -547,22 +624,22 @@ function GithubRepoCards({
   title,
 }: GHRepoCardsProp) {
   return (
-    <div className="w-full h-auto px-4 py-4 rounded-[10px] flex items-center justify-start bg-dark-100 shadow-lg border-solid border-[1px] border-white-600 ">
+    <div className="relative w-full h-auto px-4 py-4 rounded-[10px] flex items-center justify-start bg-dark-100 shadow-lg border-solid border-[1px] border-white-600 ">
       <div className="w-auto h-full flex flex-col items-center justify-center">
         <div className="p-2 bg-blue-705 backdrop-blur rounded-[50%]">
           <AiOutlineCodeSandbox size={20} className=" text-blue-200 " />
         </div>
       </div>
       <div className="w-full flex items-start justify-between">
-        <div className="w-full flex flex-col items-start justify-start px-4 py-1">
-          <p className="text-white-100 font-pp-sb text-[13px] ">Baaymax</p>
-          <p className="text-white-400 font-pp-rg text-[12px] ">
-            Description some description
+        <div className="w-full min-w-full flex flex-col items-start justify-start px-4 py-1">
+          <p className="text-white-100 font-pp-sb text-[13px] ">{title}</p>
+          <p className="w-full text-white-400 font-pp-rg text-[12px] ">
+            {description ?? ""}
           </p>
         </div>
-        <div className="w-full flex items-center justify-end">
+        <div className="w-full absolute right-3 top-2 flex items-center justify-end">
           <a
-            href="#"
+            href={githubUrl ?? ""}
             className="p-2 hover:bg-dark-200 border-solid border-[1px] border-white-600 flex flex-col items-center justify-center transition-all rounded-md "
           >
             <RiGithubLine />
