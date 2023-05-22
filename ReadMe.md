@@ -9,7 +9,7 @@ Discover, connect, and thrive with Showwcial. Harness the power of threads and s
 
 ### Demo Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/GHnJyDZ2yww" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+![[demo video](https://project-assets.showwcase.com/1420x/102662/1684794358548-Screenshot%25202023-05-19%2520at%252020.png)](https://www.youtube.com/embed/GHnJyDZ2yww)
 
 ### Chrome Extension
 
