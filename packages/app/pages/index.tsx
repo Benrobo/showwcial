@@ -154,6 +154,13 @@ function Home() {
             title="Effortless Portfolio Site Creation"
             description="Showcase your work and talents effortlessly with our built-in portfolio site creator. Say goodbye to the hassle of building a website from scratch. Simply choose from customizable templates, upload your content, and personalize your portfolio site to reflect your unique style and professional brand."
             imagePath="/images/mockups/4.png"
+            align="r-l"
+          />
+          <Gap height={50} />
+          <FeaturesContent
+            title="Effortless Portfolio Site Creation"
+            description="Showwcial provides a way for users to identify who and who's not on showwcase platform via twitter."
+            imagePath="/images/mockups/7.png"
             align="l-r"
           />
           <Gap height={100} />
