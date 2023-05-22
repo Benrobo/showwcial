@@ -6,6 +6,7 @@ import ImageTag from "../Image";
 import { BiCog } from "react-icons/bi";
 import { Button, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react";
 import { IoLockOpen } from "react-icons/io5";
+import ErrorBanner from "../ErrorBanner";
 
 function TopBar() {
   const [scrollY, setScrollY] = useState(0);
@@ -41,8 +42,9 @@ function TopBar() {
 
   return (
     <div
-      className={`w-full h-auto px-7 py-3 border-b-[1px] border-b-white-600 fixed top-0 left-0 z-[200] bg-dark-100 backdrop-blur bg-opacity-75 `}
+      className={`w-full h-auto border-b-[1px] border-b-white-600 fixed top-0 left-0 z-[200] bg-dark-100 backdrop-blur bg-opacity-75 `}
     >
+      <ErrorBanner />
       <div className="w-full px-[2rem] flex items-center justify-between">
         <div className="w-auto left flex items-center justify-center">
           <div className="w-auto flex items-center justify-center">
@@ -54,7 +56,7 @@ function TopBar() {
             {/* <span className="text-white-200 ml-2 pp-EB text-[13px] ">showccial</span> */}
           </div>
         </div>
-        <div className="w-auto left flex items-center justify-center">
+        <div className="w-auto px-7 left flex items-center justify-center">
           <ul className="ml-[3rem] flex items-center justify-center gap-5">
             <li className="text-white-200 text-[13.5px] pp-RG ">
               {/* @ts-ignore */}
@@ -93,7 +95,7 @@ function TopBar() {
                 </MenuList>
               </Menu>
             </li>
-            <li className="text-white-200 text-[13.5px] pp-RG flex items-center justify-center ">
+            <li className="text-white-200 text-[13.5px] mb-2 py-1 pp-RG flex items-center justify-center ">
               <ImageTag
                 src={
                   userInfo?.image ??
