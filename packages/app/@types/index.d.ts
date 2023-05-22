@@ -10,6 +10,7 @@ export interface NuroThemeProps {
   userImage?: string;
   fullname?: string;
   tagline?: string;
+  headline?: string;
   email?: string;
   experiences?: {
     id: number | string;
