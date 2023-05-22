@@ -13,7 +13,7 @@ Discover, connect, and thrive with Showwcial. Harness the power of threads and s
 
 ### Chrome Extension
 
-> For some reasons, I couldn't deply the extension to chrome app store, but that doesn't mean it can't be used / run locally.
+> For some reasons, I couldn't deploy the extension to chrome app store, but that doesn't mean it can't be used / run locally.
 
 #### Setting up chrome extension locally.
 
