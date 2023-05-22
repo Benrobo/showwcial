@@ -6,45 +6,8 @@ import { isEmpty } from "../util";
 import ImageTag from "../components/Image";
 import OasisTheme from "./themes/oasis";
 import { LoaderModal } from "../components/Loader";
-
-interface OasisProps {
-  resumeUrl?: string;
-  userImage?: string;
-  email?: string;
-  socialLinks?: {
-    label?: string;
-    url?: string;
-  }[];
-  fullname?: string;
-  tagline?: string;
-  headline?: string;
-  showwcaseProfile?: string;
-  about?: string;
-  stacks?: string[];
-  experiences?: {
-    id: string | number;
-    companyName?: string;
-    title?: string;
-    startDate?: string;
-    endDate?: string;
-    current?: boolean;
-    description?: string;
-  }[];
-  projects?: {
-    name?: string;
-    decsription?: string;
-    tags?: string[];
-    githubUrl?: string;
-    liveUrl?: string;
-    image: string;
-  }[];
-  ghRepo?: {
-    name?: string;
-    decsription?: string;
-    tags?: string[];
-    url?: string;
-  }[];
-}
+import NuroTheme from "./themes/nuro";
+import { NuroThemeProps, OasisProps } from "../@types";
 
 function UserPortfolio() {
   const router = useRouter();
@@ -113,6 +76,39 @@ function UserPortfolio() {
           socialLinks={socialLinks}
           stacks={stacks}
           workExperience={experiences}
+          projects={portfolioProjects}
+        />
+      );
+    }
+    if (siteData?.themeName === "nuro") {
+      const {
+        email,
+        fullname,
+        ghRepo,
+        resumeUrl,
+        socialLinks,
+        tagline,
+        headline,
+        userImage,
+        experiences,
+      } = siteData?.portfolioData as NuroThemeProps;
+      const about = siteData?.portfolioData["about"];
+      const techStacks = siteData?.portfolioData["stacks"];
+      const portfolioProjects = siteData?.portfolioProjects;
+
+      userRenderedSiteTheme = (
+        <NuroTheme
+          about={{ content: about ?? "", stacks: techStacks }}
+          userImage={userImage}
+          email={email}
+          fullname={fullname.trim() ?? ""}
+          ghRepo={ghRepo}
+          tagline={tagline}
+          headline={headline}
+          resumeUrl={resumeUrl ?? "#"}
+          showcaseprofile={siteData?.showwcaseProfile}
+          socialLinks={socialLinks}
+          experiences={experiences}
           projects={portfolioProjects}
         />
       );
