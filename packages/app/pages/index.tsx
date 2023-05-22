@@ -7,7 +7,7 @@ import Modal from "../components/Modal";
 
 function Home() {
   const [isVideoPreview, setIsVideoPreview] = useState(false);
-  const videoPreviewUrl = "";
+  const videoPreviewUrl = "https://youtube.com/embed/GHnJyDZ2yww";
 
   const toggleVideoPreview = () => setIsVideoPreview(!isVideoPreview);
 
