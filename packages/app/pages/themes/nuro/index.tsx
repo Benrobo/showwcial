@@ -121,7 +121,7 @@ function TopNavBar({
   email,
   resumeUrl,
 }: NavbarProps) {
-  const allLinks = socialLinks.concat() ?? [];
+  const allLinks = socialLinks ?? [];
 
   if (!isEmpty(email)) {
     allLinks.push({ label: "email", url: email });
