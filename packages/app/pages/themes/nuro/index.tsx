@@ -121,14 +121,11 @@ function TopNavBar({
   email,
   resumeUrl,
 }: NavbarProps) {
-  const allLinks = socialLinks ?? [];
-
-  if (!isEmpty(email)) {
-    allLinks.push({ label: "email", url: email });
-  }
-  if (!isEmpty(resumeUrl)) {
-    allLinks.push({ label: "resume", url: resumeUrl });
-  }
+  const allLinks = [
+    ...(socialLinks ?? []),
+    ...(resumeUrl ? [{ label: "resume", url: resumeUrl }] : []),
+    ...(email ? [{ label: "email", url: `mailto:${email}` }] : []),
+  ];
 
   function renderSocialLinkIcon(label: string) {
     console.log(label);
@@ -250,14 +247,7 @@ function TopNavBar({
                         {renderSocialLinkIcon(item.label.toLowerCase())}
                         <span className="font-pp-rg">{item.label}</span>
                       </div>
-                      <a
-                        href={
-                          item.label === "email"
-                            ? `mailto:${item.url}`
-                            : item.url
-                        }
-                        className=""
-                      >
+                      <a href={item.url}>
                         <FiExternalLink />
                       </a>
                     </MenuItem>
