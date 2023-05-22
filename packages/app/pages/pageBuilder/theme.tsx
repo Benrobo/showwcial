@@ -64,6 +64,16 @@ interface ThemeProps {
 function ThemeCards({ name, id, slug, image, pageInfo, onClick }: ThemeProps) {
   const isSelected = pageInfo?.themeName === slug;
 
+  const themeBgStyle = {
+    backgroundImage: `url("${image}")`,
+    width: "100%",
+    height: "100%",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "contain",
+    backgroundPosition: "top",
+    borderRadius: "10px",
+  };
+
   return (
     <div
       className={`w-[200px] h-[200px] ${
@@ -74,19 +84,8 @@ function ThemeCards({ name, id, slug, image, pageInfo, onClick }: ThemeProps) {
         className="w-full flex items-center theme-bg rounded-[8px] cursor-pointer"
         onClick={onClick}
         data-name={slug}
-      >
-        <style>{`
-          .theme-bg{
-            width: 100%;
-            height: 100%;
-            background-image:url("${image}");
-            background-repeat:no-repeat;
-            background-size: contain;
-            background-position: center;
-            border-radius:10px;
-          }
-        `}</style>
-      </div>
+        style={themeBgStyle}
+      ></div>
       <div className="w-full h-[40px] mt-5 p-2 absolute bottom-0 left-0 flex items-center justify-around backdrop-blur bg-white-600 theme-info rounded-[10px] ">
         <p className="text-white-100 text-[12px] font-pp-sb ">{name}</p>
         <a

@@ -4,8 +4,13 @@
       "id": 1,
       "name": "OAsis",
       "slug": "oasis",
-      "image2": "./images/themes/demo1.webp",
       "image": "./images/themes/oasis.png"
+    },
+    {
+      "id": 2,
+      "name": "Nuro",
+      "slug": "nuro",
+      "image": "./images/themes/nuro.png"
     }
   ]
 }
