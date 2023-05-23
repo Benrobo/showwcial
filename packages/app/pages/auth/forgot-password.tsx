@@ -3,20 +3,123 @@ import ImageTag from "../../components/Image";
 import { Spinner } from "../../components/Loader";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoCheckmark, IoCheckmarkCircle } from "react-icons/io5";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { useMutation } from "react-query";
+import {
+  resetPassword,
+  sendResetPwdLink,
+  verifyResetPwdLink,
+} from "../../http";
+import { HandlePasswordResetResponse } from "../../util/response";
+import { toast } from "react-hot-toast";
+import { isEmpty } from "../../util";
 
 export default function ForgotPassword() {
   const router = useRouter();
-  const [isSent, setIsSent] = useState(true);
+  const query = router.query;
+  const resetToken = query["token"] ?? "";
+  const [isSent, setIsSent] = useState(false);
   const [showpwd, setShowPwd] = useState(false);
   const togglePwdVisib = () => setShowPwd(!showpwd);
   const [inputData, setInputData] = useState({
     email: "",
     password: "",
   });
-  const [state, setState] = useState("reset");
+  const [resetState, setResetState] = useState<null | string>(null);
+  const [tokenVerified, setTokenVerified] = useState(false);
+  const [response, setResponse] = useState({
+    error: false,
+    message: "",
+  });
+  const verifyResetTokenMutation = useMutation(
+    async (data: any) => await verifyResetPwdLink(data)
+  );
+  const resetPasswordMutation = useMutation(
+    async (data) => await resetPassword(data)
+  );
+  const sendResetPwdMutation = useMutation(
+    async (data: any) => await sendResetPwdLink(data)
+  );
+
+  const handleInput = (e: any) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setInputData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  useEffect(() => {
+    if (
+      typeof verifyResetTokenMutation.data !== "undefined" ||
+      verifyResetTokenMutation.error !== null
+    ) {
+      const { data } = verifyResetTokenMutation;
+      const response = data;
+      HandlePasswordResetResponse(
+        response,
+        () => verifyResetTokenMutation.reset(),
+        (data: any) => {
+          const code = data?.code;
+          if (code === "INVALID_LINK") {
+            setResponse({
+              error: true,
+              message: "Link is invalid or has expired.",
+            });
+            return;
+          }
+          console.log({ code });
+        }
+      );
+    }
+  }, [verifyResetTokenMutation.data]);
+
+  useEffect(() => {
+    if (
+      typeof sendResetPwdMutation.data !== "undefined" ||
+      sendResetPwdMutation.error !== null
+    ) {
+      const { data } = sendResetPwdMutation;
+      const response = data;
+      HandlePasswordResetResponse(
+        response,
+        () => sendResetPwdMutation.reset(),
+        (data: any) => {
+          const code = data?.code;
+          if (code === "RESET_LINK_SENT") {
+            setIsSent(true);
+            localStorage.setItem("reset_password_email", inputData?.email);
+          }
+        }
+      );
+    }
+  }, [sendResetPwdMutation.data]);
+
+  useEffect(() => {
+    if (!isEmpty(resetToken)) {
+      // setIsSent(true);
+      // setResetState("reset");
+      const email = localStorage.getItem("reset_password_email") ?? "";
+      const payload = { email, token: resetToken };
+      verifyResetTokenMutation.mutate(payload);
+    }
+  }, [resetToken]);
+
+  const sendPasswordResetLink = () => {
+    if (inputData?.email === "") {
+      toast.error("email is required.");
+      return;
+    }
+    sendResetPwdMutation.mutate({ email: inputData?.email });
+  };
+
+  if (verifyResetTokenMutation.isLoading) {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
@@ -38,7 +141,7 @@ export default function ForgotPassword() {
             Reset your showwcial default password.
           </p>
         </div>
-        {false && (
+        {!isSent && isEmpty(resetState) && !response?.error && (
           <div className="w-full mt-7 px-3 py-2 flex flex-col items-center justify-end gap-5">
             <div className="w-full relative flex items-center justify-center mb-3">
               <input
@@ -46,17 +149,17 @@ export default function ForgotPassword() {
                 name="email"
                 id="authInput"
                 className={`w-full py-4 px-3 text-[12px] bg-dark-100 border-[3px] border-solid border-blue-300 outline-none text-white-100 rounded-md  `}
-                placeholder="Showwcase Email"
-                //   onKeyUp={handleInput}
+                placeholder="Showwcial Email"
+                onChange={handleInput}
               />
             </div>
             <button
               className="w-full rounded-lg  game-btn "
-              // disabled={loading}
-              // onClick={handleUserLogin}
+              disabled={sendResetPwdMutation.isLoading}
+              onClick={sendPasswordResetLink}
             >
               <span className="w-full px-4 py-4 text-center flex items-center justify-center text-[14px]  bg-blue-300 shadow-md -translate-y-1.5 hover:-translate-y-2.5 duration-300 text-white-100 rounded-lg ">
-                {false ? (
+                {sendResetPwdMutation?.isLoading ? (
                   <Spinner color="#fff" />
                 ) : (
                   <div className="w-full text-center pp-SB flex flex-row items-center justify-center gap-5">
@@ -71,7 +174,7 @@ export default function ForgotPassword() {
             </button>
           </div>
         )}
-        {false && (
+        {isSent && isEmpty(resetState) && !response?.error && (
           <div className="w-full mt-7 px-3 py-2 flex flex-col items-center justify-center">
             <IoCheckmarkCircle className="text-green-100" size={35} />
             <p className="text-green-100 pp-SB">Password reset link sent.</p>
@@ -83,7 +186,7 @@ export default function ForgotPassword() {
             </span>
           </div>
         )}
-        {true && (
+        {!isEmpty(resetState) && (
           <div className="w-full mt-7 px-3 py-2 flex flex-col items-center justify-end gap-5">
             <div className="relative w-full flex items-center justify-center">
               <input
