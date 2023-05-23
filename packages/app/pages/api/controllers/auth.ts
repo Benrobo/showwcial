@@ -478,7 +478,7 @@ export default class Authentication extends BaseController {
       cacheTime
     );
 
-    const resetLink = `${ENV.clientUrl}/auth/forget-password?token=${randToken}`;
+    const resetLink = `${ENV.clientUrl}/auth/forgot-password?token=${randToken}`;
 
     const mailBody = `
     <h2>Password Reset</h2>
@@ -489,8 +489,8 @@ export default class Authentication extends BaseController {
     Password reset link expires in 3min time, use it before the expiration time.
     </br>
     `;
-    // await sendMail(email, "Verify Account", mailBody);
-    // await sendCustomMail(email, "Password Reset", mailBody);
+
+    await sendCustomMail(email, "Password Reset", mailBody);
 
     this.success(
       res,
