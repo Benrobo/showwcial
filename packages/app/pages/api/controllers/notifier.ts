@@ -267,13 +267,15 @@ export default class NotifierController extends BaseController {
 
     // check if channelId exists in db.
     const notifierData = await prisma.botNotifier.findMany();
-    const filteredChannels = notifierData.map((ch) => {
-      const channelIds = JSON.parse(ch.notifAuthChannels as string);
-      if (channelIds.includes(channelId)) return ch;
-      return null;
-    });
-    const availableChannel =
-      filteredChannels[0] === null ? [] : filteredChannels;
+    const filteredChannels = notifierData
+      .map((ch) => {
+        const channelIds = JSON.parse(ch.notifAuthChannels as string);
+        if (channelIds.includes(channelId)) return ch;
+        return null;
+      })
+      .filter((d) => d !== null);
+
+    const availableChannel = filteredChannels;
 
     if (availableChannel.length === 0) {
       return this.error(
@@ -308,7 +310,7 @@ export default class NotifierController extends BaseController {
       if (typeof d?.community !== "undefined") {
         PostsWithCommunities.push(d);
       }
-      console.log(d?.community);
+      // console.log(d?.community);
     }
 
     const combinedPosts = PostsWithoutCommunities.concat(PostsWithCommunities);
@@ -389,11 +391,13 @@ export default class NotifierController extends BaseController {
 
     // check if channelId exists in db.
     const notifierData = await prisma.botNotifier.findMany();
-    const filteredChannels = notifierData.map((ch) => {
-      const channelIds = JSON.parse(ch.notifAuthChannels as string);
-      if (channelIds.includes(channelId)) return ch;
-      return null;
-    });
+    const filteredChannels = notifierData
+      .map((ch) => {
+        const channelIds = JSON.parse(ch.notifAuthChannels as string);
+        if (channelIds.includes(channelId)) return ch;
+        return null;
+      })
+      .filter((d) => d !== null);
     const availableChannel =
       filteredChannels[0] === null ? [] : filteredChannels;
 
