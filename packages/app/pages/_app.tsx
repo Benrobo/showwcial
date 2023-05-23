@@ -21,14 +21,17 @@ export default function App({ Component, pageProps }: AppProps) {
   const client = new QueryClient();
 
   useEffect(() => {
+    const { pathname } = location;
+    const splittedName = pathname.split("/");
+    const isAuthPage = splittedName.includes("auth");
     const initialWidth = window?.innerWidth;
     setWidth(initialWidth);
-    if (initialWidth <= 700) setVisible(true);
+    if (initialWidth <= 700 && !isAuthPage) setVisible(true);
 
     window.addEventListener("resize", (e) => {
       const width = (e.target as any)?.innerWidth;
       setWidth(width);
-      if (width <= 700) {
+      if (width <= 700 && !isAuthPage) {
         setVisible(true);
         return;
       }
