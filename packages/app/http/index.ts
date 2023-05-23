@@ -53,6 +53,36 @@ export const loginUser = async (data: any) => {
   }
 };
 
+// verify password reset link
+export const verifyResetPwdLink = async (data: any) => {
+  try {
+    const res = await $http.post("/auth/verify-pwd-reset", data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+// send password reset link
+export const sendResetPwdLink = async (data: any) => {
+  try {
+    const res = await $http.post("/auth/sendResetLink", data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+// reset password
+export const resetPassword = async (data: any) => {
+  try {
+    const res = await $http.post("/auth/password-reset", data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
 export const createThread = async (data: any) => {
   try {
     const res = await $http.post("/thread/createThread", data);
