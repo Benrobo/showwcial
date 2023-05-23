@@ -123,6 +123,11 @@ module.exports = {
         "pp-sb": ["Poppins-SemiBold"],
       },
     },
+    fontFamily: {
+      "pp-eb": ["Poppins-ExtraBold"],
+      "pp-rg": ["Poppins-Regular"],
+      "pp-sb": ["Poppins-SemiBold"],
+    },
   },
   plugins: [],
 };
