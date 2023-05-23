@@ -6,6 +6,12 @@ export const LoginSchema = Joi.object({
   password: Joi.string().optional().alphanum().min(4).required(),
 });
 
+export const ResetPwdSchema = Joi.object({
+  email: Joi.string().email().required(),
+  token: Joi.string().required(),
+  newPassword: Joi.string().min(4).required(),
+});
+
 export const VerifyUserSchema = Joi.object({
   email: Joi.string().email().required(),
   username: Joi.string().required(),
