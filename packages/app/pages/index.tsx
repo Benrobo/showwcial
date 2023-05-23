@@ -68,7 +68,7 @@ function Home() {
             </a>
           </div>
         </div>
-        <div className="w-full min-h-[550px] flex flex-col items-center justify-start py-8">
+        <div className="w-full min-h-[550px] flex flex-col items-center justify-start py-8 text-center ">
           <h1 className="text-[50px] font-pp-eb text-white-100">
             Elevate Your Digital Identity
           </h1>
