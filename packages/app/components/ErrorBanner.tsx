@@ -37,7 +37,7 @@ function ErrorBanner() {
             <br />
             <div className="w-full px-4">
               <p className="text-white-300 text-[13px] font-pp-rg">
-                Showwcial discord bot server is provider is currently down and
+                Showwcial discord bot server provider is currently down and
                 under maintenance. Which means, every discord commands and
                 interactions used within your personal discord server's would no
                 longer work.
