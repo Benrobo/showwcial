@@ -158,7 +158,12 @@ export default class Authentication extends BaseController {
     // await sendMail(userData?.email, "Verify Account", mailBody);
     await sendCustomMail(userData?.email, "Verify Account", mailBody);
 
-    this.success(res, "--auth/verify-email", `Verify your email.`, 200);
+    this.success(
+      res,
+      "--auth/verify-email",
+      `Verify your email, check Inbox.`,
+      200
+    );
     return;
   }
 
