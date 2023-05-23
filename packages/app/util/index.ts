@@ -14,7 +14,7 @@ export const capitalizeWord = (wrd: string) => {
   return comb;
 };
 
-export const isEmpty = (param: string) =>
+export const isEmpty = (param: string | null | any) =>
   param === null || typeof param === "undefined" || param.length == 0;
 
 export const capitalizeFirstCharacter = (str: string) => {
