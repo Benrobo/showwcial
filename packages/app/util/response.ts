@@ -135,6 +135,71 @@ export function HandleAuthenticationResponse(
   checkInvalidToken(response, resetState);
 }
 
+// handle password reset
+export function HandlePasswordResetResponse(
+  response: any,
+  resetState: () => void,
+  success: (data?: any) => void
+) {
+  if (
+    [
+      "--verifyPasswordReset/invalid-field",
+      "--verifyPasswordReset/invalid-token",
+    ].includes(response?.code)
+  ) {
+    resetState();
+    success({ code: "INVALID_LINK" });
+    return;
+  }
+  if (
+    [
+      "--passwordReset/user-notfound",
+      "--verifyPasswordReset/user-notfound",
+    ].includes(response?.code)
+  ) {
+    resetState();
+    success({ code: "USER_NOT_FOUND" });
+    return;
+  }
+  if (response?.code === "--verifyPasswordReset/verified") {
+    resetState();
+    success({ code: "VERIFIED" });
+    return;
+  }
+  if (
+    [
+      "--sendResetLink/invalid-field",
+      "--sendResetLink/user-notfound",
+      "--passwordReset/invalid-fields",
+    ].includes(response?.code)
+  ) {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+  if (["--passwordReset/invalid-token"].includes(response?.code)) {
+    resetState();
+    toast.error("Password reset link expired.");
+    return;
+  }
+  if (response?.code === "--sendResetLink/success") {
+    resetState();
+    success({ code: "RESET_LINK_SENT" });
+    return;
+  }
+
+  if (response?.code === "--passwordReset/successfull") {
+    resetState();
+    localStorage.removeItem("reset_password_email");
+    location.href = "/auth/login";
+    success();
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
+
 // thread response handler
 export function HandleThreadResponse(
   response: any,
