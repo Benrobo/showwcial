@@ -37,11 +37,16 @@ export default function ForgotPassword() {
     async (data: any) => await verifyResetPwdLink(data)
   );
   const resetPasswordMutation = useMutation(
-    async (data) => await resetPassword(data)
+    async (data: any) => await resetPassword(data)
   );
   const sendResetPwdMutation = useMutation(
     async (data: any) => await sendResetPwdLink(data)
   );
+
+  const codeMessage = {
+    USER_NOT_FOUND: "User doesn't exists in our record.",
+    INVALID_LINK: "Link is invalid or has expired.",
+  };
 
   const handleInput = (e: any) => {
     const name = e.target.name;
@@ -61,18 +66,37 @@ export default function ForgotPassword() {
         () => verifyResetTokenMutation.reset(),
         (data: any) => {
           const code = data?.code;
-          if (code === "INVALID_LINK") {
+          if (["INVALID_LINK", "USER_NOT_FOUND"].includes(code)) {
             setResponse({
               error: true,
-              message: "Link is invalid or has expired.",
+              message: codeMessage[code] as string,
             });
             return;
           }
-          console.log({ code });
+          if (code === "VERIFIED") {
+            setResponse({ error: false, message: "" });
+            setResetState("reset");
+            return;
+          }
         }
       );
     }
   }, [verifyResetTokenMutation.data]);
+
+  useEffect(() => {
+    if (
+      typeof resetPasswordMutation.data !== "undefined" ||
+      resetPasswordMutation.error !== null
+    ) {
+      const { data } = resetPasswordMutation;
+      const response = data;
+      HandlePasswordResetResponse(
+        response,
+        () => resetPasswordMutation.reset(),
+        () => {}
+      );
+    }
+  }, [resetPasswordMutation.data]);
 
   useEffect(() => {
     if (
@@ -98,7 +122,6 @@ export default function ForgotPassword() {
   useEffect(() => {
     if (!isEmpty(resetToken)) {
       // setIsSent(true);
-      // setResetState("reset");
       const email = localStorage.getItem("reset_password_email") ?? "";
       const payload = { email, token: resetToken };
       verifyResetTokenMutation.mutate(payload);
@@ -111,6 +134,19 @@ export default function ForgotPassword() {
       return;
     }
     sendResetPwdMutation.mutate({ email: inputData?.email });
+  };
+
+  const resetUserPassword = () => {
+    if (isEmpty(inputData.password)) {
+      toast.error("password cannot be empty");
+      return;
+    }
+    const payload = {
+      email: localStorage.getItem("reset_password_email") ?? "",
+      token: resetToken,
+      newPassword: inputData?.password,
+    };
+    resetPasswordMutation.mutate(payload);
   };
 
   if (verifyResetTokenMutation.isLoading) {
@@ -137,9 +173,6 @@ export default function ForgotPassword() {
           <h2 className="text-white-100 text-3xl veryBold pp-RG">
             Password Reset
           </h2>
-          <p className="text-white-200 text-1xl pp-RG mt-2 ">
-            Reset your showwcial default password.
-          </p>
         </div>
         {!isSent && isEmpty(resetState) && !response?.error && (
           <div className="w-full mt-7 px-3 py-2 flex flex-col items-center justify-end gap-5">
@@ -195,14 +228,14 @@ export default function ForgotPassword() {
                 id="authInput"
                 className={`w-full py-4 px-3 text-[12px] bg-dark-100 border-blue-300 border-[3px] border-solid outline-none text-white-100 rounded-md  `}
                 placeholder="New Password"
-                //   onKeyUp={handleInput}
+                onChange={handleInput}
               />
               <PasswordToggle state={showpwd} action={togglePwdVisib} />
             </div>
             <button
               className="w-full rounded-lg  game-btn "
-              // disabled={loading}
-              // onClick={handleUserLogin}
+              disabled={resetPasswordMutation.isLoading}
+              onClick={resetUserPassword}
             >
               <span className="w-full px-4 py-4 text-center flex items-center justify-center text-[14px]  bg-blue-300 shadow-md -translate-y-1.5 hover:-translate-y-2.5 duration-300 text-white-100 rounded-lg ">
                 {false ? (
@@ -213,12 +246,17 @@ export default function ForgotPassword() {
                       src="/images/logos/logo2.png"
                       className="w-[30px] h-[30px] rounded-[50%] "
                     />
-                    <p className="">Continue Password Reset</p>
+                    <p className="">Reset Password</p>
                   </div>
                 )}
               </span>
             </button>
           </div>
+        )}
+        {response?.error && (
+          <p className="text-white-100 text-1xl pp-RG px-3 mt-4 ">
+            {"❌ " + response?.message}
+          </p>
         )}
       </div>
     </div>
