@@ -81,7 +81,7 @@ export function HandleAuthenticationResponse(
     return;
   }
   if (response?.code === "--auth/account-verified") {
-    toast.success(`Account verified..\n\n ${response?.message}`, {
+    toast.success(`Account verified, check Inbox..\n\n ${response?.message}`, {
       duration: 3000,
     });
     resetState();
