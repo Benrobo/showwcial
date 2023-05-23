@@ -30,8 +30,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: PoppinsReg;
-  /* background: rgba(18, 21, 26); */
-  background: red;
+  background: rgba(18, 21, 26);
   position: relative;
   overflow-x: hidden;
   overflow-y: hidden;
