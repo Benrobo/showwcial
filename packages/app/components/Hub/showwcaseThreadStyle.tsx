@@ -75,18 +75,16 @@ export default function ShowwcaseThreadStyle({
         </span>
         <div className="w-auto ml-5 flex flex-col items-start justify-start">
           <div className="flex items-start justify-start">
-            <p className="text-white-100 font-pp-sb text-[14px] ">
-              {displayName}
-            </p>
-            <p className="text-white-100 font-pp-sb text-[14px] ml-1 mr-1 ">
+            <p className="text-white-100 pp-SB text-[14px] ">{displayName}</p>
+            <p className="text-white-100 pp-SB text-[14px] ml-1 mr-1 ">
               {emoji ?? "🚀"}
             </p>
-            <p className="text-white-300 font-pp-rg text-[13px] ">
+            <p className="text-white-300 pp-RG text-[13px] ">
               @{username ?? "jonny54"}
             </p>
           </div>
           <div className="flex items-start justify-start">
-            <p className="text-white-200 font-pp-rg text-[14px] ">
+            <p className="text-white-200 pp-RG text-[14px] ">
               {headline?.slice(0, 35) + "...." ?? "Mobile Engineer"}
             </p>
           </div>
@@ -106,12 +104,12 @@ export default function ShowwcaseThreadStyle({
                     copyToClipboard(threadUrl);
                     toast.success("URL Copied.");
                   }}
-                  className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 font-pp-sb text-[12px] flex items-center justify-start cursor-pointer"
+                  className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 pp-SB text-[12px] flex items-center justify-start cursor-pointer"
                 >
                   <IoLink size={15} className="mr-3" /> Copy Link
                 </li>
                 {/* {!previewState && (
-                  <li className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 font-pp-sb text-[12px] flex items-center justify-start cursor-pointer">
+                  <li className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 pp-SB text-[12px] flex items-center justify-start cursor-pointer">
                     <IoTrash size={15} className="mr-3" /> Delete
                   </li>
                 )} */}
@@ -122,10 +120,8 @@ export default function ShowwcaseThreadStyle({
       </div>
       {/* thread content */}
       <div className="w-full h-auto flex flex-col flex-wrap whitespace-nowrap items-start justify-start">
-        <p className="text-white-200 font-pp-sb text-[14px] mt-2 ">
-          {title ?? ""}
-        </p>
-        <div className="text-white-200 font-pp-rg whitespace-pre-wrap flex-wrap text-[14px] mt-5">
+        <p className="text-white-200 pp-SB text-[14px] mt-2 ">{title ?? ""}</p>
+        <div className="text-white-200 pp-RG whitespace-pre-wrap flex-wrap text-[14px] mt-5">
           <ReactMarkdown
             children={threadContent}
             remarkPlugins={[remarkGfm]}

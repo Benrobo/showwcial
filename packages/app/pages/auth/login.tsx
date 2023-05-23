@@ -81,7 +81,7 @@ function Login() {
               {loading ? (
                 <Spinner color="#fff" />
               ) : (
-                <div className="w-full text-center font-pp-sb flex flex-row items-center justify-center gap-5">
+                <div className="w-full text-center pp-SB flex flex-row items-center justify-center gap-5">
                   <ImageTag
                     src="/images/logos/showwcase.png"
                     className="w-[30px] h-[30px] bg-white-100 rounded-[50%] "

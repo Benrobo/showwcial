@@ -173,7 +173,7 @@ function TopNavBar({ handleActivePage, userImage, socialLinks }: NavbarProps) {
               _hover={{ bg: "#1E1E22", opacity: "1", color: "#fff" }}
               opacity={".6"}
               background={"#101014"}
-              className="font-pp-rg py-4 text-[15px] flex items-center justify-start gap-3"
+              className="pp-RG py-4 text-[15px] flex items-center justify-start gap-3"
               onClick={() => handleActivePage("home")}
             >
               <BiHomeAlt size={20} color="#ccc" /> Home
@@ -184,7 +184,7 @@ function TopNavBar({ handleActivePage, userImage, socialLinks }: NavbarProps) {
               _hover={{ bg: "#1E1E22", opacity: "1", color: "#fff" }}
               opacity={".6"}
               background={"#101014"}
-              className="font-pp-rg py-4 text-[15px] flex items-center justify-start gap-3"
+              className="pp-RG py-4 text-[15px] flex items-center justify-start gap-3"
               onClick={() => handleActivePage("about")}
             >
               <AiOutlineUser size={20} color="#ccc" /> About
@@ -195,7 +195,7 @@ function TopNavBar({ handleActivePage, userImage, socialLinks }: NavbarProps) {
               _hover={{ bg: "#1E1E22", opacity: "1", color: "#fff" }}
               opacity={".6"}
               background={"#101014"}
-              className="font-pp-rg py-4 text-[15px] flex items-center justify-start gap-3"
+              className="pp-RG py-4 text-[15px] flex items-center justify-start gap-3"
               onClick={() => handleActivePage("experiences")}
             >
               <IoBriefcase size={20} color="#ccc" /> Experiences
@@ -206,7 +206,7 @@ function TopNavBar({ handleActivePage, userImage, socialLinks }: NavbarProps) {
               _hover={{ bg: "#1E1E22", opacity: "1", color: "#fff" }}
               opacity={".6"}
               background={"#101014"}
-              className="font-pp-rg py-4 text-[15px] flex items-center justify-start gap-3"
+              className="pp-RG py-4 text-[15px] flex items-center justify-start gap-3"
               onClick={() => handleActivePage("projects")}
             >
               <AiOutlineCodeSandbox size={20} color="#ccc" /> Projects
@@ -221,11 +221,11 @@ function TopNavBar({ handleActivePage, userImage, socialLinks }: NavbarProps) {
                   _hover={{ bg: "#1E1E22", opacity: "1", color: "#fff" }}
                   opacity={".6"}
                   background={"#101014"}
-                  className="font-pp-rg py-4 text-[15px] flex w-full items-center justify-between gap-5"
+                  className="pp-RG py-4 text-[15px] flex w-full items-center justify-between gap-5"
                 >
                   <div className="w-full flex items-center justify-start gap-3">
                     {renderSocialLinkIcon(item)}{" "}
-                    <span className="font-pp-rg">{item}</span>
+                    <span className="pp-RG">{item}</span>
                   </div>
                   <a href="#" className="">
                     <FiExternalLink />
@@ -261,7 +261,7 @@ function HomeSection({ fullname, tagline }: HomeProps) {
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center text-center">
-      <h1 className="text-white-100 dark:text-white text-5xl sm:text-6xl md:text-6xl lg:text-8xl tracking-tight font-extrabold font-pp-eb">
+      <h1 className="text-white-100 dark:text-white text-5xl sm:text-6xl md:text-6xl lg:text-8xl tracking-tight font-extrabold pp-EB">
         Hey{" "}
         <span className="inline-block origin-70 hover:animate-wave">👋</span>{" "}
         I'm {firstname ?? "Benaiah"}, <br className="hidden sm:block" />a
@@ -269,7 +269,7 @@ function HomeSection({ fullname, tagline }: HomeProps) {
           developer
         </div>
       </h1>
-      <p className="max-w-xs mt-4 md:mt-8 mx-auto font-pp-rg text-base text-gray-400 sm:text-md md:text-lg md:max-w-3xl">
+      <p className="max-w-xs mt-4 md:mt-8 mx-auto pp-RG text-base text-gray-400 sm:text-md md:text-lg md:max-w-3xl">
         {tagline ?? "I solve problem for a living."}
       </p>
       <br />
@@ -362,14 +362,12 @@ function JobCards({
         </div>
       </div>
       <div className="relative w-full flex flex-col items-start justify-start px-4">
-        <p className="absolute text-[12px] rounded-[5px] top-[-10px] right-0 px-2 py-1 bg-blue-705 text-blue-100 font-pp-sb flex items-center justify-start gap-2 ">
+        <p className="absolute text-[12px] rounded-[5px] top-[-10px] right-0 px-2 py-1 bg-blue-705 text-blue-100 pp-SB flex items-center justify-start gap-2 ">
           <BsCalendar size={15} /> {moment(startDate).format("MMMM yy")} -{" "}
           {current ? "Present" : moment(endDate).format("MMMM yy")}
         </p>
-        <h1 className="font-pp-eb text-white-100">{title}</h1>
-        <p className="font-pp-rg text-[13px] text-white-400 ">
-          @ {companyName}
-        </p>
+        <h1 className="pp-EB text-white-100">{title}</h1>
+        <p className="pp-RG text-[13px] text-white-400 ">@ {companyName}</p>
         <div className="mt-3 flex flex-col items-start justify-start">
           {splitDescription(description).map((d) => (
             <p className="relative w-full flex items-start text-start justify-start text-slate-200 text-[12px] ml-5 px-[30px] gap-3 font-mono before:content-['▹'] before:text-blue-300 before:absolute before:left-0 before:top-[-8px] before:text-[20px] mb-1 ">
@@ -397,7 +395,7 @@ function AboutSection({ content, stacks }: AboutProps) {
         className="w-full h-full flex flex-col items-center justify-center my-10 mb-10"
       >
         <div className="w-full md:max-w-[450px] flex items-center justify-start">
-          <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
+          <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] pp-SB text-[25px] before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
             About
           </h2>
         </div>
@@ -405,7 +403,7 @@ function AboutSection({ content, stacks }: AboutProps) {
         <div className="w-full md:max-w-[450px] h-auto ">
           <div className="w-full h-full ml-2 flex flex-col items-start justify-start">
             <div className="w-full max-w-[450px] flex flex-col items-start justify-start gap-5 ">
-              <p className="text-white-100 font-pp-rg text-[15px] ">
+              <p className="text-white-100 pp-RG text-[15px] ">
                 17+ years of experience in Software Development and User
                 Interface Engineering. Bringing forth expertise in the design,
                 development, and delivery of software systems. Equipped with a
@@ -414,7 +412,7 @@ function AboutSection({ content, stacks }: AboutProps) {
                 independent projects, as well as collaborate as part of a
                 productive team.
               </p>
-              <p className="text-white-100 font-pp-rg text-[15px] ">
+              <p className="text-white-100 pp-RG text-[15px] ">
                 A passionate content creator who wrote over 200 articles on his
                 own blog and many other freelancing engagements like
                 freeCodeCamp, CSS-Tricks, and many more. Always up for knowledge
@@ -423,7 +421,7 @@ function AboutSection({ content, stacks }: AboutProps) {
                 projects in the areas of web development to create tools,
                 mentoring resources, and guides.
               </p>
-              <p className="text-slate-200 font-pp-rg text-[14px]">
+              <p className="text-slate-200 pp-RG text-[14px]">
                 Here are a few technologies I’ve been working with recently:
               </p>
               <div className="w-full max-w-[350px] flex flex-wrap items-center justify-start mt-1 gap-3">
@@ -464,7 +462,7 @@ function ProjectSection({ githubRepo, projects }: ProjectsProps) {
   return (
     <section className="w-full md:max-w-[700px] h-full my-10 mb-10">
       <div className="w-full flex items-center justify-start">
-        <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:mr-2 after:content-[''] after:w-[300px] after:h-[.5px] after:opacity-[.3] after:bg-slate-200 after:ml-10 ">
+        <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] pp-SB text-[25px] before:mr-2 after:content-[''] after:w-[300px] after:h-[.5px] after:opacity-[.3] after:bg-slate-200 after:ml-10 ">
           Projects
         </h2>
       </div>
@@ -562,8 +560,8 @@ function PortfolioCards({
         </div>
       </div>
       <div className="w-full flex flex-col items-start justify-start py-2 mt-2">
-        <p className="text-white-100 font-pp-eb text-[18px] mb-2 ">AI App</p>
-        <p className="text-white-300 font-pp-rg text-[12px] mb-5 ">
+        <p className="text-white-100 pp-EB text-[18px] mb-2 ">AI App</p>
+        <p className="text-white-300 pp-RG text-[12px] mb-5 ">
           {description ??
             `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero
               corrupti explicabo blanditiis ipsum rerum hic!`}
@@ -616,8 +614,8 @@ function GithubRepoCards({
       </div>
       <div className="w-full flex items-start justify-between">
         <div className="w-full flex flex-col items-start justify-start px-4 py-1">
-          <p className="text-white-100 font-pp-sb text-[13px] ">Baaymax</p>
-          <p className="text-white-400 font-pp-rg text-[12px] ">
+          <p className="text-white-100 pp-SB text-[13px] ">Baaymax</p>
+          <p className="text-white-400 pp-RG text-[12px] ">
             Description some description
           </p>
         </div>

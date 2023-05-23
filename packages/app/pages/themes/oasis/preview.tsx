@@ -74,7 +74,7 @@ export default function PreviewOasisTheme({
   workExperience,
 }: OasisProps) {
   return (
-    <div className="w-full h-screen font-pp-sb flex flex-col items-start justify-start bg-dark-300 scroll-smooth transition-all  overflow-y-scroll hideScrollBar2">
+    <div className="w-full h-screen pp-SB flex flex-col items-start justify-start bg-dark-300 scroll-smooth transition-all  overflow-y-scroll hideScrollBar2">
       {/* Top Navbar */}
       <div className="w-full h-auto z-[100] fixed top-0 p-2 bg-dark-900 backdrop-blur ">
         <div className=" flex items-center justify-between ">
@@ -124,7 +124,7 @@ export default function PreviewOasisTheme({
               <li className="flex items-center justify-center gap-2 m-2">
                 <a
                   href={resumeUrl ?? "#"}
-                  className="w-auto px-5 py-2 rounded-md border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all font-pp-rg text-[13px]"
+                  className="w-auto px-5 py-2 rounded-md border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all pp-RG text-[13px]"
                 >
                   Resume
                 </a>
@@ -186,13 +186,13 @@ export default function PreviewOasisTheme({
         <section className="w-full h-full  flex flex-col items-start justify-start pt-[100px]">
           <p className="text-blue-301 font-mono font-medium">Hi, my name is </p>
           <div className="w-full flex flex-col items-start justify-start">
-            <h2 className=" text-[60px] space-y-[10px] text-slate-100 font-pp-eb ">
+            <h2 className=" text-[60px] space-y-[10px] text-slate-100 pp-EB ">
               {fullname ?? "Benaiah Alumona"}
             </h2>
-            <h2 className=" text-[60px] space-y-[10px] text-slate-200 font-pp-eb ">
+            <h2 className=" text-[60px] space-y-[10px] text-slate-200 pp-EB ">
               {tagline ?? "I solve problem for a living."}
             </h2>
-            <p className="text-[16px] max-w-[540px] mt-5 text-slate-200 font-pp-rg ">
+            <p className="text-[16px] max-w-[540px] mt-5 text-slate-200 pp-RG ">
               {headline ??
                 `Mission driven software engineer, with a passion for thoughtful UI
                 design, collaboration, and teaching.`}
@@ -210,7 +210,7 @@ export default function PreviewOasisTheme({
         {/* About Section */}
         <section id="about" className="w-full h-full my-10 mb-10">
           <div className="w-full flex items-center justify-start">
-            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['01.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
+            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] pp-SB text-[25px] before:content-['01.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
               About
             </h2>
           </div>
@@ -218,7 +218,7 @@ export default function PreviewOasisTheme({
           <div className="w-full grid grid-cols-2 ">
             <div className="w-full ml-2 flex flex-col items-start justify-start">
               <div className="w-full max-w-[450px] flex flex-col items-start justify-start gap-5 ">
-                <p className="text-slate-200 font-pp-rg text-[14px] ">
+                <p className="text-slate-200 pp-RG text-[14px] ">
                   17+ years of experience in Software Development and User
                   Interface Engineering. Bringing forth expertise in the design,
                   development, and delivery of software systems. Equipped with a
@@ -227,7 +227,7 @@ export default function PreviewOasisTheme({
                   during independent projects, as well as collaborate as part of
                   a productive team.
                 </p>
-                <p className="text-slate-200 font-pp-rg text-[14px] ">
+                <p className="text-slate-200 pp-RG text-[14px] ">
                   A passionate content creator who wrote over 200 articles on
                   his own blog and many other freelancing engagements like
                   freeCodeCamp, CSS-Tricks, and many more. Always up for
@@ -236,7 +236,7 @@ export default function PreviewOasisTheme({
                   several projects in the areas of web development to create
                   tools, mentoring resources, and guides.
                 </p>
-                <p className="text-slate-200 font-pp-rg text-[14px]">
+                <p className="text-slate-200 pp-RG text-[14px]">
                   Here are a few technologies I’ve been working with recently:
                 </p>
                 <div className="w-full max-w-[350px] flex flex-wrap items-center justify-start mt-1 gap-3">
@@ -268,7 +268,7 @@ export default function PreviewOasisTheme({
           className="w-full max-w-[700px] h-full my-10 mb-10"
         >
           <div className="w-full flex items-center justify-start">
-            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['02.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
+            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] pp-SB text-[25px] before:content-['02.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:opacity-[.3] after:h-[.5px] after:bg-slate-200 after:ml-10 ">
               Work Experience
             </h2>
           </div>
@@ -291,12 +291,10 @@ export default function PreviewOasisTheme({
             </div>
             <div className="w-full min-h-[340px] h-full flex flex-col items-start justify-start px-4">
               <div className="flex items-center justify-center gap-4">
-                <h2 className="text-slate-100 font-pp-rg text-[17px] ">
+                <h2 className="text-slate-100 pp-RG text-[17px] ">
                   User Interface Architect & Senior Manager UX
                 </h2>
-                <h2 className="text-blue-301 font-pp-sb text-[17px] ">
-                  @ Company
-                </h2>
+                <h2 className="text-blue-301 pp-SB text-[17px] ">@ Company</h2>
               </div>
               <div className="flex items-center justify-center gap-4">
                 <p className="text-slate-200 text-[13px] font-mono">
@@ -319,7 +317,7 @@ export default function PreviewOasisTheme({
         {/* Projects Section */}
         <section className="w-full h-full my-10 mb-10">
           <div className="w-full flex items-center justify-start">
-            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] font-pp-sb text-[25px] before:content-['03.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:h-[.5px] after:opacity-[.3] after:bg-slate-200 after:ml-10 ">
+            <h2 className="w-full flex items-center justify-start text-white-100 m-[10px] pp-SB text-[25px] before:content-['03.'] before:font-mono before:text-blue-301 before:mr-2 after:content-[''] after:w-[300px] after:h-[.5px] after:opacity-[.3] after:bg-slate-200 after:ml-10 ">
               Projects
             </h2>
           </div>
@@ -349,7 +347,7 @@ export default function PreviewOasisTheme({
           <Gap height={200} />
           <div className="w-full max-w-[1000px] ">
             <div className="w-full flex flex-col items-center justify-center">
-              <h2 className="text-slate-100 font-pp-sb text-[25px] ">
+              <h2 className="text-slate-100 pp-SB text-[25px] ">
                 Other Noteworthy Projects.
               </h2>
             </div>
@@ -377,10 +375,10 @@ export default function PreviewOasisTheme({
           <h2 className="text-blue-301 font-mono text-[16px] before:content-['04'] before:text-blue-301 before:mr-2 ">
             What's Next?
           </h2>
-          <h2 className="text-slate-100 font-pp-eb text-[46px] mb-8">
+          <h2 className="text-slate-100 pp-EB text-[46px] mb-8">
             Get In Touch
           </h2>
-          <p className="text-slate-200 font-pp-rg text-[17px] ">
+          <p className="text-slate-200 pp-RG text-[17px] ">
             I'm not saying I'm the world's best conversationalist, but I did
             once talk to myself for three hours straight. So I think we'll be
             just fine.
@@ -388,7 +386,7 @@ export default function PreviewOasisTheme({
           <br />
           <a
             href="mailto:johndoe@mail.com"
-            className="w-auto px-8 py-4 rounded-[1px] border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all font-pp-rg text-[14px]"
+            className="w-auto px-8 py-4 rounded-[1px] border-solid border-[2px] border-blue-301 text-blue-301 scale-[.95] hover:scale-[1] transition-all pp-RG text-[14px]"
           >
             Say Hello
           </a>
@@ -437,8 +435,8 @@ function PortfolioCards({
         </div>
       </div>
       <div className="w-full flex flex-col items-start justify-start py-2 mt-2">
-        <p className="text-white-100 font-pp-eb text-[24px] mb-2 ">AI App</p>
-        <p className="text-slate-100 font-pp-rg text-[13px] mb-5 ">
+        <p className="text-white-100 pp-EB text-[24px] mb-2 ">AI App</p>
+        <p className="text-slate-100 pp-RG text-[13px] mb-5 ">
           {description ??
             `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Libero
             corrupti explicabo blanditiis ipsum rerum hic!`}
@@ -489,10 +487,10 @@ function GithubRepoCards({
         <IoLogoOctocat size={25} className="text-blue-301" />
       </div>
       <div className="w-full flex flex-col items-start justify-start gap-3 mb-0">
-        <p className="text-slate-100 font-pp-sb text-[18px] hover:text-blue-301 transition-all ">
+        <p className="text-slate-100 pp-SB text-[18px] hover:text-blue-301 transition-all ">
           {title ?? "webapis-playground Public"}
         </p>
-        <p className="text-slate-200 font-pp-rg text-[12px] transition-all ">
+        <p className="text-slate-200 pp-RG text-[12px] transition-all ">
           {description ??
             `The Web APIs Playground is a project to showcase the JavaScript Web
             APIs with examples and demonstrations. Client-side JavaScript APIs are

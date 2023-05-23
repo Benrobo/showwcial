@@ -159,8 +159,8 @@ function AddNotionPage({
   return (
     <div className="w-full h-full">
       <div className="w-full flex flex-col items-start justify-center">
-        <p className="text-white-200 font-pp-sb">Add Notion Page</p>
-        <p className="text-white-300 text-[14px] font-pp-rg">
+        <p className="text-white-200 pp-SB">Add Notion Page</p>
+        <p className="text-white-300 text-[14px] pp-RG">
           Add a notion page which would be used for your portfolio projects.
         </p>
         <br />
@@ -169,7 +169,7 @@ function AddNotionPage({
         <div className="w-full flex items-start justify-start">
           {/* @ts-ignore */}
           <input
-            className="w-full py-[14px] rounded-l-[10px] outline-none border-[1px] border-solid border-blue-300 px-4 text-slate-100 font-pp-rg bg-dark-100 text-[13px] "
+            className="w-full py-[14px] rounded-l-[10px] outline-none border-[1px] border-solid border-blue-300 px-4 text-slate-100 pp-RG bg-dark-100 text-[13px] "
             placeholder="https://benrobo.notion.site/Portfolio-f8dec7f670154145a0a0dc04fd07961f"
             onChange={handleInput}
             // defaultValue={inpVal}
@@ -185,7 +185,7 @@ function AddNotionPage({
             {verifyNotionMutation?.isLoading ? (
               <Spinner color="#fff" />
             ) : (
-              <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
+              <span className="text-[12px] p-[3px] pp-SB text-white-100">
                 Verify Page
               </span>
             )}
@@ -196,7 +196,7 @@ function AddNotionPage({
       <div className="w-full flex flex-col items-start justify-start">
         <div className="w-full h-auto">
           <div className="w-full flex flex-col items-start justify-start">
-            <p className="text-slate-200 font-pp-rg text-[13px] ">
+            <p className="text-slate-200 pp-RG text-[13px] ">
               Use this{" "}
               <a
                 href={NotionTemplate}
@@ -218,42 +218,42 @@ function AddNotionPage({
                   : "animate-none"
               } `}
             >
-              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+              <p className="text-slate-200 pp-SB text-[13px] flex items-center justify-center">
                 Name
                 <ValidIconState
                   valid={validPortfolioData?.name}
                   verified={verified}
                 />
               </p>
-              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+              <p className="text-slate-200 pp-SB text-[13px] flex items-center justify-center">
                 Description
                 <ValidIconState
                   valid={validPortfolioData?.description}
                   verified={verified}
                 />
               </p>
-              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+              <p className="text-slate-200 pp-SB text-[13px] flex items-center justify-center">
                 Tags
                 <ValidIconState
                   valid={validPortfolioData?.tags}
                   verified={verified}
                 />
               </p>
-              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+              <p className="text-slate-200 pp-SB text-[13px] flex items-center justify-center">
                 Github Url
                 <ValidIconState
                   valid={validPortfolioData?.ghUrl}
                   verified={verified}
                 />
               </p>
-              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+              <p className="text-slate-200 pp-SB text-[13px] flex items-center justify-center">
                 Live Url
                 <ValidIconState
                   valid={validPortfolioData?.lvUrl}
                   verified={verified}
                 />
               </p>
-              <p className="text-slate-200 font-pp-sb text-[13px] flex items-center justify-center">
+              <p className="text-slate-200 pp-SB text-[13px] flex items-center justify-center">
                 Image
                 <ValidIconState
                   valid={validPortfolioData?.image}

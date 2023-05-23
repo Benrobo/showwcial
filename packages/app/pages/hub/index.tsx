@@ -38,10 +38,10 @@ function Hub() {
       <div className="w-full h-auto">
         {["bookmarkThread", "viewBookmark", ""].includes(activeComp) && (
           <div className="w-full flex flex-col items-start justify-start px-6 py-3">
-            <p className="text-white-100 font-pp-sb text-[20px]">
+            <p className="text-white-100 pp-SB text-[20px]">
               Creative Hub Space
             </p>
-            <p className="text-white-300 font-pp-rg text-[14px]">
+            <p className="text-white-300 pp-RG text-[14px]">
               Manage Threads, Shows here.
             </p>
           </div>
@@ -104,7 +104,7 @@ function HubFeatures({ label, icon, handleActive }: HubFeatureProp) {
       className="w-auto h-auto bg-blue-300 rounded-lg p-4 px-8 flex flex-col items-center justify-center transition-all hover:scale-[1] scale-[.95] "
     >
       {icon}
-      <p className="text-white-100 font-pp-sb text-[12px] mt-2">{label}</p>
+      <p className="text-white-100 pp-SB text-[12px] mt-2">{label}</p>
     </button>
   );
 }

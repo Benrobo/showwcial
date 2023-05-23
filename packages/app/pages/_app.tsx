@@ -64,10 +64,10 @@ function UnresponsiveMessage() {
     <div className="w-full bg-dark-300 h-screen flex flex-col items-center justify-center text-center  ">
       <div className="w-full max-w-[400px] flex flex-col items-center justify-center text-center">
         <span className="text-5xl">😞</span>
-        <h1 className="font-pp-sb text-[20px] text-white-100 mt-2 ">
+        <h1 className="pp-SB text-[20px] text-white-100 mt-2 ">
           Showwcial Message
         </h1>
-        <p className="text-white-400 text-[14px] font-pp-rg">
+        <p className="text-white-400 text-[14px] pp-RG">
           Showwcial is unresponsive to this screen size. We recommend viewing
           this on a <span className="text-white-100">Desktop</span> device.{" "}
         </p>

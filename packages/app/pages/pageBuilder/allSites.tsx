@@ -76,7 +76,7 @@ function AllSites() {
         </div>
       ) : !allSitesQuery?.isLoading && createdSites?.length === 0 ? (
         <div className="w-full h-full min-h-[300px] flex flex-col items-center justify-center">
-          <p className="text-white-300 font-pp-sb text-[16px] ">
+          <p className="text-white-300 pp-SB text-[16px] ">
             No sites available! 😔
           </p>
         </div>
@@ -151,7 +151,7 @@ function CreatedSites({
         <span className="text-2xl">🎉</span>
       </div>
       <div className="w-full flex flex-col items-start justify-start ml-2 gap-2">
-        <p className="text-white-100 font-pp-sb text-[14px]">
+        <p className="text-white-100 pp-SB text-[14px]">
           {name}
           <kbd className="ml-1 px-2 py-1 border-solid border-[.5px] border-white-600 text-[10px] rounded-[3px] text-white-300 bg-dark-400">
             {themeName}
@@ -163,20 +163,20 @@ function CreatedSites({
               typeof window !== "undefined" && window?.location?.origin
             }/${slug}`}
             target="_blank"
-            className=" text-white-300 font-pp-rg underline text-[13px]"
+            className=" text-white-300 pp-RG underline text-[13px]"
           >
             {slug}
           </a>
         </div>
       </div>
       <button
-        className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+        className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
         onClick={copyToken}
       >
         <BiCopy color="#ccc" />
       </button>
       <button
-        className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+        className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
         onClick={() => {
           if (!isRefreshing) refreshSiteData(slug);
         }}
@@ -187,12 +187,12 @@ function CreatedSites({
         />
       </button>
       <button
-        className="px-3 py-[10px] flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+        className="px-3 py-[10px] flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
         onClick={onSelected}
         data-id={id}
       >
         <span
-          className="text-white-200 font-pp-rg text-[10px] "
+          className="text-white-200 pp-RG text-[10px] "
           onClick={onSelected}
           data-id={id}
         >
@@ -215,7 +215,7 @@ function SiteTags({ tags }: NotifierProp) {
       ) : (
         tags.map((d, i) => (
           <span
-            className="px-2 py-1 rounded-md text-[10px] bg-dark-100 text-white-100 border-solid border-[1px] border-blue-300 font-pp-sb"
+            className="px-2 py-1 rounded-md text-[10px] bg-dark-100 text-white-100 border-solid border-[1px] border-blue-300 pp-SB"
             key={i}
           >
             {d}

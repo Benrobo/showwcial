@@ -35,7 +35,7 @@ export default function SiteInfo({ savePageInfo, pageInfo }: PageProps) {
       <div className="w-full flex items-center justify-between gap-2">
         <input
           type="text"
-          className="w-full border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+          className="w-full border-[1px] border-solid border-white-600 p-3 pp-RG bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
           placeholder="Name"
           data-name="name"
           onChange={handleInput}
@@ -43,7 +43,7 @@ export default function SiteInfo({ savePageInfo, pageInfo }: PageProps) {
           value={pageInfo?.name}
         />
         <select
-          className="w-full border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+          className="w-full border-[1px] border-solid border-white-600 p-3 pp-RG bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
           data-name="type"
           onChange={handleInput}
           // disabled={createVariantMutation.isLoading}
@@ -68,7 +68,7 @@ export default function SiteInfo({ savePageInfo, pageInfo }: PageProps) {
           borderColor={"rgba(255,255,255,0.08)"}
           fontSize="14px"
           pointerEvents={"none"}
-          className="select-none font-pp-rg cursor-pointer"
+          className="select-none pp-RG cursor-pointer"
         />
         <Input
           placeholder="slug"
@@ -78,7 +78,7 @@ export default function SiteInfo({ savePageInfo, pageInfo }: PageProps) {
           _focus={{ border: "none", borderColor: "transparent" }}
           _hover={{ borderColor: "rgba(255,255,255,0.08)", bg: "none" }}
           fontSize="14px"
-          className="font-pp-rg"
+          className="pp-RG"
           data-name="slug"
           onChange={handleInput}
           value={pageInfo?.slug}

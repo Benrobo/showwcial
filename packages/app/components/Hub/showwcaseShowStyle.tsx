@@ -67,7 +67,7 @@ export default function ShowwcaseShowStyle({
       </div>
       <div className="w-full flex items-start justify-start">
         {!isEmpty(category) && (
-          <span className="px-4 py-2 font-pp-sb rounded-md bg-dark-100 border-solid border-[.5px] border-white-600 text-white-100 text-[12px] mt-3 ">
+          <span className="px-4 py-2 pp-SB rounded-md bg-dark-100 border-solid border-[.5px] border-white-600 text-white-100 text-[12px] mt-3 ">
             {category ?? "Blog"}
           </span>
         )}
@@ -88,12 +88,12 @@ export default function ShowwcaseShowStyle({
                     copyToClipboard(threadUrl);
                     toast.success("URL Copied.");
                   }}
-                  className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 font-pp-sb text-[12px] flex items-center justify-start cursor-pointer"
+                  className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 pp-SB text-[12px] flex items-center justify-start cursor-pointer"
                 >
                   <IoLink size={15} className="mr-3" /> Copy Link
                 </li>
                 {/* {!previewState && (
-                  <li className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 font-pp-sb text-[12px] flex items-center justify-start cursor-pointer">
+                  <li className="w-full text-white-200 rounded-md p-2 hover:bg-dark-200 pp-SB text-[12px] flex items-center justify-start cursor-pointer">
                     <IoTrash size={15} className="mr-3" /> Delete
                   </li>
                 )} */}
@@ -105,7 +105,7 @@ export default function ShowwcaseShowStyle({
       <div className="w-full h-auto flex flex-col items-start justify-start">
         <a
           href={showLink ?? "#"}
-          className="text-white-100 font-pp-sb text-[14px] mt-2 hover:underline"
+          className="text-white-100 pp-SB text-[14px] mt-2 hover:underline"
         >
           {title ?? "GraphQL for Beginners: Setting Up GraphQL Server"}
         </a>
@@ -118,10 +118,10 @@ export default function ShowwcaseShowStyle({
             }
             className={`w-[20px] rounded-[50%]`}
           />
-          <span className="text-white-300 font-pp-rg text-[12px] ">
+          <span className="text-white-300 pp-RG text-[12px] ">
             {displayName ?? "John Doe"}
           </span>
-          <span className="text-white-200 font-pp-sb ml-2 text-[12px]">
+          <span className="text-white-200 pp-SB ml-2 text-[12px]">
             {readingStats ?? ""}
           </span>
         </div>

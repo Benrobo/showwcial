@@ -30,8 +30,8 @@ export default function Themes({ savePageInfo, pageInfo }: PageProps) {
   return (
     <div className="w-full h-full">
       <div className="w-full flex flex-col items-start justify-center">
-        {/* <p className="text-white-200 font-pp-sb">Select Themes</p> */}
-        <p className="text-white-300 text-[14px] font-pp-rg">
+        {/* <p className="text-white-200 pp-SB">Select Themes</p> */}
+        <p className="text-white-300 text-[14px] pp-RG">
           Choose the theme that suit your needs.
         </p>
         <br />
@@ -87,7 +87,7 @@ function ThemeCards({ name, id, slug, image, pageInfo, onClick }: ThemeProps) {
         style={themeBgStyle}
       ></div>
       <div className="w-full h-[40px] mt-5 p-2 absolute bottom-0 left-0 flex items-center justify-around backdrop-blur bg-white-600 theme-info rounded-[10px] ">
-        <p className="text-white-100 text-[12px] font-pp-sb ">{name}</p>
+        <p className="text-white-100 text-[12px] pp-SB ">{name}</p>
         <a
           href={`/themes/${slug}?preview=true`}
           target="_blank"

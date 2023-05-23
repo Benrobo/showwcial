@@ -150,7 +150,7 @@ function OAuth() {
           <p className="text-white-200 text-1xl pp-RG mt-2 ">
             Let get you authenticated.
           </p>
-          <small className="text-white-400 font-pp-rg mt-2">
+          <small className="text-white-400 pp-RG mt-2">
             Make sure you have an account on{" "}
             <a
               href="https://www.showwcase.com/login?type=signin"
@@ -214,7 +214,7 @@ function OAuth() {
                   onClick={resendPwd}
                 >
                   <p
-                    className={`text-white-100 text-[12px] flex items-center justify-center font-pp-rg`}
+                    className={`text-white-100 text-[12px] flex items-center justify-center pp-RG`}
                   >
                     Resend
                   </p>
@@ -244,7 +244,7 @@ function OAuth() {
               {loginMutation.isLoading || verifyMutation.isLoading ? (
                 <Spinner color="#fff" />
               ) : (
-                <div className="w-full text-center font-pp-sb flex flex-row items-center justify-center gap-5">
+                <div className="w-full text-center pp-SB flex flex-row items-center justify-center gap-5">
                   <ImageTag
                     src="/images/logos/showwcase.png"
                     className="w-[30px] h-[30px] bg-white-100 rounded-[50%] "

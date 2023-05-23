@@ -215,7 +215,7 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
           {Object.entries(hubInfo).length > 0 && (
             <div className="w-full h-auto p-4 flex items-center justify-center gap-3">
               <button
-                className="w-[150px] hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 px-4 py-3 flex items-center justify-center text-[10px] font-pp-sb rounded-[30px] "
+                className="w-[150px] hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 px-4 py-3 flex items-center justify-center text-[10px] pp-SB rounded-[30px] "
                 onClick={saveThread}
                 disabled={bookmarkMutation.isLoading}
               >

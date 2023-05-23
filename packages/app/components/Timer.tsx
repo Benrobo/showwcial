@@ -26,11 +26,11 @@ function Timer({ timeframe, action }: TimerProp) {
     <button className="bg-dark-300 px-3 py-1 rounded-[30px] ml-2">
       <p
         className={
-          " text-white-200 text-[10px] flex items-center justify-center font-pp-rg"
+          " text-white-200 text-[10px] flex items-center justify-center pp-RG"
         }
       >
         Resend in
-        <span className="text-white-100 font-pp-sb ml-2">{time}sec</span>
+        <span className="text-white-100 pp-SB ml-2">{time}sec</span>
       </p>
     </button>
   );

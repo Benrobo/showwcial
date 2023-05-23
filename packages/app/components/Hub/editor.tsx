@@ -133,7 +133,7 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
       <Gap />
       <div className="w-auto p-2 absolute top-[-35px] right-0 flex items-center justify-between">
         <button
-          className="w-auto hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 px-6 py-2 flex items-center justify-between text-[12px] font-pp-sb rounded-[30px] "
+          className="w-auto hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 px-6 py-2 flex items-center justify-between text-[12px] pp-SB rounded-[30px] "
           onClick={postThread}
           style={{
             opacity: isPostsEmpty ? 0.5 : 1,
@@ -145,7 +145,7 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
       </div>
       <div className="w-auto p-2 absolute top-[-35px] left-0 flex items-center justify-between">
         <button
-          className="w-auto hover:scale-[.96] scale-[1] transition-all hover:bg-red-400 hover:text-white-100 p-2 flex items-center justify-between text-[12px] font-pp-sb rounded-[30px] "
+          className="w-auto hover:scale-[.96] scale-[1] transition-all hover:bg-red-400 hover:text-white-100 p-2 flex items-center justify-between text-[12px] pp-SB rounded-[30px] "
           onClick={closeActiveThread}
         >
           <IoClose size={20} color="#ccc" />
@@ -170,7 +170,7 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
           </div>
           <input
             type="text"
-            className="w-full  font-pp-sb text-white-300 border-none outline-none bg-transparent p-3 text-[20px]"
+            className="w-full  pp-SB text-white-300 border-none outline-none bg-transparent p-3 text-[20px]"
             placeholder="Title..."
             onChange={(e) => setThreadTitle(e.target.value)}
             value={threadTitle}
@@ -263,14 +263,14 @@ function ThreadInputBox({
         </div>
         <div className="w-full h-auto  flex flex-col items-start justify-start">
           <div className="w-full relative flex flex-col items-start justify-start ml-2">
-            <p className="text-white-100 font-pp-sb text-[14px] ">
+            <p className="text-white-100 pp-SB text-[14px] ">
               {userInfo?.fullname}
             </p>
-            <p className="text-white-400 font-pp-rg text-[12px] ">
+            <p className="text-white-400 pp-RG text-[12px] ">
               @{userInfo?.username}
             </p>
-            <p className="text-white-400 absolute top-2 right-4 font-pp-rg text-[12px] ">
-              <span className="font-pp-sb">
+            <p className="text-white-400 absolute top-2 right-4 pp-RG text-[12px] ">
+              <span className="pp-SB">
                 Max:{" "}
                 <span
                   style={{
@@ -285,7 +285,7 @@ function ThreadInputBox({
           <div className="w-full  flex flex-col items-start justify-start py-2">
             <textarea
               ref={inputRef}
-              className="w-full bg-transparent resize-none text-white-100 border-none outline-none text-[14px] font-pp-rg"
+              className="w-full bg-transparent resize-none text-white-100 border-none outline-none text-[14px] pp-RG"
               placeholder="Content..."
               style={{
                 minHeight: "10px",
@@ -302,7 +302,7 @@ function ThreadInputBox({
               defaultValue={value}
             ></textarea>
             {/* <div
-              className="w-full bg-transparent resize-none text-white-100 border-none outline-none text-[14px] pre-wrap font-pp-rg"
+              className="w-full bg-transparent resize-none text-white-100 border-none outline-none text-[14px] pre-wrap pp-RG"
               style={{
                 minHeight: "50px",
                 maxHeight: "400px",
@@ -323,14 +323,14 @@ function ThreadInputBox({
             ></div> */}
             <div className="w-full relative py-5 flex items-start justify-between">
               <button
-                className="w-auto absolute left-[-20px] hover:scale-[.96] scale-[1] transition-all bg-dark-200 text-blue-300 px-4 py-2 flex items-center justify-center text-[10px] font-pp-sb rounded-[30px] "
+                className="w-auto absolute left-[-20px] hover:scale-[.96] scale-[1] transition-all bg-dark-200 text-blue-300 px-4 py-2 flex items-center justify-center text-[10px] pp-SB rounded-[30px] "
                 onClick={addInput}
               >
                 Add Thread
               </button>
               {id > 0 && (
                 <button
-                  className="w-auto absolute left-[90px] top-[23px] hover:scale-[.96] scale-[1] transition-all bg-red-100 text-red-200 px-2 py-2 flex items-center justify-center text-[10px] font-pp-sb rounded-lg "
+                  className="w-auto absolute left-[90px] top-[23px] hover:scale-[.96] scale-[1] transition-all bg-red-100 text-red-200 px-2 py-2 flex items-center justify-center text-[10px] pp-SB rounded-lg "
                   onClick={() => removeInput(id)}
                 >
                   <BsTrash />

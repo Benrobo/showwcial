@@ -67,7 +67,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
       </div>
       <div className="w-full flex flex-col items-start justify-start relative top-10">
         <div className="w-full flex flex-col items-start justify-start px-4">
-          <p className="text-white-100 font-pp-sb">View Saved Bookmarks</p>
+          <p className="text-white-100 pp-SB">View Saved Bookmarks</p>
           <Gap height={20} />
           <div className="w-full flex items-start justify-start gap-4">
             <button
@@ -79,7 +79,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
                 activeView === "thread" ? "bg-blue-300" : "bg-dark-300"
               } px-5 py-3 rounded-[10px] flex flex-col items-center justify-center transition-all hover:scale-[1] scale-[.95] `}
             >
-              <p className="text-white-100 font-pp-sb text-[12px]">Threads</p>
+              <p className="text-white-100 pp-SB text-[12px]">Threads</p>
             </button>
             <button
               onClick={() => {
@@ -90,7 +90,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
                 activeView === "show" ? "bg-blue-300" : "bg-dark-300"
               } px-5 py-3 rounded-[10px] flex flex-col items-center justify-center transition-all hover:scale-[1] scale-[.95] `}
             >
-              <p className="text-white-100 font-pp-sb text-[12px]">Shows</p>
+              <p className="text-white-100 pp-SB text-[12px]">Shows</p>
             </button>
           </div>
         </div>
@@ -152,7 +152,7 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
           {fetchBookmarkMutation.isLoading === false &&
           seletedBookmark.length === 0 ? (
             <div className="w-full h-full mt-20 flex flex-col items-center justify-center">
-              <p className="text-white-200 font-pp-rg">
+              <p className="text-white-200 pp-RG">
                 No Bookmark Data Available. 😞
               </p>
             </div>

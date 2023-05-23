@@ -80,11 +80,11 @@ function Notifier() {
         <div className="w-full h-full flex flex-col items-start justify-start py-5 px-4 border-r-solid border-r-[1px] border-r-white-600 overflow-y-scroll hideScrollBar">
           <div className="flex items-center justify-start gap-5">
             <BsDiscord className="text-blue-300" size={25} />
-            <p className="text-white-100 font-pp-eb text-[20px]">
+            <p className="text-white-100 pp-EB text-[20px]">
               Showwcial Notifier
             </p>
           </div>
-          <p className="text-white-300 font-pp-rg text-[13px] mt-2 ">
+          <p className="text-white-300 pp-RG text-[13px] mt-2 ">
             Receive updates ranging from
             <kbd className="bg-dark-200 p-1 rounded-md">jobs</kbd>,
             <kbd className="bg-dark-200 p-1 rounded-md">threads</kbd>,{" "}
@@ -95,7 +95,7 @@ function Notifier() {
           <br />
           <div className="w-full flex items-center justify-start gap-2">
             <button
-              className="px-6 py-3 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+              className="px-6 py-3 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
               onClick={() => setShowCreateVariant(!showCreateVariant)}
             >
               Create Variant
@@ -103,7 +103,7 @@ function Notifier() {
             <a
               href={AUTH_BOT_URL}
               target="_blank"
-              className="px-6 py-3 flex items-center justify-center text-white-100 bg-green-700 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+              className="px-6 py-3 flex items-center justify-center text-white-100 bg-green-700 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
             >
               <BsDiscord size={20} className="text-white-100 mr-2" /> Install
               Bot.
@@ -144,7 +144,7 @@ function Notifier() {
         <div className="w-full h-full flex flex-col items-start justify-start">
           {selectedVariantId.length === 0 ? (
             <div className="w-full h-full flex flex-col items-center justify-center">
-              <p className="text-white-200 font-pp-sb text-[14px] ">
+              <p className="text-white-200 pp-SB text-[14px] ">
                 {allVariants.length > 0
                   ? "👈 Select one of the variants"
                   : "Nothing to show here for now 😞.."}
@@ -153,39 +153,39 @@ function Notifier() {
           ) : (
             <div className="w-full flex flex-col items-center justify-center px-4 py-4">
               <div className="w-full flex flex-col items-start justify-start gap-4">
-                <p className="text-white-300 font-pp-rg text-[14px]">
+                <p className="text-white-300 pp-RG text-[14px]">
                   NAME:{" "}
-                  <span className="text-white-200 font-pp-sb ml-5">
+                  <span className="text-white-200 pp-SB ml-5">
                     {selectedVariant?.name}
                   </span>
                 </p>
-                <p className="text-white-300 font-pp-rg text-[14px]">
+                <p className="text-white-300 pp-RG text-[14px]">
                   Token:
-                  <span className="text-white-200 font-pp-sb ml-5">
+                  <span className="text-white-200 pp-SB ml-5">
                     {selectedVariant?.token}
                   </span>
                 </p>
-                <p className="text-white-300 font-pp-rg text-[14px]">
+                <p className="text-white-300 pp-RG text-[14px]">
                   Communities:
-                  <span className="text-white-200 font-pp-sb ml-5">
+                  <span className="text-white-200 pp-SB ml-5">
                     <NotifierTags tags={selectedVariant?.communities ?? []} />
                   </span>
                 </p>
-                <p className="text-white-300 flex font-pp-rg text-[14px]">
+                <p className="text-white-300 flex pp-RG text-[14px]">
                   Tags:
-                  <span className="text-white-200 flex flex-wrap font-pp-sb ml-5">
+                  <span className="text-white-200 flex flex-wrap pp-SB ml-5">
                     <NotifierTags tags={selectedVariant?.tags ?? []} />
                   </span>
                 </p>
-                <p className="text-white-300 font-pp-rg text-[14px]">
+                <p className="text-white-300 pp-RG text-[14px]">
                   Disable:
-                  <span className="text-white-200 font-pp-sb ml-5">
+                  <span className="text-white-200 pp-SB ml-5">
                     <Switch isChecked={selectedVariant?.disabled} />
                   </span>
                 </p>
                 <Gap height={50} />
                 <button
-                  className="px-6 py-3 flex items-center justify-center text-white-100 bg-red-400 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+                  className="px-6 py-3 flex items-center justify-center text-white-100 bg-red-400 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
                   onClick={deleteSelectedVariant}
                   disabled={deleteVariantMutation?.isLoading}
                 >
@@ -383,14 +383,12 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
       <div className="w-full h-full flex flex-col items-center justify-center">
         <div className="w-[450px] h-auto bg-dark-300 rounded-md flex flex-col items-start justify-start">
           <div className="w-full h-aut p-3 flex flex-col items-start justify-start border-b-solid border-b-[1px] border-b-white-600 ">
-            <p className="text-white-200 font-pp-sb text-[14px] ">
-              Create Variant
-            </p>
+            <p className="text-white-200 pp-SB text-[14px] ">Create Variant</p>
           </div>
           <br />
           <div className="w-full flex p-3">
             <select
-              className="w-full border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+              className="w-full border-[1px] border-solid border-white-600 p-3 pp-RG bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
               data-name="type"
               onChange={(e) => handleInput(e, "type")}
               disabled={createVariantMutation.isLoading}
@@ -407,14 +405,14 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
             <div className="w-full flex items-center justify-between gap-2">
               <input
                 type="text"
-                className="w-full border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+                className="w-full border-[1px] border-solid border-white-600 p-3 pp-RG bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
                 placeholder="Name"
                 data-name="name"
                 onChange={(e) => handleInput(e, "name")}
                 disabled={createVariantMutation.isLoading}
               />
               <select
-                className="w-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+                className="w-[100px] border-[1px] border-solid border-white-600 p-3 pp-RG bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
                 onChange={(e) => handleInput(e, "icon")}
                 data-name="icon"
                 disabled={createVariantMutation.isLoading}
@@ -427,11 +425,11 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
               </select>
             </div>
             <div className="w-full flex flex-col items-start justify-start mt-3">
-              <p className="text-white-400 font-pp-rg text-[13px] mb-2">
+              <p className="text-white-400 pp-RG text-[13px] mb-2">
                 Tags (max: 10)
               </p>
               <select
-                className="w-full max-h-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+                className="w-full max-h-[100px] border-[1px] border-solid border-white-600 p-3 pp-RG bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
                 multiple
                 data-name="tags"
                 disabled={createVariantMutation.isLoading}
@@ -457,11 +455,11 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
             </div>
             {variantData?.type === "thread" && (
               <div className="w-full flex flex-col items-start justify-start mt-3">
-                <p className="text-white-400 font-pp-rg text-[13px] mb-2">
+                <p className="text-white-400 pp-RG text-[13px] mb-2">
                   Communities (max: 10)
                 </p>
                 <select
-                  className="w-full h-[100px] border-[1px] border-solid border-white-600 p-3 font-pp-rg bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
+                  className="w-full h-[100px] border-[1px] border-solid border-white-600 p-3 pp-RG bg-dark-100 rounded-md outline-none text-[13px] text-white-200"
                   multiple
                   data-name="communities"
                   onChange={(e) => {
@@ -488,7 +486,7 @@ function CreateVariant({ closeModal, refreshVariant }: CreateVariantProp) {
           </div>
           <div className="w-full flex items-center justify-center p-3">
             <button
-              className="w-full px-6 py-3 flex items-center justify-center text-white-100 bg-blue-300 hover:animate-pulse transition-all font-pp-rg text-[13px] rounded-lg"
+              className="w-full px-6 py-3 flex items-center justify-center text-white-100 bg-blue-300 hover:animate-pulse transition-all pp-RG text-[13px] rounded-lg"
               onClick={saveVariant}
               disabled={createVariantMutation.isLoading}
             >
@@ -544,13 +542,13 @@ function NotifierVariant({
         <span className="text-2xl">{icon}</span>
       </div>
       <div className="w-full flex flex-col items-start justify-start ml-2 gap-2">
-        <p className="text-white-100 font-pp-sb text-[14px]">{name}</p>
+        <p className="text-white-100 pp-SB text-[14px]">{name}</p>
         <div className="w-full flex flex-wrap items-start justify-start gap-2">
           <NotifierTags tags={tags} />
         </div>
       </div>
       <button
-        className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+        className="px-3 py-3 flex items-center justify-center border-solid border-[1px] border-white-600 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
         onClick={copyToken}
       >
         <BiCopy color="#ccc" />
@@ -571,7 +569,7 @@ function NotifierTags({ tags }: NotifierProp) {
       ) : (
         tags.map((d, i) => (
           <span
-            className="px-2 py-1 rounded-md text-[10px] bg-dark-100 text-white-100 border-solid border-[1px] border-blue-300 font-pp-sb"
+            className="px-2 py-1 rounded-md text-[10px] bg-dark-100 text-white-100 border-solid border-[1px] border-blue-300 pp-SB"
             key={i}
           >
             {d}

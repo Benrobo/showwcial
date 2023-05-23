@@ -5,17 +5,17 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: PoppinsReg;
+  font-family: Poppins-Regular;
   src: url("/fonts/Poppins-Regular.ttf");
 }
 
 @font-face {
-  font-family: PoppinsSemiBold;
+  font-family: Poppins-SemiBold;
   src: url("/fonts/Poppins-SemiBold.ttf");
 }
 
 @font-face {
-  font-family: PoppinsExtraBold;
+  font-family: Poppins-ExtraBold;
   src: url("/fonts/Poppins-ExtraBold.ttf");
 }
 
@@ -29,7 +29,7 @@ body {
   height: 100vh;
   padding: 0;
   margin: 0;
-  font-family: PoppinsReg;
+  font-family: Poppins-Regular;
   background: rgba(18, 21, 26);
   position: relative;
   overflow-x: hidden;
@@ -107,15 +107,15 @@ textarea::placeholder {
 }
 /* Fonts */
 .pp-RG {
-  font-family: PoppinsReg;
+  font-family: Poppins-Regular;
 }
 
 .pp-SB {
-  font-family: PoppinsSemiBold;
+  font-family: Poppins-SemiBold;
 }
 
 .pp-EB {
-  font-family: PoppinsExtraBold;
+  font-family: Poppins-ExtraBold;
 }
 
 .Coda {

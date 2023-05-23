@@ -32,7 +32,7 @@ function Home() {
       <div className="relative w-full min-h-[400px] max-h-[700px] bg-dark-200 ">
         <div className="w-full flex items-center justify-around h-auto px-2 py-4">
           <div className="w-auto flex items-center justify-center">
-            <div className="p-1 scale-[.8] flex items-center justify-center text-[13px] font-pp-rg text-white-100 bg-white-600 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur ">
+            <div className="p-1 scale-[.8] flex items-center justify-center text-[13px] pp-RG text-white-100 bg-white-600 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur ">
               <ImageTag
                 src="/images/logos/logo2.png"
                 alt="logo"
@@ -42,19 +42,16 @@ function Home() {
             {/* <span className="text-white-200 ml-2 pp-EB text-[13px] ">showccial</span> */}
           </div>
           <div className="w-auto flex items-start justify-center gap-5">
-            <a href="#" className="text-white-100 font-pp-rg text-[12px]">
+            <a href="#" className="text-white-100 pp-RG text-[12px]">
               Why Showwcial
             </a>
-            <a
-              href="#features"
-              className="text-white-100 font-pp-rg text-[12px]"
-            >
+            <a href="#features" className="text-white-100 pp-RG text-[12px]">
               Features
             </a>
             <a
               href="mailto:alumonabenaiah71@gmail.com"
               target="_blank"
-              className="text-white-100 font-pp-rg text-[12px]"
+              className="text-white-100 pp-RG text-[12px]"
             >
               Contact
             </a>
@@ -62,21 +59,21 @@ function Home() {
           <div className="w-auto flex items-start justify-center gap-2">
             <a
               href="/auth/login"
-              className="px-7 py-2 flex items-center justify-center text-[13px] font-pp-sb text-white-100 bg-white-600 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur "
+              className="px-7 py-2 flex items-center justify-center text-[13px] pp-SB text-white-100 bg-white-600 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur "
             >
               Try Now
             </a>
           </div>
         </div>
         <div className="w-full min-h-[550px] flex flex-col items-center justify-start py-8 text-center ">
-          <h1 className="text-[50px] font-pp-eb text-white-100">
+          <h1 className="text-[50px] pp-EB text-white-100">
             Elevate Your Digital Identity
           </h1>
-          <p className="text-[15px] opacity-[.7] font-pp-rg text-white-100">
+          <p className="text-[15px] opacity-[.7] pp-RG text-white-100">
             Your One-Stop Content Hub: Threads, Shows, Portfolios, and More
           </p>
           <button
-            className="px-7 py-3 mt-5 flex items-center justify-center text-[13px] font-pp-rg text-dark-700 bg-white-100 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur transition-all scale-[.90] hover:scale-[1] "
+            className="px-7 py-3 mt-5 flex items-center justify-center text-[13px] pp-RG text-dark-700 bg-white-100 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur transition-all scale-[.90] hover:scale-[1] "
             onClick={toggleVideoPreview}
           >
             Watch Demo <BsFillPlayFill size={20} />
@@ -92,7 +89,7 @@ function Home() {
         </div>
         <div className="w-full h-auto  mt-5 py-9 flex flex-col items-center">
           <div className="w-full max-w-[60%] flex flex-col items-center text-center">
-            <p className="text-white-200 font-pp-rg text-[13px] z-[10] ">
+            <p className="text-white-200 pp-RG text-[13px] z-[10] ">
               Discover, connect, and thrive with Showwcial. Harness the power of
               threads and shows tailored to your interests and communities.
               Create professional portfolio sites with ease, personalize your
@@ -108,10 +105,8 @@ function Home() {
       {/* Features */}
       <a id="features"></a>
       <div className="w-full h-auto flex flex-col items-center justify-center">
-        <p className="text-white-100 font-pp-eb text-[35px] mb-5 z-[20]">
-          Features
-        </p>
-        <p className="text-white-200 max-w-[600px] text-center font-pp-rg text-[13px] z-[20] ">
+        <p className="text-white-100 pp-EB text-[35px] mb-5 z-[20]">Features</p>
+        <p className="text-white-200 max-w-[600px] text-center pp-RG text-[13px] z-[20] ">
           Discover, Engage, and Grow: Showwcial Revolutionizes How You Showcase
           and Connect with Your Audience. Here are the lists of features offered
           by Showwcial.
@@ -167,10 +162,10 @@ function Home() {
         </div>
         {/* Team */}
         <div className="w-full h-full min-h-[350px] mt-8 mb-6 flex flex-col items-center justify-center z-[20] ">
-          <p className="text-white-100 text-center font-pp-eb text-[35px] mb-5">
+          <p className="text-white-100 text-center pp-EB text-[35px] mb-5">
             Acknowlegement
           </p>
-          <p className="text-white-200 max-w-[70%] text-center font-pp-rg text-[13px]">
+          <p className="text-white-200 max-w-[70%] text-center pp-RG text-[13px]">
             Special thanks to the incredible platforms and APIs that power my
             app's functionality and make it all possible. I extend my heartfelt
             acknowledgement to <kbd>Showwcase</kbd> and the Blog API for their
@@ -185,13 +180,13 @@ function Home() {
                 style={userProfileImageStyle}
               ></div>
               <br />
-              <p className="text-white-400 font-pp-rg text-[12px] italic ">
+              <p className="text-white-400 pp-RG text-[12px] italic ">
                 Built By:
               </p>
               <a
                 target="_blank"
                 href="https://www.showwcase.com/benrobo"
-                className="text-white-100 font-pp-eb text-[15px] hover:underline"
+                className="text-white-100 pp-EB text-[15px] hover:underline"
               >
                 Benaiah
                 <span className="text-white-200 text-[12px]">@benrobo</span>
@@ -203,13 +198,13 @@ function Home() {
                 style={showwcaseImageStyle}
               ></div>
               <br />
-              <p className="text-white-400 font-pp-rg text-[12px] italic ">
+              <p className="text-white-400 pp-RG text-[12px] italic ">
                 Powered By:
               </p>
               <a
                 target="_blank"
                 href="https://www.showwcase.com"
-                className="text-white-100 font-pp-eb text-[15px] hover:underline"
+                className="text-white-100 pp-EB text-[15px] hover:underline"
               >
                 Showwcase HQ
               </a>
@@ -218,14 +213,14 @@ function Home() {
         </div>
         {/* Get started */}
         <div className="w-full h-full z-[10] min-h-[300px] py-8 bg-dark-300 flex flex-col items-center justify-center">
-          <h1 className="text-[40px] font-pp-eb text-white-100">
+          <h1 className="text-[40px] pp-EB text-white-100">
             It&apos;s easy to get started.
           </h1>
           <br />
           <a
             href="/auth/login"
             target="_blank"
-            className="px-7 py-3 flex items-center justify-center text-[13px] font-pp-sb text-dark-100 bg-white-100 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur "
+            className="px-7 py-3 flex items-center justify-center text-[13px] pp-SB text-dark-100 bg-white-100 rounded-[30px] border-solid border-[1px] border-white-600 backdrop-blur "
           >
             Get Started <BsArrowUpRight size={15} className="ml-2" />
           </a>
@@ -278,8 +273,8 @@ function FeaturesContent({
       {align === "l-r" ? (
         <div className="w-full max-w-[90%] mt-8 grid grid-cols-2 gap-7 px-8 z-[10]">
           <div className="w-full h-auto flex flex-col items-start justify-center">
-            <h1 className="text-white-100 font-pp-sb">{title}</h1>
-            <p className="text-white-200 font-pp-rg text-[14px] mt-5 ">
+            <h1 className="text-white-100 pp-SB">{title}</h1>
+            <p className="text-white-200 pp-RG text-[14px] mt-5 ">
               {description}
             </p>
           </div>
@@ -293,8 +288,8 @@ function FeaturesContent({
             <ImageTag src={imagePath} className="rounded-[10px]" />
           </div>
           <div className="w-full h-auto flex flex-col items-start justify-start">
-            <h1 className="text-white-100 font-pp-sb">{title}</h1>
-            <p className="text-white-200 font-pp-rg text-[14px] mt-5 ">
+            <h1 className="text-white-100 pp-SB">{title}</h1>
+            <p className="text-white-200 pp-RG text-[14px] mt-5 ">
               {description}
             </p>
           </div>

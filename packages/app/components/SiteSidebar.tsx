@@ -124,12 +124,12 @@ export default function SiteSideBar({
         {/* Tagline and Headline */}
         <div className="w-full flex flex-col items-start justify-start">
           <div className="w-full flex items-start justify-start mb-1">
-            <span className="text-white-400 font-pp-rg text-[13px]">
+            <span className="text-white-400 pp-RG text-[13px]">
               Tagline (Max: {MAX_CHAR})
             </span>
           </div>
           <input
-            className="w-full py-[14px] rounded-[10px] outline-none border-[1px] border-solid border-white-500 px-4 text-slate-100 font-pp-rg bg-dark-100 text-[13px] "
+            className="w-full py-[14px] rounded-[10px] outline-none border-[1px] border-solid border-white-500 px-4 text-slate-100 pp-RG bg-dark-100 text-[13px] "
             placeholder="Tagline"
             onChange={handleInput}
             value={inpData?.tagline}
@@ -139,12 +139,12 @@ export default function SiteSideBar({
           />
           <br />
           <div className="w-full flex items-start justify-start mb-1">
-            <span className="text-white-400 font-pp-rg text-[13px]">
+            <span className="text-white-400 pp-RG text-[13px]">
               Headline (Max: {MAX_CHAR})
             </span>
           </div>
           <input
-            className="w-full py-[14px] rounded-[10px] outline-none border-[1px] border-solid border-white-500 px-4 text-slate-100 font-pp-rg bg-dark-100 text-[13px] "
+            className="w-full py-[14px] rounded-[10px] outline-none border-[1px] border-solid border-white-500 px-4 text-slate-100 pp-RG bg-dark-100 text-[13px] "
             placeholder="Headline"
             onChange={handleInput}
             value={inpData?.headline}
@@ -166,7 +166,7 @@ export default function SiteSideBar({
               {updateSiteMutation?.isLoading ? (
                 <Spinner color="#fff" />
               ) : (
-                <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
+                <span className="text-[12px] p-[3px] pp-SB text-white-100">
                   Save Changes
                 </span>
               )}
@@ -182,7 +182,7 @@ export default function SiteSideBar({
               {deleteSiteMutation?.isLoading ? (
                 <Spinner color="#fff" />
               ) : (
-                <span className="text-[12px] p-[3px] font-pp-sb text-white-100">
+                <span className="text-[12px] p-[3px] pp-SB text-white-100">
                   Delete Site
                 </span>
               )}

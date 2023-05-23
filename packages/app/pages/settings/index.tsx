@@ -81,7 +81,7 @@ function Settings() {
       {getNotionTokenQuery.isLoading && <LoaderModal />}
       <div className="w-full h-full">
         <div className="w-full min-h-[150px] flex flex-col items-start justify-start px-5 py-4">
-          <h2 className="text-white-100 font-pp-sb text-[20px] ">Settings</h2>
+          <h2 className="text-white-100 pp-SB text-[20px] ">Settings</h2>
           <p className="text-slate-200 text-[13px] ">
             Manage Showccial Config.
           </p>
@@ -89,10 +89,10 @@ function Settings() {
         <div className="w-full flex flex-col items-start justify-start px-5 py-2">
           {/* Notion Integration */}
           <div className="w-full max-w-[450px] flex flex-col items-start justify-start">
-            <p className="text-white-100 font-pp-sb text-[18px] ">
+            <p className="text-white-100 pp-SB text-[18px] ">
               Notion Integration
             </p>
-            <p className="text-white-300 font-pp-rg text-[13px] ">
+            <p className="text-white-300 pp-RG text-[13px] ">
               Add your notion integration token. Dont know where to find one,
               follow this guide
               <a
@@ -107,7 +107,7 @@ function Settings() {
             <div className="w-full flex items-start justify-start gap-3">
               <input
                 type="text"
-                className="w-full px-4 py-4 text-[12px] rounded-md bg-dark-300 font-pp-rg text-white-100 border-none outline-none "
+                className="w-full px-4 py-4 text-[12px] rounded-md bg-dark-300 pp-RG text-white-100 border-none outline-none "
                 placeholder="secret_7JuYFMeNMdssGSgzcdWm8wD4hDxcKXlaaJFFVTQXZQez"
                 defaultValue={appCredentials?.notion}
                 onChange={(e) =>
@@ -115,7 +115,7 @@ function Settings() {
                 }
               />
               <button
-                className="w-full max-w-[135px] rounded-md px-5 py-[16px] font-pp-sb text-white-100 bg-blue-300 text-[10px] flex items-center justify-center"
+                className="w-full max-w-[135px] rounded-md px-5 py-[16px] pp-SB text-white-100 bg-blue-300 text-[10px] flex items-center justify-center"
                 onClick={() => addNotionToken("notion")}
               >
                 {appCredentials?.notion?.length > 0 &&
@@ -129,10 +129,10 @@ function Settings() {
 
           {/* Showwcase */}
           <div className="w-full mt-[40px] max-w-[450px] flex flex-col items-start justify-start">
-            <p className="text-white-100 font-pp-sb text-[18px] ">
+            <p className="text-white-100 pp-SB text-[18px] ">
               Showwcase Integration
             </p>
-            <p className="text-white-300 font-pp-rg text-[13px] ">
+            <p className="text-white-300 pp-RG text-[13px] ">
               Add your personal showwcase api token. Dont know where to find
               one, follow this guide
               <a
@@ -147,7 +147,7 @@ function Settings() {
             <div className="w-full flex items-start justify-start gap-3">
               <input
                 type="text"
-                className="w-full px-4 py-4 text-[12px] rounded-md bg-dark-300 font-pp-rg text-white-100 border-none outline-none "
+                className="w-full px-4 py-4 text-[12px] rounded-md bg-dark-300 pp-RG text-white-100 border-none outline-none "
                 placeholder="8f24d64ed20a134bdcdcf7df6b6f437dd129fff2ac1a4c6d814c34"
                 defaultValue={appCredentials?.showwcase}
                 onChange={(e) =>
@@ -158,7 +158,7 @@ function Settings() {
                 }
               />
               <button
-                className="w-full max-w-[135px] rounded-md px-5 py-[16px] font-pp-sb text-white-100 bg-blue-300 text-[10px] flex items-center justify-center"
+                className="w-full max-w-[135px] rounded-md px-5 py-[16px] pp-SB text-white-100 bg-blue-300 text-[10px] flex items-center justify-center"
                 onClick={() => addNotionToken("showwcase")}
               >
                 {appCredentials?.showwcase?.length > 0 &&

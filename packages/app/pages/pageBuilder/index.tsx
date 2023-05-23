@@ -31,30 +31,28 @@ function PortfolioBuilder() {
         <div className="w-full h-auto flex flex-col items-start justify-start py-3 px-4 border-b-solid border-b-[1px] border-b-white-600 overflow-y-scroll hideScrollBar border-b-solid">
           <div className="flex items-center justify-start gap-5">
             {/* <BsDiscord className="text-blue-300" size={25} /> */}
-            <p className="text-white-100 font-pp-eb text-[20px]">
-              Page Builder
-            </p>
+            <p className="text-white-100 pp-EB text-[20px]">Page Builder</p>
           </div>
-          <p className="text-white-300 font-pp-rg text-[13px] mt-2 ">
+          <p className="text-white-300 pp-RG text-[13px] mt-2 ">
             Create impressive
-            <kbd className="bg-dark-200 font-pp-sb ml-2 mr-2 p-1 text-white-200 rounded-md">
+            <kbd className="bg-dark-200 pp-SB ml-2 mr-2 p-1 text-white-200 rounded-md">
               portfolio
             </kbd>
             site that impress potential clients & customers.
           </p>
-          <p className="text-white-300 font-pp-rg text-[13px] mt-2 ">
+          <p className="text-white-300 pp-RG text-[13px] mt-2 ">
             Follow this
             <a
               href="https://gist.github.com/Benrobo/e2cba898bdeb786ab73812aa84b8481a"
               target="_blank"
-              className="underline ml-1 mr-1 font-pp-sb text-white-100"
+              className="underline ml-1 mr-1 pp-SB text-white-100"
             >
               Guide
             </a>
             on how to setup a site on showwcial from scratch.
           </p>
           <button
-            className="px-6 py-3 mt-2 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all font-pp-eb text-[13px] rounded-lg"
+            className="px-6 py-3 mt-2 flex items-center justify-center text-white-100 bg-blue-300 scale-[.95] hover:scale-[1] transition-all pp-EB text-[13px] rounded-lg"
             onClick={() => setOpenModal(true)}
           >
             Create Site
@@ -280,7 +278,7 @@ function CreateSite({ closeModal }: CreateSiteProps) {
       <div className="w-full h-full mt-10 flex flex-col items-center justify-center">
         <div className="w-[700px] h-auto rounded-md bg-dark-300 overflow-y-scroll hideScrollBar">
           <div className="w-full flex items-center justify-center p-3  border-b-[.5px] border-b-white-600 border-b-solid">
-            <p className="text-white-200 font-pp-sb">Portfolio Builder</p>
+            <p className="text-white-200 pp-SB">Portfolio Builder</p>
           </div>
           <div className="w-full flex flex-col items-start justify-center p-3">
             <div className="w-full h-auto px-2 py-5">

@@ -174,10 +174,8 @@ function ErrorComp({ notfound, message }: ErrorProp) {
           }
           className="max-w-[50%]"
         />
-        <h2 className="text-blue-200 font-pp-eb text-[30px] ">
-          An Error Occured!
-        </h2>
-        <p className="text-white-300 font-pp-rg text-[13px] ">{message}</p>
+        <h2 className="text-blue-200 pp-EB text-[30px] ">An Error Occured!</h2>
+        <p className="text-white-300 pp-RG text-[13px] ">{message}</p>
       </div>
     </div>
   );
