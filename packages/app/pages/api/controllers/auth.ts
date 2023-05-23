@@ -410,6 +410,16 @@ export default class Authentication extends BaseController {
       return;
     }
 
+    if (userCachedData?.token !== token) {
+      this.error(
+        res,
+        "--verifyPasswordReset/invalid-token",
+        "Password reset link is invalid. 'token' is invalid.",
+        400
+      );
+      return;
+    }
+
     // check if user exists.
     const userExist = await prisma.users.findFirst({ where: { email } });
 
@@ -459,7 +469,7 @@ export default class Authentication extends BaseController {
     }
 
     const randToken = this.generateTempPassword();
-    const cacheTime = 5 * 60 * 1000;
+    const cacheTime = 3 * 60 * 1000;
     memcache.put(
       email,
       JSON.stringify({
@@ -476,11 +486,11 @@ export default class Authentication extends BaseController {
     </br>
     <p><b>${resetLink}</b></p>
     </br>
-    Password reset link expires in 5min time, use it before the expiration time.
+    Password reset link expires in 3min time, use it before the expiration time.
     </br>
     `;
     // await sendMail(email, "Verify Account", mailBody);
-    await sendCustomMail(email, "Password Reset", mailBody);
+    // await sendCustomMail(email, "Password Reset", mailBody);
 
     this.success(
       res,
