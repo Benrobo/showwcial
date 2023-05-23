@@ -189,6 +189,7 @@ export function HandlePasswordResetResponse(
   }
 
   if (response?.code === "--passwordReset/successfull") {
+    toast.success("Password reset successfully.");
     resetState();
     localStorage.removeItem("reset_password_email");
     location.href = "/auth/login";
