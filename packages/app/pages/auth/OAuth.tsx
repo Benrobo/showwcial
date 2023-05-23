@@ -230,7 +230,7 @@ function OAuth() {
             )}
             <Link
               className="text-white-300 text-[13px] underline "
-              href="/forgot-password"
+              href="/auth/forgot-password"
             >
               Forgot password
             </Link>
