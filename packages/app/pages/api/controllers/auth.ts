@@ -1,5 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { LoginSchema, VerifyUserSchema } from "../helper/validator";
+import {
+  LoginSchema,
+  ResetPwdSchema,
+  VerifyUserSchema,
+} from "../helper/validator";
 import BaseController from "./base";
 import $axios from "../config/axios";
 import { v4 as uuidv4 } from "uuid";
@@ -9,12 +13,11 @@ import memcache from "memory-cache";
 import JsonWebToken from "../helper/jwt";
 import { isEmpty } from "../../../util";
 import sendCustomMail from "../helper/sendEmail";
+import ENV from "../config/env";
 // import { sendMail } from "../helper/sendMail";
 
-interface AuthData {
-  username?: string;
-  email: string;
-  password?: string;
+interface PasswordReseCacheProp {
+  token?: string;
 }
 
 const jwt = new JsonWebToken();
@@ -22,10 +25,12 @@ const jwt = new JsonWebToken();
 export default class Authentication extends BaseController {
   protected loginSchema;
   protected VerifyUserSchema;
+  protected ResetPwdSchema;
   public constructor() {
     super();
     this.loginSchema = LoginSchema;
     this.VerifyUserSchema = VerifyUserSchema;
+    this.ResetPwdSchema = ResetPwdSchema;
   }
 
   public async doesShowwcaseUserExists(username: string, email: string) {
@@ -366,6 +371,193 @@ export default class Authentication extends BaseController {
       "logged in successfully",
       200,
       validUserData
+    );
+  }
+
+  public async verifyPwdReset(req: NextApiRequest, res: NextApiResponse) {
+    const { token, email } = req.body;
+
+    if (isEmpty(email)) {
+      this.error(
+        res,
+        "--verifyPasswordReset/invalid-field",
+        "Password reset link is invalid. 'email' is required.",
+        404
+      );
+      return;
+    }
+    if (isEmpty(token)) {
+      this.error(
+        res,
+        "--verifyPasswordReset/invalid-field",
+        "Password reset link is invalid. 'token' is required.",
+        404
+      );
+      return;
+    }
+
+    const userCachedData = JSON.parse(
+      memcache.get(email)
+    ) as PasswordReseCacheProp | null;
+
+    if (isEmpty(userCachedData)) {
+      this.error(
+        res,
+        "--verifyPasswordReset/invalid-token",
+        "Password reset link is invalid. 'token' is invalid.",
+        400
+      );
+      return;
+    }
+
+    // check if user exists.
+    const userExist = await prisma.users.findFirst({ where: { email } });
+
+    if (isEmpty(userExist)) {
+      this.error(
+        res,
+        "--verifyPasswordReset/user-notfound",
+        "Verification failed, user not found.",
+        404
+      );
+      return;
+    }
+
+    this.success(
+      res,
+      "--verifyPasswordReset/verified",
+      "Verification successful.",
+      200
+    );
+  }
+
+  public async sendPasswordResetLink(
+    req: NextApiRequest,
+    res: NextApiResponse
+  ) {
+    const { email } = req.body;
+    if (isEmpty(email)) {
+      this.error(
+        res,
+        "--sendResetLink/invalid-field",
+        `Expected a valid email, but got none`,
+        400
+      );
+      return;
+    }
+
+    // check if user with this email exists.
+    const userExist = await prisma.users.findFirst({ where: { email } });
+    if (isEmpty(userExist)) {
+      this.error(
+        res,
+        "--sendResetLink/user-notfound",
+        "Failed to send, user not found.",
+        404
+      );
+      return;
+    }
+
+    const randToken = this.generateTempPassword();
+    const cacheTime = 5 * 60 * 1000;
+    memcache.put(
+      email,
+      JSON.stringify({
+        token: randToken,
+      }),
+      cacheTime
+    );
+
+    const resetLink = `${ENV.clientUrl}/auth/forget-password?token=${randToken}`;
+
+    const mailBody = `
+    <h2>Password Reset</h2>
+    A user with this username <b>${userExist?.username}</b> and email <b>${email}</b> try to request for password reset for Showwcial, if this wasn't you, please ignore the link below.
+    </br>
+    <p><b>${resetLink}</b></p>
+    </br>
+    Password reset link expires in 5min time, use it before the expiration time.
+    </br>
+    `;
+    // await sendMail(email, "Verify Account", mailBody);
+    await sendCustomMail(email, "Password Reset", mailBody);
+
+    this.success(
+      res,
+      "--sendResetLink/success",
+      `password reset link sent..`,
+      200,
+      { token: randToken }
+    );
+  }
+
+  public async passwordReset(req: NextApiRequest, res: NextApiResponse) {
+    const payload = req.body;
+    const { error, value } = this.ResetPwdSchema.validate(payload);
+    if (typeof error !== "undefined") {
+      const msg = error.message;
+      this.error(res, "--passwordReset/invalid-fields", msg, 400);
+      return;
+    }
+
+    const { email, newPassword, token } = payload;
+
+    // check if token still exists in cache.
+    const userCachedData = JSON.parse(
+      memcache.get(email)
+    ) as PasswordReseCacheProp | null;
+
+    console.log({ userCachedData });
+
+    if (isEmpty(userCachedData)) {
+      this.error(
+        res,
+        "--passwordReset/invalid-token",
+        "Password reset link is invalid. 'token' is invalid.",
+        400
+      );
+      return;
+    }
+
+    const userExist = await prisma.users.findFirst({ where: { email } });
+
+    if (isEmpty(userExist)) {
+      this.error(
+        res,
+        "--passwordReset/user-notfound",
+        "Password reset failed, user not found.",
+        404
+      );
+      return;
+    }
+
+    if (userCachedData?.token !== token) {
+      this.error(
+        res,
+        "--passwordReset/invalid-token",
+        "Password reset link is invalid. 'token' is invalid.",
+        404
+      );
+      return;
+    }
+
+    const pwdHash = bcrypt.hashSync(newPassword, 10);
+
+    // update password.
+    const userId = userExist?.id;
+    await prisma.accounts.update({
+      where: { userId },
+      data: { hash: pwdHash },
+    });
+
+    // delete cached data
+    memcache.del(email);
+
+    this.success(
+      res,
+      "--passwordReset/successfull",
+      "Password reset successfull.",
+      200
     );
   }
 }
