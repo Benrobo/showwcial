@@ -41,9 +41,10 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
 
   async function fetchAllCommunities() {
     try {
-      const res = await axios.get(
-        `https://cache.showwcase.com/communities/featured?limit=100`
-      );
+      const userData = JSON.parse(localStorage.getItem("userData")) ?? null;
+      if (isEmpty(userData)) return;
+      const url = `https://cache.showwcase.com/user/${userData?.username}/communities`;
+      const res = await axios.get(url);
       const result = res.data;
       setCommunities(result);
     } catch (e: any) {
@@ -158,10 +159,12 @@ export default function ThreadEditor({ closeActiveThread }: ThreadEditorProp) {
             disabled={fetchCommunitiesQuery.isLoading}
             onChange={(e) => setSelectedCommunity(e.target.value)}
           >
-            <option value="">Communities</option>
+            <option value="">
+              {fetchCommunitiesQuery.isLoading ? "...Loading" : "Communities"}
+            </option>
             {communities?.length > 0
               ? communities.map((d) => <option value={d?.id}>{d?.name}</option>)
-              : null}
+              : "No communities available. Try logging in or join a community."}
           </select>
         </div>
         <div className="w-full flex items-center justify-center">
