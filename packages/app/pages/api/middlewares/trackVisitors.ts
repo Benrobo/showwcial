@@ -28,7 +28,6 @@ export default function TrackVisitor(
       }
 
       const userData = await prisma.site.findFirst({ where: { slug } });
-      const userId = userData?.userId;
 
       const siteExistsInTracker = await prisma.pageTracker.findMany({
         where: { slug, ipAddress },
@@ -72,15 +71,18 @@ export default function TrackVisitor(
       );
 
       //   Add to tracker table
-      await prisma.pageTracker.create({
-        data: {
-          id: uuidv4(),
-          slug,
-          ipAddress,
-          views: 1,
-          userId,
-        },
-      });
+      if (isEmpty(userData)) {
+        const userId = userData?.userId;
+        await prisma.pageTracker.create({
+          data: {
+            id: uuidv4(),
+            slug,
+            ipAddress,
+            views: 1,
+            userId,
+          },
+        });
+      }
     }
   };
 }
