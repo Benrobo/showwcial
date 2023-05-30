@@ -9,6 +9,7 @@ import { Toaster } from "react-hot-toast";
 import { ChakraProvider } from "@chakra-ui/react";
 import { DataContextProvider } from "../context/DataContext";
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 // nprogress loader
 Router.events.on("routeChangeStart", nProgress.start);
@@ -55,6 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
         </DataContextProvider>
       </ChakraProvider>
       <Toaster />
+      <Analytics />
     </QueryClientProvider>
   );
 }
