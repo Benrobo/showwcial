@@ -17,13 +17,8 @@ export default function TrackVisitor(
 
       const visitorExistsInCache = JSON.parse(memcache.get(ipAddress));
 
-      // ! make sure vistor page visit has expired before adding new one.
-
       if (visitorExistsInCache !== null) {
-        console.info(
-          `\n Slow down.. You just visited this page a minute ago. .\n`
-        );
-        console.log(visitorExistsInCache);
+        console.info(`tracker data cached.`);
         return;
       }
 
@@ -71,7 +66,7 @@ export default function TrackVisitor(
       );
 
       //   Add to tracker table
-      if (isEmpty(userData)) {
+      if (!isEmpty(userData)) {
         const userId = userData?.userId;
         await prisma.pageTracker.create({
           data: {
