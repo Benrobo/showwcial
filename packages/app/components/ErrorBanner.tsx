@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 
-const ACTIVE = false;
+const ACTIVE = true;
 
 function ErrorBanner() {
   const [isOpen, setIsOpen] = useState(false);
