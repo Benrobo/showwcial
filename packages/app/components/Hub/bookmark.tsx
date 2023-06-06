@@ -2,7 +2,7 @@ import { RxLinkBreak2 } from "react-icons/rx";
 import Modal from "../Modal";
 import ShowwcaseThreadStyle from "./showwcaseThreadStyle";
 import { IoBookmark, IoClose } from "react-icons/io5";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { Spinner } from "../Loader";
@@ -13,8 +13,10 @@ import {
   HandleBookmarkResponse,
   HandleThreadResponse,
 } from "../../util/response";
-import { isEmpty } from "../../util";
+import { genRandNum, isEmpty, sleep } from "../../util";
 import ShowwcaseShowStyle from "./showwcaseShowStyle";
+import { BiScreenshot } from "react-icons/bi";
+import { toPng } from "html-to-image";
 
 interface BookmarkProp {
   closeActiveThread: () => void;
@@ -30,6 +32,8 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
   const bookmarkMutation = useMutation(
     async (data: any) => await saveToBookmark(data)
   );
+  const [showShowwcaseLogo, setShowShowwcaseLogo] = useState(false);
+  const widgetRef = useRef<HTMLDivElement | any>(null);
 
   const validateUrl = (url) => {
     try {
@@ -138,6 +142,30 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
     bookmarkMutation.mutate(payload);
   }
 
+  const takeScreenShot = useCallback(() => {
+    if (widgetRef.current === null) return;
+    (async () => {
+      setShowShowwcaseLogo(true);
+      await sleep(1);
+      const wid = document.querySelector(".showwcial-bookmark-widget");
+      toPng(wid as any, { quality: 0.95 })
+        .then(function (dataUrl) {
+          var link = document.createElement("a");
+          link.download = `showwcase-${hubtype}-${genRandNum()}.png`;
+          link.href = dataUrl;
+          link.click();
+          setShowShowwcaseLogo(false);
+          toast.success("Image saved successfully");
+          location.reload();
+        })
+        .catch((err) => {
+          toast.error("failed to take screenshot");
+          console.log(`error taking screenshot`);
+          console.error(err);
+        });
+    })();
+  }, [widgetRef]);
+
   return (
     <Modal
       isOpen={true}
@@ -145,7 +173,7 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
       showCloseIcon={true}
       onClose={closeActiveThread}
     >
-      <div className="w-full h-full flex flex-col items-start justify-center hideScrollbar">
+      <div className="w-full h-screen flex flex-col items-start justify-center ">
         <div className="w-[450px] h-[650px] flex flex-col items-center justify-start ">
           <div
             className={`w-full relative flex items-center justify-start bg-dark-100 rounded-[30px] px-2 py-2 border-solid border-[2px] ${
@@ -185,7 +213,7 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
               threadMessage={(hubInfo as any)?.message}
               threadId={(hubInfo as any)?.id}
               threadLink={hubUrl}
-              userImage={(hubInfo as any)?.user?.profilePictureKey}
+              userImage={(hubInfo as any)?.user?.profilePictureUrl}
               username={(hubInfo as any)?.user?.username}
               threadImages={(hubInfo as any)?.images}
               key={1}
@@ -194,6 +222,8 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
                   ? { url: "", title: "", description: "" }
                   : (hubInfo as any).linkPreviewMeta
               }
+              showShowwcaseLogo={showShowwcaseLogo}
+              widgetRef={widgetRef}
             />
           )}
           {Object.entries(hubInfo).length > 0 && hubtype === "show" && (
@@ -203,19 +233,23 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
               title={(hubInfo as any)?.title}
               showId={(hubInfo as any)?.id}
               showLink={hubUrl}
-              userImage={(hubInfo as any)?.user?.profilePictureKey}
-              coverImg={(hubInfo as any)?.coverImage}
+              userImage={(hubInfo as any)?.user?.profilePictureUrl}
+              coverImg={
+                (hubInfo as any)?.coverImage ?? (hubInfo as any)?.coverImageUrl
+              }
               key={1}
               readingStats={(hubInfo as any)?.readingStats?.text ?? ""}
+              showShowwcaseLogo={showShowwcaseLogo}
+              widgetRef={widgetRef}
             />
           )}
 
-          {(hubInfo as any)?.images?.length > 0 && <Gap height={50} />}
+          {(hubInfo as any)?.images?.length > 0 && <Gap height={20} />}
 
           {Object.entries(hubInfo).length > 0 && (
-            <div className="w-full h-auto p-4 flex items-center justify-center gap-3">
+            <div className="w-auto h-full fixed top-0 right-0 p-4 flex flex-col items-center justify-center gap-3">
               <button
-                className="w-[150px] hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 px-4 py-3 flex items-center justify-center text-[10px] pp-SB rounded-[30px] "
+                className="w-auto hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 p-5 flex items-center justify-center text-[10px] pp-SB rounded-[30px] "
                 onClick={saveThread}
                 disabled={bookmarkMutation.isLoading}
               >
@@ -223,10 +257,17 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
                   <Spinner color="#fff" />
                 ) : (
                   <div className="flex items-center justify-center">
-                    <IoBookmark size={10} color="#fff" className="mr-2" />{" "}
-                    Bookmark {hubtype === "show" ? "Show" : "Thread"}
+                    <IoBookmark size={15} color="#fff" className="" />
                   </div>
                 )}
+              </button>
+              <button
+                className="w-auto hover:scale-[.96] scale-[1] transition-all bg-blue-300 text-white-100 p-4 flex items-center justify-center text-[10px] pp-SB rounded-[30px] "
+                onClick={takeScreenShot}
+              >
+                <div className="flex items-center justify-center">
+                  <BiScreenshot size={20} color="#fff" className="" />
+                </div>
               </button>
             </div>
           )}
