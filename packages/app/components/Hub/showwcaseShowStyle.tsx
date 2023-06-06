@@ -3,9 +3,10 @@ import ImageTag from "../Image";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { IoLink, IoMenuOutline, IoTrash, IoTriangle } from "react-icons/io5";
-import { useState } from "react";
+import { LegacyRef, useState } from "react";
 import { copyToClipboard, formatStringToMarkdown, isEmpty } from "../../util";
 import { toast } from "react-hot-toast";
+import Image from "next/image";
 
 interface ShowStyleProp {
   title?: string;
@@ -18,6 +19,8 @@ interface ShowStyleProp {
   displayName?: string;
   category?: string;
   key?: number;
+  showShowwcaseLogo?: boolean;
+  widgetRef?: LegacyRef<HTMLDivElement>;
 }
 
 export default function ShowwcaseShowStyle({
@@ -31,6 +34,8 @@ export default function ShowwcaseShowStyle({
   coverImg,
   readingStats,
   key,
+  showShowwcaseLogo,
+  widgetRef,
 }: ShowStyleProp) {
   const [openDW, setOpenDW] = useState(false);
   const threadUrl = showLink ?? "";
@@ -45,26 +50,23 @@ export default function ShowwcaseShowStyle({
       id="triangleUp"
       key={key}
       data-id={showId}
-      className="w-[300px] h-auto max-auto flex items-center justify-center flex-col relative bg-dark-300 p-3 rounded-md"
+      className="w-[300px] showwcial-bookmark-widget h-auto max-auto flex items-center justify-center flex-col relative bg-dark-300 p-3 rounded-md"
+      ref={widgetRef}
     >
-      <div className={`w-full h-[150px] rounded-t-md p-3 show-${showId} `}>
-        <style>{`
-          .show-${showId}{
-            background-image:url(${
-              coverImg ??
-              "https://project-assets.showwcase.com/4190/1657864017758-CnpG44ZQc.webp"
-            });
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-          }
-        `}</style>
+      <div className={`w-full rounded-t-md p-3 show-${showId} `}>
         {previewState && (
           <div className="absolute top-[-20px] w-full flex items-center justify-center">
             <IoTriangle size={25} className="text-dark-300" />
           </div>
         )}
       </div>
+      <Image
+        alt="show image"
+        width={300}
+        height={100}
+        src={coverImg}
+        className="rounded-[5px]"
+      />
       <div className="w-full flex items-start justify-start">
         {!isEmpty(category) && (
           <span className="px-4 py-2 pp-SB rounded-md bg-dark-100 border-solid border-[.5px] border-white-600 text-white-100 text-[12px] mt-3 ">
@@ -74,12 +76,19 @@ export default function ShowwcaseShowStyle({
       </div>
       <div className="w-full flex items-start justify-start">
         <div className="w-auto absolute top-0 right-3 flex flex-col items-end justify-end">
-          <button
-            className="mr-2 mt-3 flex flex-col items-center justify-center"
-            onClick={() => setOpenDW(!openDW)}
-          >
-            <IoMenuOutline className="text-white-200" size={20} />
-          </button>
+          {!showShowwcaseLogo ? (
+            <button
+              className="mr-2 mt-3 flex flex-col items-center justify-center"
+              onClick={() => setOpenDW(!openDW)}
+            >
+              <IoMenuOutline className="text-white-200" size={20} />
+            </button>
+          ) : (
+            <ImageTag
+              src="/images/logos/showwcase-2.jpeg"
+              className="w-[30px] rounded-[50%] mr-0 mt-1"
+            />
+          )}
           {openDW && (
             <div className="w-[150px] shadow-2xl rounded-md flex flex-col items-start justify-start bg-dark-100">
               <ul className="p-2 w-full">

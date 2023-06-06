@@ -3,7 +3,7 @@ import ImageTag from "../Image";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import { IoLink, IoMenuOutline, IoTrash, IoTriangle } from "react-icons/io5";
-import { useState } from "react";
+import { LegacyRef, useState } from "react";
 import { copyToClipboard, formatStringToMarkdown } from "../../util";
 import { toast } from "react-hot-toast";
 
@@ -26,6 +26,8 @@ interface ThreadStyleProp {
     url: string;
   };
   key?: number;
+  showShowwcaseLogo?: boolean;
+  widgetRef?: LegacyRef<HTMLDivElement>;
 }
 
 export default function ShowwcaseThreadStyle({
@@ -42,6 +44,8 @@ export default function ShowwcaseThreadStyle({
   threadImages,
   linkPreviewData,
   key,
+  showShowwcaseLogo,
+  widgetRef,
 }: ThreadStyleProp) {
   const [openDW, setOpenDW] = useState(false);
   const { finalContent: threadContent, availableImage: threadImage } =
@@ -58,7 +62,8 @@ export default function ShowwcaseThreadStyle({
       id="triangleUp"
       key={key}
       data-id={threadId}
-      className="w-full h-auto flex items-center justify-center flex-col relative bg-dark-300 p-3 rounded-md"
+      className="w-full showwcial-bookmark-widget h-auto flex items-center justify-center flex-col relative bg-dark-300 p-3 rounded-md"
+      ref={widgetRef}
     >
       {previewState && (
         <div className="absolute top-[-20px] w-full flex items-center justify-center">
@@ -90,12 +95,19 @@ export default function ShowwcaseThreadStyle({
           </div>
         </div>
         <div className="w-auto absolute top-0 right-3 flex flex-col items-end justify-end">
-          <button
-            className="mr-2 mt-3 flex flex-col items-center justify-center"
-            onClick={() => setOpenDW(!openDW)}
-          >
-            <IoMenuOutline className="text-white-200" size={20} />
-          </button>
+          {!showShowwcaseLogo ? (
+            <button
+              className="mr-2 mt-3 flex flex-col items-center justify-center"
+              onClick={() => setOpenDW(!openDW)}
+            >
+              <IoMenuOutline className="text-white-200" size={20} />
+            </button>
+          ) : (
+            <ImageTag
+              src="/images/logos/showwcase-2.jpeg"
+              className="w-[30px] rounded-[50%] mr-2 mt-3"
+            />
+          )}
           {openDW && (
             <div className="w-[150px] shadow-2xl rounded-md flex flex-col items-start justify-start bg-dark-100">
               <ul className="p-2 w-full">
@@ -133,35 +145,37 @@ export default function ShowwcaseThreadStyle({
           {threadImages?.length > 0 && threadImage?.length === 0 && (
             <ImageTag src={threadImages[0]} className="rounded-[5px]  mt-4" />
           )}
-          {threadImages?.length === 0 && threadImage?.length === 0 && (
-            <a href={linkPreviewData?.url} target="_blank" className="w-full">
-              <div className="w-full flex items-start justify-center mt-5 bg-dark-100 p-3 rounded-md">
-                <div className="w-full flex flex-col items-start justify-start">
-                  <p className="text-white-100 text-[14px]">
-                    {linkPreviewData?.title?.slice(0, 30) + "..."}
-                  </p>
-                  <p className="text-white-300 text-[12px] mt-3 ">
-                    {linkPreviewData?.description?.slice(0, 30) + "..."}
-                  </p>
-                  <p className="text-white-300 text-[12px] mt-3 ">
-                    {linkPreviewData?.url?.slice(0, 20) + "..."}
-                  </p>
+          {threadImages?.length === 0 &&
+            threadImage?.length === 0 &&
+            linkPreviewData?.url?.length > 0 && (
+              <a href={linkPreviewData?.url} target="_blank" className="w-full">
+                <div className="w-full flex items-start justify-center mt-5 bg-dark-100 p-3 rounded-md">
+                  <div className="w-full flex flex-col items-start justify-start">
+                    <p className="text-white-100 text-[14px]">
+                      {linkPreviewData?.title?.slice(0, 30) + "..."}
+                    </p>
+                    <p className="text-white-300 text-[12px] mt-3 ">
+                      {linkPreviewData?.description?.slice(0, 30) + "..."}
+                    </p>
+                    <p className="text-white-300 text-[12px] mt-3 ">
+                      {linkPreviewData?.url?.slice(0, 20) + "..."}
+                    </p>
+                  </div>
+                  <div className="w-full flex flex-col items-end justify-end">
+                    <div
+                      className="w-[160px] h-[100px]"
+                      style={{
+                        backgroundImage: `url("${
+                          linkPreviewData?.images ?? linkPreviewData?.images[0]
+                        }")`,
+                        backgroundSize: "100%",
+                        backgroundPosition: "center",
+                      }}
+                    ></div>
+                  </div>
                 </div>
-                <div className="w-full flex flex-col items-end justify-end">
-                  <div
-                    className="w-[160px] h-[100px]"
-                    style={{
-                      backgroundImage: `url("${
-                        linkPreviewData?.images ?? linkPreviewData?.images[0]
-                      }")`,
-                      backgroundSize: "100%",
-                      backgroundPosition: "center",
-                    }}
-                  ></div>
-                </div>
-              </div>
-            </a>
-          )}
+              </a>
+            )}
         </div>
       </div>
     </div>
