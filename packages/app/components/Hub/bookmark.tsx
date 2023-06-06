@@ -147,8 +147,7 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
     (async () => {
       setShowShowwcaseLogo(true);
       await sleep(1);
-      const wid = document.querySelector(".showwcial-bookmark-widget");
-      toPng(wid as any, { quality: 0.95 })
+      toPng(widgetRef.current, { quality: 0.95 })
         .then(function (dataUrl) {
           var link = document.createElement("a");
           link.download = `showwcase-${hubtype}-${genRandNum()}.png`;
