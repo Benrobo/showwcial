@@ -40,6 +40,7 @@ const checkInvalidToken = (
   if (response?.code === "--auth/invalid-token") {
     toast.error("Session Expired. Please log in again.");
     location.href = "/auth/login";
+    localStorage.removeItem("authToken");
     resetState();
     cancelRefreshing && cancelRefreshing();
   }

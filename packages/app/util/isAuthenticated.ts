@@ -14,7 +14,7 @@ function isAuthenticated(token: string) {
     const expirationTime = (decodedToken as any).exp * 1000; // convert to milliseconds
 
     if (Date.now() >= expirationTime) {
-      // clearLocalStorage();
+      clearLocalStorage();
       return false;
     }
 

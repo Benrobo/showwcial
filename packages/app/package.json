@@ -23,6 +23,7 @@
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
     "framer-motion": "^10.0.0",
+    "html-to-image": "^1.11.11",
     "ip": "^2.0.0",
     "joi": "^17.7.0",
     "jsonwebtoken": "^9.0.0",
