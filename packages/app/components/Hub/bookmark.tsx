@@ -17,6 +17,7 @@ import { genRandNum, isEmpty, sleep } from "../../util";
 import ShowwcaseShowStyle from "./showwcaseShowStyle";
 import { BiScreenshot } from "react-icons/bi";
 import { toPng } from "html-to-image";
+import html2canvas from "html2canvas";
 
 interface BookmarkProp {
   closeActiveThread: () => void;
@@ -142,27 +143,40 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
     bookmarkMutation.mutate(payload);
   }
 
+  const convertJsxToImage = async (node: HTMLDivElement) => {
+    setShowShowwcaseLogo(true);
+    await sleep(2);
+    const canvas = await html2canvas(node, {
+      allowTaint: false,
+      useCORS: true,
+    });
+    const dataUrl = canvas.toDataURL("image/png");
+    var link = document.createElement("a");
+    link.download = `showwcase-${hubtype}-${genRandNum()}.png`;
+    link.href = dataUrl;
+    link.click();
+    setShowShowwcaseLogo(false);
+  };
+
+  const convertJsxToImage2 = async (node: HTMLDivElement) => {
+    setShowShowwcaseLogo(true);
+    await sleep(2);
+    toPng(node, { quality: 0.95 }).then(function (dataUrl) {
+      var link = document.createElement("a");
+      link.download = `showwcase-${hubtype}-${genRandNum()}.png`;
+      link.href = dataUrl;
+      link.click();
+      setShowShowwcaseLogo(false);
+    });
+  };
+
   const takeScreenShot = useCallback(() => {
     if (widgetRef.current === null) return;
-    (async () => {
-      setShowShowwcaseLogo(true);
-      await sleep(1);
-      toPng(widgetRef.current, { quality: 0.95 })
-        .then(function (dataUrl) {
-          var link = document.createElement("a");
-          link.download = `showwcase-${hubtype}-${genRandNum()}.png`;
-          link.href = dataUrl;
-          link.click();
-          setShowShowwcaseLogo(false);
-          toast.success("Image saved successfully");
-          location.reload();
-        })
-        .catch((err) => {
-          toast.error("failed to take screenshot");
-          console.log(`error taking screenshot`);
-          console.error(err);
-        });
-    })();
+    toast.promise(convertJsxToImage2(widgetRef.current), {
+      success: "Image saved successfully.",
+      error: "Something went wrong",
+      loading: "Saving Image....",
+    });
   }, [widgetRef]);
 
   return (
@@ -219,7 +233,16 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
               linkPreviewData={
                 (hubInfo as any)?.linkPreviewMeta === "null"
                   ? { url: "", title: "", description: "" }
-                  : (hubInfo as any).linkPreviewMeta
+                  : isEmpty((hubInfo as any)?.linkPreviewMeta?.project)
+                  ? (hubInfo as any).linkPreviewMeta
+                  : {
+                      url: (hubInfo as any).linkPreviewMeta.project?._self,
+                      title: (hubInfo as any).linkPreviewMeta.project?.title,
+                      description: (hubInfo as any).linkPreviewMeta.project
+                        ?.projectSummary,
+                      images: (hubInfo as any).linkPreviewMeta.project
+                        ?.coverImageUrl,
+                    }
               }
               showShowwcaseLogo={showShowwcaseLogo}
               widgetRef={widgetRef}
@@ -233,9 +256,7 @@ export default function Bookmark({ closeActiveThread }: BookmarkProp) {
               showId={(hubInfo as any)?.id}
               showLink={hubUrl}
               userImage={(hubInfo as any)?.user?.profilePictureUrl}
-              coverImg={
-                (hubInfo as any)?.coverImage ?? (hubInfo as any)?.coverImageUrl
-              }
+              coverImg={(hubInfo as any)?.coverImageUrl}
               key={1}
               readingStats={(hubInfo as any)?.readingStats?.text ?? ""}
               showShowwcaseLogo={showShowwcaseLogo}
