@@ -74,7 +74,7 @@ export function replaceTagsWithNewLine(text: string): string {
 
 export function formatStringToMarkdown(content) {
   // const linkRegex = /(https?:\/\/[^\s]+)/g;
-  const maxShowText = 264;
+  const maxShowText = 400;
   const imageRegex =
     /(https?:\/\/[^\s]+\.(?:png|jpg|jpeg|gif|webp)(\?[^\s]+)?)/gi;
 
