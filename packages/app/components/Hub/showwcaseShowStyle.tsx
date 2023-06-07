@@ -60,13 +60,15 @@ export default function ShowwcaseShowStyle({
           </div>
         )}
       </div>
-      <Image
-        alt="show image"
-        width={300}
-        height={100}
-        src={coverImg}
-        className="rounded-[5px]"
-      />
+      <div className="w-full max-w-[300px]">
+        <Image
+          alt="show image"
+          width={300}
+          height={150}
+          src={coverImg}
+          className="rounded-[5px]"
+        />
+      </div>
       <div className="w-full flex items-start justify-start">
         {!isEmpty(category) && (
           <span className="px-4 py-2 pp-SB rounded-md bg-dark-100 border-solid border-[.5px] border-white-600 text-white-100 text-[12px] mt-3 ">
