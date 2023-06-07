@@ -10,6 +10,7 @@ import { useRouter } from "next/router";
 import { HandleBookmarkResponse } from "../../util/response";
 import { LoaderModal, Spinner } from "../Loader";
 import ShowwcaseShowStyle from "./showwcaseShowStyle";
+import { isEmpty } from "../../util";
 
 interface ViewBookmarkThreadProp {
   closeModal: () => void;
@@ -125,7 +126,17 @@ function ViewBookmarks({ closeModal }: ViewBookmarkThreadProp) {
                       linkPreviewData={
                         data?.linkPreviewMeta === "null"
                           ? null
-                          : data?.linkPreviewMeta
+                          : isEmpty((data as any)?.linkPreviewMeta?.project)
+                          ? (data as any).linkPreviewMeta
+                          : {
+                              url: (data as any).linkPreviewMeta.project?._self,
+                              title: (data as any).linkPreviewMeta.project
+                                ?.title,
+                              description: (data as any).linkPreviewMeta.project
+                                ?.projectSummary,
+                              images: (data as any).linkPreviewMeta.project
+                                ?.coverImageUrl,
+                            }
                       }
                       key={i}
                     />

@@ -57,6 +57,7 @@ export default function ShowwcaseThreadStyle({
     ? userImage
     : `https://profile-assets.showwcase.com/${userImage}`;
 
+  console.log({ linkPreviewData });
   return (
     <div
       id="triangleUp"
@@ -134,16 +135,25 @@ export default function ShowwcaseThreadStyle({
       <div className="w-full h-auto flex flex-col flex-wrap whitespace-nowrap items-start justify-start">
         <p className="text-white-200 pp-SB text-[14px] mt-2 ">{title ?? ""}</p>
         <div className="text-white-200 pp-RG whitespace-pre-wrap flex-wrap text-[14px] mt-5">
-          <ReactMarkdown
-            children={threadContent}
-            remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeRaw]}
-          />
+          <div className=" break-words whitespace-pre-wrap overflow-hidden max-w-[325px]  ">
+            <ReactMarkdown
+              children={threadContent}
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[rehypeRaw]}
+            />
+          </div>
           {threadImage?.length > 0 && (
-            <ImageTag src={threadImage} className="rounded-[5px] mt-4" />
+            <ImageTag
+              src={threadImage}
+              width={200}
+              className="rounded-[5px] mt-4"
+            />
           )}
           {threadImages?.length > 0 && threadImage?.length === 0 && (
-            <ImageTag src={threadImages[0]} className="rounded-[5px]  mt-4" />
+            <ImageTag
+              src={threadImages[0]}
+              className="rounded-[5px] w-full max-w-[340px]  mt-4"
+            />
           )}
           {threadImages?.length === 0 &&
             threadImage?.length === 0 &&
@@ -165,10 +175,8 @@ export default function ShowwcaseThreadStyle({
                     <div
                       className="w-[160px] h-[100px]"
                       style={{
-                        backgroundImage: `url("${
-                          linkPreviewData?.images ?? linkPreviewData?.images[0]
-                        }")`,
-                        backgroundSize: "100%",
+                        backgroundImage: `url("${linkPreviewData?.images}")`,
+                        backgroundSize: "cover",
                         backgroundPosition: "center",
                       }}
                     ></div>
