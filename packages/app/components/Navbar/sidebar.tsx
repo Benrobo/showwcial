@@ -16,6 +16,7 @@ import { RxCaretDown } from "react-icons/rx";
 import { TbWorld } from "react-icons/tb";
 import ImageTag from "../Image";
 import { CgWebsite } from "react-icons/cg";
+import { TiPointOfInterestOutline } from "react-icons/ti";
 
 interface SidebarProps {
   active?: string;
@@ -40,6 +41,9 @@ const returnActiveStyle = (active: string, name: string) => {
     case "pageBuilder-pageBuilder":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
+    case "friends-friends":
+      style = `text-white-100 bg-white-600 pp-EB`;
+      break;
     case "domain-domain":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
@@ -59,8 +63,8 @@ const returnActiveStyle = (active: string, name: string) => {
 
 function SideBar({ active }: SidebarProps) {
   return (
-    <div className="w-[18%] h-[100vh] py-[3em] border-r-[1px] border-r-solid border-r-white-600  overflow-y-scroll hideScrollBar">
-      <ul className="w-full flex flex-col items-start justify-start px-4 gap-6 mt-7">
+    <div className="w-[18%] h-[100vh] py-[2em] border-r-[1px] border-r-solid border-r-white-600  overflow-y-scroll hideScrollBar">
+      <ul className="w-full flex flex-col items-start justify-start px-2 gap-6 mt-7">
         <Link href="/dashboard" className="w-full">
           <li
             className={`${returnActiveStyle(
@@ -109,6 +113,16 @@ function SideBar({ active }: SidebarProps) {
             )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
           >
             <CgWebsite className="ml-2 text-2xl " /> Page Builder
+          </li>
+        </Link>
+        <Link href="/friends" className="w-full">
+          <li
+            className={`${returnActiveStyle(
+              active,
+              "friends"
+            )} hover:bg-white-600 py-2 rounded-[10px] cursor-pointer hover:text-white-100 hover:pp-SB text-[14px] transition-all gap-3 flex items-center justify-start`}
+          >
+            <TiPointOfInterestOutline className="ml-2 text-2xl " /> Friendcord
           </li>
         </Link>
 
