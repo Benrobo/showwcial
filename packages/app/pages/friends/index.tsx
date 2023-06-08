@@ -7,13 +7,33 @@ import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { motion, PanInfo } from "framer-motion";
 import { fakeUser } from "./data";
+import { tailwindColors } from "./data";
+import { Spinner } from "../../components/Loader";
+import { useQuery } from "react-query";
+
+function generateRandomColor(colors) {
+  const colorKeys = Object.keys(colors);
+  const randomColorKey =
+    colorKeys[Math.floor(Math.random() * colorKeys.length)];
+  const colorShades = colors[randomColorKey];
+
+  const shadeKeys = Object.keys(colorShades);
+  const randomShadeKey =
+    shadeKeys[Math.floor(Math.random() * shadeKeys.length)];
+  const randomColor = colorShades[randomShadeKey];
+
+  return randomColor;
+}
 
 export default function Friendcord() {
-  const [cards, setCards] = useState(fakeUser);
   const [suggestedFollowers, setSuggestedFollowers] = useState(fakeUser);
+  const [cards, setCards] = useState(fakeUser);
   const [currentUserData, setCurrentUserData] = useState([]);
   const [history, setHistory] = useState([]);
-  const [swipeX, setSwipeX] = useState(0);
+  const fetchSuggestedFollQuery = useQuery({
+    queryFn: async () => {},
+    queryKey: ["followers"],
+  });
 
   const activeIndex = suggestedFollowers.length - 1;
 
@@ -31,7 +51,7 @@ export default function Friendcord() {
     });
   };
 
-  console.log(history);
+  console.log(generateRandomColor(tailwindColors.colors));
 
   return (
     <MainDashboardLayout activeTab="friends">
@@ -59,38 +79,21 @@ export default function Friendcord() {
                     profilePic: d.profilePic,
                   }}
                   removeCard={removeCard}
-                  swipeX={swipeX}
                 />
               ))}
             </AnimatePresence>
             {cards.length === 0 && (
               <div className="w-full h-[400px] flex flex-col justify-center items-center">
-                <p className="text-white-100 pp-SB text-[15px] ">
+                {/* <p className="text-white-100 pp-SB text-[15px] ">
                   That all we got for now
                 </p>
                 <p className="text-white-300 pp-RG text-[13px]">
                   Come back later.
-                </p>
-              </div>
-            )}
-            {cards.length > 0 && (
-              <div className="absolute bottom-[-27em] w-full flex items-center justify-center gap-8">
-                <IoClose
-                  className="rounded-[50%] cursor-pointer transition-all scale-[.95] hover:scale-[.99] bg-white-400 p-3 text-white-100 "
-                  size={45}
-                  onClick={(e) => {
-                    removeCard(cards[cards.length - 1], "unfollow");
-                    setSwipeX(-1000);
-                  }}
-                />
-                <AiFillHeart
-                  className="rounded-[50%] cursor-pointer transition-all scale-[.95] hover:scale-[.99] bg-red-305 p-3 text-white-100 "
-                  size={45}
-                  onClick={(e) => {
-                    removeCard(cards[cards.length - 1], "follow");
-                    setSwipeX(1000);
-                  }}
-                />
+                </p> */}
+                <div className="w-full max-w-[150px] bg-red-305 rounded-[30px] p-2 flex items-center justify-center gap-5 ">
+                  <p className="text-white-100 text-[14px] pp-SB">Matching</p>
+                  <Spinner color="#fff" />
+                </div>
               </div>
             )}
           </div>
@@ -111,16 +114,12 @@ interface SwipeCardProp {
   active: boolean;
   key: any;
   removeCard: (data: any, action: string) => void;
-  swipeX?: number;
+  colors?: string;
 }
 
-function SwipeCard({ data, removeCard, active, key, swipeX }: SwipeCardProp) {
-  const [leaveX, setLeaveX] = useState<null | number>(0);
-  const [leaveY, setLeaveY] = useState<null | number>(0);
-
-  useEffect(() => {
-    setLeaveX(swipeX);
-  }, [Math.abs(swipeX)]);
+function SwipeCard({ data, removeCard, active, colors, key }: SwipeCardProp) {
+  const [leaveX, setLeaveX] = useState<number>(0);
+  const [leaveY, setLeaveY] = useState<number>(0);
 
   const onDragEnd = (_e: any, info) => {
     // if (info.offset.y < -100) {
@@ -141,59 +140,86 @@ function SwipeCard({ data, removeCard, active, key, swipeX }: SwipeCardProp) {
   const classNames = `w-full h-[450px] absolute max-w-[450px] rounded-[10px] flex flex-col items-start justify-start overflow-hidden bg-dark-200 cursor-grab `;
 
   return (
-    <motion.div
-      key={key}
-      drag={true}
-      dragConstraints={{ left: -20, right: 0, top: 0, bottom: 0 }}
-      onDragEnd={onDragEnd}
-      initial={{
-        scale: 1,
-      }}
-      animate={{
-        scale: 1.05,
-        // rotate: `${data.username.length % 2 === 0 ? 6 : -6}deg`,
-      }}
-      exit={{
-        x: leaveX,
-        y: leaveY,
-        opacity: 0,
-        scale: 0.5,
-        transition: { duration: 1 },
-      }}
-      className={classNames}
-      data-testid="active-card"
-    >
-      <div className={`${classNames}`}>
-        <div className="w-full h-[100px] max-h-[90px] bg-red-305 flex flex-col items-center justify-center">
-          {/* Header */}
-        </div>
-        <div className="w-full h-full px-3 flex flex-col items-start justify-start">
-          <div className="w-full flex flex-col items-start justify-start">
-            <ImageTag
-              src={data.profilePic ?? "/images/ack/me.jpeg"}
-              className="w-[80px] h-[80px] rounded-[50%] border-solid border-[5px] border-dark-200 mt-[-2em] bg-dark-200 "
-            />
-            <div className="w-full mt-5 flex flex-col items-start justify-start">
-              <p className="text-white-100 text-[15px] pp-SB">
-                {data.fullname ?? "Benaiah Alumona"}
-              </p>
-              <p className="text-white-300 text-[13px] pp-RG">
-                {data.username.length > 0 ? `@${data.username}` : "@benrobo"}
-              </p>
+    <>
+      <motion.div
+        key={key}
+        drag={true}
+        dragConstraints={{ left: -20, right: 0, top: 0, bottom: 0 }}
+        onDragEnd={onDragEnd}
+        initial={{
+          scale: 1,
+        }}
+        animate={{
+          scale: 1.05,
+          rotate: `${data.username.length % 2 === 0 ? 6 : -6}deg`,
+        }}
+        exit={{
+          x: leaveX,
+          y: leaveY,
+          opacity: 0,
+          scale: 0.5,
+          transition: { duration: 1 },
+        }}
+        className={classNames}
+        data-testid="active-card"
+      >
+        <div className={`${classNames}`}>
+          <div
+            className={`w-full h-[100px] max-h-[90px] flex flex-col items-center justify-center`}
+            style={{
+              backgroundColor: generateRandomColor(tailwindColors.colors),
+            }}
+          >
+            {/* Header */}
+          </div>
+          <div className="w-full h-full px-3 flex flex-col items-start justify-start">
+            <div className="w-full flex flex-col items-start justify-start">
+              <ImageTag
+                src={data.profilePic ?? "/images/ack/me.jpeg"}
+                className="w-[80px] h-[80px] rounded-[50%] border-solid border-[5px] border-dark-200 mt-[-2em] bg-dark-200 "
+              />
+              <div className="w-full mt-5 flex flex-col items-start justify-start">
+                <p className="text-white-100 text-[15px] pp-SB">
+                  {data.fullname ?? "Benaiah Alumona"}
+                </p>
+                <p className="text-white-300 text-[13px] pp-RG">
+                  {data.username.length > 0 ? `@${data.username}` : "@benrobo"}
+                </p>
+              </div>
             </div>
+            <p className="text-white-300 mt-6 pp-SB text-[12px] pp-RG">
+              INTERESTS
+            </p>
+            <div className="w-full h-auto max-h-[120px] overflow-auto hideScrollBar2 mt-5 mb-8 flex flex-wrap items-start justify-start gap-2">
+              {data.tags.length > 0
+                ? data.tags.map((d, i) => (
+                    <Tags tag={d} key={i} active={false} />
+                  ))
+                : null}
+            </div>
+            <div className="w-full h-[100px] "></div>
           </div>
-          <p className="text-white-300 mt-6 pp-SB text-[12px] pp-RG">
-            INTERESTS
-          </p>
-          <div className="w-full h-auto max-h-[120px] overflow-auto hideScrollBar2 mt-5 mb-8 flex flex-wrap items-start justify-start gap-2">
-            {data.tags.length > 0
-              ? data.tags.map((d, i) => <Tags tag={d} key={i} active={false} />)
-              : null}
-          </div>
-          <div className="w-full h-[100px] "></div>
         </div>
+      </motion.div>
+      <div className="absolute bottom-[-27em] w-full flex items-center justify-center gap-8">
+        <IoClose
+          className="rounded-[50%] cursor-pointer transition-all scale-[.95] hover:scale-[.99] bg-white-400 p-3 text-white-100 "
+          size={45}
+          onClick={(e) => {
+            removeCard(data, "unfollow");
+            setLeaveX(-1000);
+          }}
+        />
+        <AiFillHeart
+          className="rounded-[50%] cursor-pointer transition-all scale-[.95] hover:scale-[.99] bg-red-305 p-3 text-white-100 "
+          size={45}
+          onClick={(e) => {
+            removeCard(data, "follow");
+            setLeaveX(1000);
+          }}
+        />
       </div>
-    </motion.div>
+    </>
   );
 }
 
