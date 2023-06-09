@@ -252,3 +252,15 @@ export const getAllSiteViews = async () => {
     return e.response?.data ?? { message: e.message, code: e?.code };
   }
 };
+
+// Friendcord
+export const fetchSuggestedFollowers = async () => {
+  try {
+    const res = await $http.get(
+      `/friends/suggestFollowers?id=${genRandNum(20)}`
+    );
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
