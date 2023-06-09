@@ -10,6 +10,8 @@ import { fakeUser } from "./data";
 import { tailwindColors } from "./data";
 import { Spinner } from "../../components/Loader";
 import { useQuery } from "react-query";
+import { fetchSuggestedFollowers } from "../../http";
+import { HandleFriendcordResponse } from "../../util/response";
 
 function generateRandomColor(colors) {
   const colorKeys = Object.keys(colors);
@@ -26,12 +28,12 @@ function generateRandomColor(colors) {
 }
 
 export default function Friendcord() {
-  const [suggestedFollowers, setSuggestedFollowers] = useState(fakeUser);
-  const [cards, setCards] = useState(fakeUser);
+  const [suggestedFollowers, setSuggestedFollowers] = useState([]);
+  const [cards, setCards] = useState([]);
   const [currentUserData, setCurrentUserData] = useState([]);
   const [history, setHistory] = useState([]);
   const fetchSuggestedFollQuery = useQuery({
-    queryFn: async () => {},
+    queryFn: async () => await fetchSuggestedFollowers(),
     queryKey: ["followers"],
   });
 
@@ -41,17 +43,30 @@ export default function Friendcord() {
     setHistory((current) => [...current, { ...oldCard, action }]);
     setCards((current) =>
       current.filter((card) => {
-        return card.userId !== oldCard.userId;
+        return card.id !== oldCard.userId;
       })
     );
     // setResult((current) => ({ ...current, [swipe]: current[swipe] + 1 }));
-    console.log({
-      oldCard,
-      action,
-    });
   };
 
-  console.log(generateRandomColor(tailwindColors.colors));
+  useEffect(() => {
+    if (
+      typeof fetchSuggestedFollQuery.data !== "undefined" ||
+      fetchSuggestedFollQuery.error !== null
+    ) {
+      const { data } = fetchSuggestedFollQuery;
+      const response = data;
+      HandleFriendcordResponse(
+        response,
+        () => {},
+        (data) => {
+          console.log(data);
+          setSuggestedFollowers(data);
+          setCards(data);
+        }
+      );
+    }
+  }, [fetchSuggestedFollQuery.data]);
 
   return (
     <MainDashboardLayout activeTab="friends">
@@ -66,23 +81,29 @@ export default function Friendcord() {
         </div>
         <div className="relative w-full h-full flex flex-col items-center justify-center">
           <div className="relative w-full h-full max-w-[350px] mt-[5em] ">
+            {fetchSuggestedFollQuery.isLoading && (
+              <div className="w-full h-full flex flex-col items-center justify-center">
+                <Spinner color="#fff" />
+              </div>
+            )}
             <AnimatePresence>
-              {cards.map((d, i) => (
-                <SwipeCard
-                  key={d.username}
-                  active={i === activeIndex}
-                  data={{
-                    username: d.username,
-                    fullname: d.fullname,
-                    userId: d.userId,
-                    tags: d.tags,
-                    profilePic: d.profilePic,
-                  }}
-                  removeCard={removeCard}
-                />
-              ))}
+              {cards.length > 0 &&
+                cards.map((d, i) => (
+                  <SwipeCard
+                    key={d.id}
+                    active={i === activeIndex}
+                    data={{
+                      username: d.username,
+                      fullname: d.fullname,
+                      userId: d.id,
+                      tags: d.tags,
+                      profilePic: d.image,
+                    }}
+                    removeCard={removeCard}
+                  />
+                ))}
             </AnimatePresence>
-            {cards.length === 0 && (
+            {cards.length === 0 && !fetchSuggestedFollQuery.isLoading && (
               <div className="w-full h-[400px] flex flex-col justify-center items-center">
                 {/* <p className="text-white-100 pp-SB text-[15px] ">
                   That all we got for now
@@ -139,6 +160,8 @@ function SwipeCard({ data, removeCard, active, colors, key }: SwipeCardProp) {
 
   const classNames = `w-full h-[450px] absolute max-w-[450px] rounded-[10px] flex flex-col items-start justify-start overflow-hidden bg-dark-200 cursor-grab `;
 
+  // return null;
+
   return (
     <>
       <motion.div
@@ -165,7 +188,7 @@ function SwipeCard({ data, removeCard, active, colors, key }: SwipeCardProp) {
       >
         <div className={`${classNames}`}>
           <div
-            className={`w-full h-[100px] max-h-[90px] flex flex-col items-center justify-center`}
+            className={`w-full h-[120px] max-h-[190px] flex flex-col items-center justify-center`}
             style={{
               backgroundColor: generateRandomColor(tailwindColors.colors),
             }}
@@ -175,8 +198,8 @@ function SwipeCard({ data, removeCard, active, colors, key }: SwipeCardProp) {
           <div className="w-full h-full px-3 flex flex-col items-start justify-start">
             <div className="w-full flex flex-col items-start justify-start">
               <ImageTag
-                src={data.profilePic ?? "/images/ack/me.jpeg"}
-                className="w-[80px] h-[80px] rounded-[50%] border-solid border-[5px] border-dark-200 mt-[-2em] bg-dark-200 "
+                src={data?.profilePic ?? "/images/ack/me.jpeg"}
+                className="w-[80px] h-[80px] max-w-[80px] max-h-[80px] rounded-[50%] border-solid border-[5px] border-dark-200 mt-[-2em] bg-dark-200 "
               />
               <div className="w-full mt-5 flex flex-col items-start justify-start">
                 <p className="text-white-100 text-[15px] pp-SB">
@@ -193,7 +216,7 @@ function SwipeCard({ data, removeCard, active, colors, key }: SwipeCardProp) {
             <div className="w-full h-auto max-h-[120px] overflow-auto hideScrollBar2 mt-5 mb-8 flex flex-wrap items-start justify-start gap-2">
               {data.tags.length > 0
                 ? data.tags.map((d, i) => (
-                    <Tags tag={d} key={i} active={false} />
+                    <Tags tag={(d as any)?.name} key={i} active={false} />
                   ))
                 : null}
             </div>
