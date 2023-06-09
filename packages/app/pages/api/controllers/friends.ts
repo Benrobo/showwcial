@@ -33,12 +33,21 @@ export default class FriendController extends BaseController {
         )
         .then((res) => res.data);
 
-      const data = Promise.all([suggFollowers, userFollowers]).then(
-        (result) => {
-          const [suggFollowers, userFollowers] = result;
-          return { data: { suggFollowers, userFollowers }, success: true };
-        }
-      );
+      const currentUserInfo = await axios
+        .get(`https://cache.showwcase.com/user/${userData.username}`)
+        .then((res) => res.data);
+
+      const data = Promise.all([
+        suggFollowers,
+        userFollowers,
+        currentUserInfo,
+      ]).then((result) => {
+        const [suggFollowers, userFollowers, currentUserInfo] = result;
+        return {
+          data: { suggFollowers, userFollowers, currentUserInfo },
+          success: true,
+        };
+      });
       return data;
     } catch (e: any) {
       console.log(e);
@@ -73,6 +82,7 @@ export default class FriendController extends BaseController {
     const data = followers.data;
     const suggFollow = data.suggFollowers;
     const userFollowers = data.userFollowers;
+    const currentUserTags = data.currentUserInfo?.tags;
 
     const filterUser = suggFollow
       .map((user, idx, arr) => {
@@ -107,7 +117,7 @@ export default class FriendController extends BaseController {
       "--suggestedFollowers/success",
       "suggested followers fetched.",
       200,
-      filterUser
+      { suggestedFollowers: filterUser, currentUserTags }
     );
   }
 }

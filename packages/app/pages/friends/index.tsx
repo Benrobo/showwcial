@@ -32,12 +32,15 @@ export default function Friendcord() {
   const [cards, setCards] = useState([]);
   const [currentUserData, setCurrentUserData] = useState([]);
   const [history, setHistory] = useState([]);
+  const [currentUserTags, setCurrentUserTags] = useState([]);
   const fetchSuggestedFollQuery = useQuery({
     queryFn: async () => await fetchSuggestedFollowers(),
     queryKey: ["followers"],
   });
 
   const activeIndex = suggestedFollowers.length - 1;
+
+  const matchedFriends = history.filter((u) => u?.action === "follow");
 
   const removeCard = (oldCard, action) => {
     setHistory((current) => [...current, { ...oldCard, action }]);
@@ -61,8 +64,9 @@ export default function Friendcord() {
         () => {},
         (data) => {
           console.log(data);
-          setSuggestedFollowers(data);
-          setCards(data);
+          setSuggestedFollowers(data?.suggestedFollowers);
+          setCards(data?.suggestedFollowers);
+          setCurrentUserTags(data?.currentUserTags);
         }
       );
     }
@@ -100,21 +104,36 @@ export default function Friendcord() {
                       profilePic: d.image,
                     }}
                     removeCard={removeCard}
+                    currUserTags={currentUserTags}
                   />
                 ))}
             </AnimatePresence>
             {cards.length === 0 && !fetchSuggestedFollQuery.isLoading && (
               <div className="w-full h-[400px] flex flex-col justify-center items-center">
-                {/* <p className="text-white-100 pp-SB text-[15px] ">
+                <p className="text-white-100 pp-SB text-[15px] ">
                   That all we got for now
                 </p>
                 <p className="text-white-300 pp-RG text-[13px]">
-                  Come back later.
-                </p> */}
-                <div className="w-full max-w-[150px] bg-red-305 rounded-[30px] p-2 flex items-center justify-center gap-5 ">
-                  <p className="text-white-100 text-[14px] pp-SB">Matching</p>
-                  <Spinner color="#fff" />
+                  Mean while, Here are the data.
+                </p>
+                <br />
+                <div className="w-full flex items-center justify-center">
+                  <div className="bg-red-305 rounded-[50%] p-2 flex items-center justify-center mr-2 ">
+                    <AiFillHeart size={20} color="#fff" />
+                  </div>
+                  <p className="text-white-100 text-[14px] pp-EB">
+                    {matchedFriends.length > 0
+                      ? matchedFriends.length + " Friends"
+                      : `0 Friends 😔`}
+                  </p>
                 </div>
+                <br />
+                {matchedFriends.length > 0 && (
+                  <div className="w-full max-w-[150px] bg-blue-300 rounded-[30px] p-2 flex items-center justify-center gap-5 ">
+                    <p className="text-white-100 text-[14px] pp-SB">Matching</p>
+                    <Spinner color="#fff" />
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -136,9 +155,16 @@ interface SwipeCardProp {
   key: any;
   removeCard: (data: any, action: string) => void;
   colors?: string;
+  currUserTags: any[];
 }
 
-function SwipeCard({ data, removeCard, active, colors, key }: SwipeCardProp) {
+function SwipeCard({
+  data,
+  removeCard,
+  active,
+  currUserTags,
+  key,
+}: SwipeCardProp) {
   const [leaveX, setLeaveX] = useState<number>(0);
   const [leaveY, setLeaveY] = useState<number>(0);
 
@@ -216,7 +242,11 @@ function SwipeCard({ data, removeCard, active, colors, key }: SwipeCardProp) {
             <div className="w-full h-auto max-h-[120px] overflow-auto hideScrollBar2 mt-5 mb-8 flex flex-wrap items-start justify-start gap-2">
               {data.tags.length > 0
                 ? data.tags.map((d, i) => (
-                    <Tags tag={(d as any)?.name} key={i} active={false} />
+                    <Tags
+                      tag={(d as any)?.name}
+                      key={i}
+                      active={currUserTags[i].name === (d as any)?.name}
+                    />
                   ))
                 : null}
             </div>
