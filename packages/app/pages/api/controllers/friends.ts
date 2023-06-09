@@ -74,23 +74,28 @@ export default class FriendController extends BaseController {
     const suggFollow = data.suggFollowers;
     const userFollowers = data.userFollowers;
 
-    const filterUser = suggFollow.map((user, idx, arr) => {
-      if (user.id !== userFollowers[idx].id) {
-        return {
-          id: user.id,
-          username: user.username,
-          fullname: user.displayName,
-          image: user.profilePictureKey,
-          followers: user.totalFollowers,
-          tags: user.tags,
-        };
-      }
-    });
+    const filterUser = suggFollow
+      .map((user, idx, arr) => {
+        if (user.id !== userFollowers[idx].id) {
+          const userPic = user.profilePictureKey;
+          return {
+            id: user.id,
+            username: user.username,
+            fullname: user.displayName,
+            image: userPic?.startsWith("https")
+              ? userPic
+              : `https://profile-assets.showwcase.com/${userPic}`,
+            followers: user.totalFollowers,
+            tags: user.tags.slice(0, 5),
+          };
+        }
+      })
+      .filter((user) => user.tags.length > 1);
 
     if (filterUser.length === 0) {
       this.error(
         res,
-        "----suggestedFollowers/something-went-wrong",
+        "--suggestedFollowers/something-went-wrong",
         "No users for now",
         404
       );
