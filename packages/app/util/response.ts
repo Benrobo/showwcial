@@ -543,3 +543,29 @@ export function HandleDashboardResponse(
   checkServerError(response, resetState);
   checkInvalidToken(response, resetState);
 }
+
+// Friendcord
+export function HandleFriendcordResponse(
+  response: any,
+  resetState: () => void,
+  returnData: (data) => any,
+  successfull?: () => void | any
+) {
+  if (["--suggestedFollowers/something-went-wrong"].includes(response?.code)) {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  if (response?.code === "--suggestedFollowers/success") {
+    resetState();
+    successfull && successfull();
+    const data = response?.data;
+    returnData(data);
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
