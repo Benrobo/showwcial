@@ -57,7 +57,6 @@ export default function ShowwcaseThreadStyle({
     ? userImage
     : `https://profile-assets.showwcase.com/${userImage}`;
 
-  console.log({ linkPreviewData });
   return (
     <div
       id="triangleUp"
