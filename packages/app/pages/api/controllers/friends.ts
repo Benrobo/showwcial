@@ -2,6 +2,7 @@ import BaseController from "./base";
 import prisma from "../config/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
+import { isEmpty } from "../../../util";
 
 export default class FriendController extends BaseController {
   constructor() {
@@ -60,6 +61,38 @@ export default class FriendController extends BaseController {
     }
   }
 
+  private async followShowwcaseUser(userId: string, showwcaseUid: any) {
+    let response = { success: false };
+    try {
+      const userToken = await prisma.settings.findFirst({ where: { userId } });
+      const resp = await axios
+        .post(
+          `https://cache.showwcase.com/network/followers/follow`,
+          {
+            userId: showwcaseUid,
+          },
+          {
+            headers: {
+              "X-API-KEY": userToken.showwcaseToken,
+            },
+          }
+        )
+        .then((res) => res.data);
+      const data = resp.success;
+      response["success"] = data;
+      return response;
+    } catch (e: any) {
+      console.log(`Error occured: ${e.message}`);
+      // console.log(e);
+      response["data"] = e.response?.data ?? {
+        message: e.message,
+        code: e?.code,
+      };
+      response["success"] = false;
+      return response;
+    }
+  }
+
   public async getSuggestedFollowers(
     req: NextApiRequest,
     res: NextApiResponse
@@ -96,7 +129,7 @@ export default class FriendController extends BaseController {
               ? userPic
               : `https://profile-assets.showwcase.com/${userPic}`,
             followers: user.totalFollowers,
-            tags: user.tags.slice(0, 5),
+            tags: user.tags,
           };
         }
       })
@@ -119,5 +152,57 @@ export default class FriendController extends BaseController {
       200,
       { suggestedFollowers: filterUser, currentUserTags }
     );
+  }
+
+  public async bulkFollowUser(req: NextApiRequest, res: NextApiResponse) {
+    const reqUser = req["user"];
+    const userId = reqUser["id"];
+    const payload = req.body.usersIds as string[];
+
+    if (isEmpty(payload)) {
+      this.error(res, "--userMatching/failed", "User id is missing.", 404);
+      return;
+    }
+
+    if (payload.length === 0) {
+      this.error(res, "--userMatching/failed", "expected valid users.", 404);
+      return;
+    }
+
+    let userIdx = 0;
+    let idx = payload.length;
+    let counter = 0;
+    let errorCount = [];
+
+    while (idx !== 0) {
+      const id = payload[userIdx];
+      const isFollowed = await this.followShowwcaseUser(userId, id);
+      console.log(isFollowed);
+      if (!isFollowed.success) {
+        counter++;
+        errorCount.push({ [id]: counter });
+      }
+      idx--;
+      userIdx += 1;
+    }
+
+    if (errorCount.length > 2) {
+      this.error(
+        res,
+        "--userMatching/match-error",
+        `Error matching ${errorCount.length} users`,
+        400,
+        {
+          matched: payload.length - errorCount.length,
+          unMatched: errorCount.length,
+        }
+      );
+      return;
+    }
+
+    this.success(res, "--userMatching/success", "Successfully matched", 200, {
+      matched: payload.length - errorCount.length,
+      unMatched: errorCount.length,
+    });
   }
 }
