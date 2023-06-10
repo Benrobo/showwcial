@@ -596,6 +596,7 @@ export function HandleMeetResponse(
     ["--meeting/notfound", "--meeting/field-empty"].includes(response?.code)
   ) {
     toast.error(response?.message);
+    returnData({ code: "MEETING_NOTFOUND" });
     resetState();
     return;
   }
@@ -618,7 +619,6 @@ export function HandleMeetResponse(
 
   // meet by slug
   if (response?.code === "--meeting/fetched-successfully") {
-    toast.success(response?.message);
     resetState();
     returnData(response?.data);
     return;
