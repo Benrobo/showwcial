@@ -551,13 +551,28 @@ export function HandleFriendcordResponse(
   returnData: (data) => any,
   successfull?: () => void | any
 ) {
-  if (["--suggestedFollowers/something-went-wrong"].includes(response?.code)) {
+  if (
+    [
+      "--suggestedFollowers/something-went-wrong",
+      "--userMatching/failed",
+      "--userMatching/match-error",
+    ].includes(response?.code)
+  ) {
     toast.error(response?.message);
     resetState();
     return;
   }
 
   if (response?.code === "--suggestedFollowers/success") {
+    resetState();
+    successfull && successfull();
+    const data = response?.data;
+    returnData(data);
+    return;
+  }
+
+  if (response?.code === "--userMatching/success") {
+    toast.success(response?.message);
     resetState();
     successfull && successfull();
     const data = response?.data;
