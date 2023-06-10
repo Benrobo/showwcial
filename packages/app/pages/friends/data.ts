@@ -146,3 +146,5 @@ export const tailwindColors = {
     },
   },
 };
+
+export default () => {};
