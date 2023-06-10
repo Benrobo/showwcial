@@ -9,9 +9,10 @@ import { motion, PanInfo } from "framer-motion";
 import { fakeUser } from "./data";
 import { tailwindColors } from "./data";
 import { Spinner } from "../../components/Loader";
-import { useQuery } from "react-query";
-import { fetchSuggestedFollowers } from "../../http";
+import { useMutation, useQuery } from "react-query";
+import { bulkFollowUser, fetchSuggestedFollowers } from "../../http";
 import { HandleFriendcordResponse } from "../../util/response";
+import Gap from "../../components/Gap";
 
 function generateRandomColor(colors) {
   const colorKeys = Object.keys(colors);
@@ -37,6 +38,9 @@ export default function Friendcord() {
     queryFn: async () => await fetchSuggestedFollowers(),
     queryKey: ["followers"],
   });
+  const matchUsersMutation = useMutation(
+    async (data: any) => await bulkFollowUser(data)
+  );
 
   const activeIndex = suggestedFollowers.length - 1;
 
@@ -51,6 +55,11 @@ export default function Friendcord() {
     );
     // setResult((current) => ({ ...current, [swipe]: current[swipe] + 1 }));
   };
+
+  async function matchUsers() {
+    const userIds = matchedFriends.map((u) => u.userId);
+    matchUsersMutation.mutate({ usersIds: userIds });
+  }
 
   useEffect(() => {
     if (
@@ -72,10 +81,33 @@ export default function Friendcord() {
     }
   }, [fetchSuggestedFollQuery.data]);
 
+  useEffect(() => {
+    if (
+      typeof matchUsersMutation.data !== "undefined" ||
+      matchUsersMutation.error !== null
+    ) {
+      const { data } = matchUsersMutation;
+      const response = data;
+      HandleFriendcordResponse(
+        response,
+        () => {},
+        (data) => {
+          console.log(data);
+        }
+      );
+    }
+  }, [matchUsersMutation]);
+
+  useEffect(() => {
+    if (cards.length === 0 && suggestedFollowers.length > 0) {
+      matchUsers();
+    }
+  }, [cards.length]);
+
   return (
     <MainDashboardLayout activeTab="friends">
       <div className="w-full h-auto flex flex-col items-start justify-start">
-        <div className="w-full h-auto border-b-solid border-b-[.5px] border-b-white-600 py-3 flex flex-col items-center justify-center">
+        <div className="relative w-full h-auto border-b-solid border-b-[.5px] border-b-white-600 py-3 flex flex-col items-center justify-center">
           <h1 className="font-extrabold pp-EB text-[2em] text-white-100">
             we met on Showwcase
           </h1>
@@ -108,6 +140,17 @@ export default function Friendcord() {
                   />
                 ))}
             </AnimatePresence>
+            {suggestedFollowers.length === 0 &&
+              !fetchSuggestedFollQuery.isLoading && (
+                <div className="w-full h-[400px] flex flex-col justify-center items-center">
+                  <p className="text-white-100 pp-SB text-[15px] ">
+                    That all we got for now
+                  </p>
+                  <p className="text-white-300 pp-RG text-[13px]">
+                    Check back later.
+                  </p>
+                </div>
+              )}
             {cards.length === 0 && !fetchSuggestedFollQuery.isLoading && (
               <div className="w-full h-[400px] flex flex-col justify-center items-center">
                 <p className="text-white-100 pp-SB text-[15px] ">
@@ -123,12 +166,12 @@ export default function Friendcord() {
                   </div>
                   <p className="text-white-100 text-[14px] pp-EB">
                     {matchedFriends.length > 0
-                      ? matchedFriends.length + " Friends"
+                      ? matchedFriends.length + " Friends Matched."
                       : `0 Friends 😔`}
                   </p>
                 </div>
                 <br />
-                {matchedFriends.length > 0 && (
+                {matchUsersMutation.isLoading && (
                   <div className="w-full max-w-[150px] bg-blue-300 rounded-[30px] p-2 flex items-center justify-center gap-5 ">
                     <p className="text-white-100 text-[14px] pp-SB">Matching</p>
                     <Spinner color="#fff" />
@@ -214,20 +257,20 @@ function SwipeCard({
       >
         <div className={`${classNames}`}>
           <div
-            className={`w-full h-[120px] max-h-[190px] flex flex-col items-center justify-center`}
-            style={{
-              backgroundColor: generateRandomColor(tailwindColors.colors),
-            }}
+            className={`relative w-full h-[100px] max-h-[190px] flex flex-col items-center justify-center bg-red-305 overflow-hidden `}
+            // style={{
+            //   backgroundColor: generateRandomColor(tailwindColors.colors),
+            // }}
           >
             {/* Header */}
           </div>
-          <div className="w-full h-full px-3 flex flex-col items-start justify-start">
-            <div className="w-full flex flex-col items-start justify-start">
+          <div className="relative w-full h-full px-3 flex flex-col items-start justify-start">
+            <div className="absolute w-full flex flex-col items-start justify-start">
               <ImageTag
                 src={data?.profilePic ?? "/images/ack/me.jpeg"}
                 className="w-[80px] h-[80px] max-w-[80px] max-h-[80px] rounded-[50%] border-solid border-[5px] border-dark-200 mt-[-2em] bg-dark-200 "
               />
-              <div className="w-full mt-5 flex flex-col items-start justify-start">
+              <div className="w-full mt-4 flex flex-col items-start justify-start">
                 <p className="text-white-100 text-[15px] pp-SB">
                   {data.fullname ?? "Benaiah Alumona"}
                 </p>
@@ -236,7 +279,8 @@ function SwipeCard({
                 </p>
               </div>
             </div>
-            <p className="text-white-300 mt-6 pp-SB text-[12px] pp-RG">
+            <Gap height={70} />
+            <p className="text-white-300 mt-[4em] pp-SB text-[12px] pp-RG">
               INTERESTS
             </p>
             <div className="w-full h-auto max-h-[120px] overflow-auto hideScrollBar2 mt-5 mb-8 flex flex-wrap items-start justify-start gap-2">
@@ -245,12 +289,12 @@ function SwipeCard({
                     <Tags
                       tag={(d as any)?.name}
                       key={i}
-                      active={currUserTags[i].name === (d as any)?.name}
+                      active={currUserTags[i]?.name === (d as any)?.name}
                     />
                   ))
                 : null}
             </div>
-            <div className="w-full h-[100px] "></div>
+            {/* <div className="w-full h-[100px] "></div> */}
           </div>
         </div>
       </motion.div>
