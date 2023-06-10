@@ -90,6 +90,10 @@ textarea::placeholder {
   border-left: 50px yellow;
 }
 
+.glass {
+  /*  */
+}
+
 .hideScrollBar::-webkit-scrollbar {
   width: 5px;
 }
