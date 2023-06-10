@@ -49,6 +49,11 @@ export default class MeetController extends BaseController {
       return;
     }
 
+    if (isEmpty(meeting)) {
+      this.error(res, "--meeting/notfound", "meeting notfound.", 404);
+      return;
+    }
+
     this.success(
       res,
       "--meeting/fetched-successfully",
