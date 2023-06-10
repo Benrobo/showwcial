@@ -273,3 +273,40 @@ export const bulkFollowUser = async (data: string[]) => {
     return e.response?.data ?? { message: e.message, code: e?.code };
   }
 };
+
+// Meet
+export const createMeeting = async (data: string) => {
+  try {
+    const res = await $http.post(`/meet/create`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const getMeetings = async () => {
+  try {
+    const res = await $http.get(`/meet/getMeetings`);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const getMeeting = async (data: string) => {
+  try {
+    const res = await $http.post(`/meet/getMeeting`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
+
+export const deleteMeeting = async (data: string) => {
+  try {
+    const res = await $http.post(`/meet/delete`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
