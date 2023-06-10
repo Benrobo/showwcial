@@ -584,3 +584,47 @@ export function HandleFriendcordResponse(
   checkServerError(response, resetState);
   checkInvalidToken(response, resetState);
 }
+
+// Meet
+export function HandleMeetResponse(
+  response: any,
+  resetState: () => void,
+  returnData: (data) => any,
+  successfull?: () => void | any
+) {
+  if (
+    ["--meeting/notfound", "--meeting/field-empty"].includes(response?.code)
+  ) {
+    toast.error(response?.message);
+    resetState();
+    return;
+  }
+
+  // all created meeting.
+  if (response?.code === "--meeting/fetched") {
+    resetState();
+    successfull && successfull();
+    returnData(response?.data);
+    return;
+  }
+
+  if (response?.code === "--meeting/success") {
+    toast.success(response?.message);
+    resetState();
+    successfull && successfull();
+    returnData(response?.data);
+    return;
+  }
+
+  // meet by slug
+  if (response?.code === "--meeting/fetched-successfully") {
+    toast.success(response?.message);
+    resetState();
+    returnData(response?.data);
+    return;
+  }
+
+  // api server error
+  checkServerError(response, resetState);
+  checkInvalidToken(response, resetState);
+}
