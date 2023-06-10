@@ -36,14 +36,14 @@ export default function VideoCall() {
   }>();
 
   const handleCloseLoadingState = useCallback(() => {
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => setLoading(false), 1200);
   }, []);
 
   useEffect(() => {
-    if (!getMeetingQuery.isLoading && isEmpty(error)) {
+    if (!getMeetingQuery.isLoading) {
       setLoading(true);
     }
-  }, []);
+  }, [getMeetingQuery.data]);
 
   useEffect(() => {
     if (loading) {
