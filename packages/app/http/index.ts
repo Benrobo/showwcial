@@ -264,3 +264,12 @@ export const fetchSuggestedFollowers = async () => {
     return e.response?.data ?? { message: e.message, code: e?.code };
   }
 };
+
+export const bulkFollowUser = async (data: string[]) => {
+  try {
+    const res = await $http.post(`/friends/followUser`, data);
+    return res?.data ?? (res as any)?.response?.data;
+  } catch (e: any) {
+    return e.response?.data ?? { message: e.message, code: e?.code };
+  }
+};
