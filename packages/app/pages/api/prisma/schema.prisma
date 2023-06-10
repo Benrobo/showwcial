@@ -23,6 +23,7 @@ model Users {
     threadBookmarks BookMarks[]
     botNotifier     BotNotifier[]
     sites           Site[]
+    meetings        Meet[]
 
     @@unique([id])
 }
@@ -149,4 +150,15 @@ model PageTracker {
     userId    String
 
     createdAt DateTime @default(now())
+}
+
+model Meet {
+    id     String @id
+    slug   String
+    name   String
+    userId String
+
+    users Users @relation(fields: [userId], references: [id])
+
+    @@index([userId])
 }
