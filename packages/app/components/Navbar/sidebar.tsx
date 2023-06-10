@@ -37,6 +37,9 @@ const returnActiveStyle = (active: string, name: string) => {
     case "hub-hub":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
+    case "meet-meet":
+      style = `text-white-100 bg-white-600 pp-EB`;
+      break;
     case "notifier-notifier":
       style = `text-white-100 bg-white-600 pp-EB`;
       break;
