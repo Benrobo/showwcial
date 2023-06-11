@@ -134,7 +134,7 @@ export default function ShowwcaseThreadStyle({
       <div className="w-full h-auto flex flex-col flex-wrap whitespace-nowrap items-start justify-start">
         <p className="text-white-200 pp-SB text-[14px] mt-2 ">{title ?? ""}</p>
         <div className="text-white-200 pp-RG whitespace-pre-wrap flex-wrap text-[14px] mt-5">
-          <div className=" break-words whitespace-pre-wrap overflow-hidden max-w-[325px]  ">
+          <div className=" break-words whitespace-pre-wrap overflow-hidden max-w-[420px]  ">
             <ReactMarkdown
               children={threadContent}
               remarkPlugins={[remarkGfm]}
@@ -151,7 +151,7 @@ export default function ShowwcaseThreadStyle({
           {threadImages?.length > 0 && threadImage?.length === 0 && (
             <ImageTag
               src={threadImages[0]}
-              className="rounded-[5px] w-full max-w-[340px]  mt-4"
+              className="rounded-[5px] w-full max-w-[420px]  mt-4"
             />
           )}
           {threadImages?.length === 0 &&
