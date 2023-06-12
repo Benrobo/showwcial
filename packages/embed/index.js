@@ -101,70 +101,69 @@ class ShowwcaseEmbed {
     }
 
     const threadCont = `
-    <div class="showwcial-embed">
-  <!-- User Info -->
-  <div class="showwcial-userInfo">
-    <div class="showwcase-user-profile">
-      <img src="${main.userImage}" class="" />
-    </div>
-    <div class="showwcial-user-details">
-      <div class="showwcial-user-details-1">
-        <p class="p-14 pp-SB">${addDottt(main.fullname, 12)}</p>
-        <p class="p-14">${main.emoji}</p>
-        <p class="p-13 pp-RG">@${main.username}</p>
-      </div>
-      <div class="showwcial-user-details-1">
-        <p class="p-14 pp-RG">${addDottt(main.tagline, 20)}</p>
-      </div>
-    </div>
-    <div class="showwcase-logo">
-      <img src="https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.3/assets/logos/showwcase-2.jpeg" class="" />
-    </div>
-  </div>
-  <!-- Thread section -->
-  <div class="showwcial-thread-section">
-    <p class="pp-SB p-14 title">${main.title}</p>
-    <div class="markdown-content pp-RG" id="thread-markdown-content">
-      ${MarkdownToHtml.parse(main.description)}
-    </div>
+        <div class="showwcial-embed">
+          <!-- User Info -->
+          <div class="showwcial-userInfo">
+            <div class="showwcase-user-profile">
+              <img src="${main.userImage}" class="" />
+            </div>
+            <div class="showwcial-user-details">
+              <div class="showwcial-user-details-1">
+                <p class="p-14 pp-SB">${addDottt(main.fullname, 12)}</p>
+                <p class="p-14">${main.emoji}</p>
+                <p class="p-13 pp-RG">@${main.username}</p>
+              </div>
+              <div class="showwcial-user-details-1">
+                <p class="p-14 pp-RG">${addDottt(main.tagline, 20)}</p>
+              </div>
+            </div>
+            <div class="showwcase-logo">
+              <img src="https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.3/assets/logos/showwcase-2.jpeg" class="" />
+            </div>
+          </div>
+          <!-- Thread section -->
+          <div class="showwcial-thread-section">
+            <p class="pp-SB p-14 title">${main.title}</p>
+            <div class="markdown-content pp-RG" id="thread-markdown-content">
+              ${MarkdownToHtml.parse(main.description)}
+            </div>
 
-    <!-- Thread Image -->
-    ${renderThreadImage()}
+            <!-- Thread Image -->
+            ${renderThreadImage()}
 
-    <!-- Thread Link Preview -->
-    ${renderLinkPreview()}
+            <!-- Thread Link Preview -->
+            ${renderLinkPreview()}
 
-    <!-- Thread action info -->
-    <!-- <div class="timing">
-      <span class="pp-RG p-13">${main.timestamp}</span>
-    </div> -->
+            <!-- Thread action info -->
+            <!-- <div class="timing">
+              <span class="pp-RG p-13">${main.timestamp}</span>
+            </div> -->
 
-    <div class="divider"></div>
+            <div class="divider"></div>
 
-    <!-- Reply, Likes, Copy -->
-    <div class="thread-actions">
-      <a href="#" class="">
-        <ion-icon name="heart" class="icon icon1"></ion-icon>
-        <span class="p-14 pp-SB">${main.likes}</span>
-      </a>
-      <a href="#" class="">
-        <ion-icon name="arrow-up-circle" class="icon icon2"></ion-icon>
-        <span class="p-14 pp-SB">${main.upvotes}</span>
-      </a>
-      <a href="#" class="">
-        <ion-icon name="chatbubble" class="icon icon3"></ion-icon>
-        <!-- <span class="p-14 pp-SB">${main.comments}</span> -->
-      </a>
-    </div>
-    <div class="readmore">
-      <a href="${threadUrl}" target="_blank" class="p-14 pp-RG">Read more on Showwcase</a>
-    </div>
-  </div>
-</div>`
+            <!-- Reply, Likes, Copy -->
+            <div class="thread-actions">
+              <a href="#" class="">
+                <ion-icon name="heart" class="icon icon1"></ion-icon>
+                <span class="p-14 pp-SB">${main.likes}</span>
+              </a>
+              <a href="#" class="">
+                <ion-icon name="arrow-up-circle" class="icon icon2"></ion-icon>
+                <span class="p-14 pp-SB">${main.upvotes}</span>
+              </a>
+              <a href="#" class="">
+                <ion-icon name="chatbubble" class="icon icon3"></ion-icon>
+                <!-- <span class="p-14 pp-SB">${main.comments}</span> -->
+              </a>
+            </div>
+            <div class="readmore">
+              <a href="${threadUrl}" target="_blank" class="p-14 pp-RG">Read more on Showwcase</a>
+            </div>
+          </div>
+        </div>`
 
     div.innerHTML = (threadCont);
     mainContainer.appendChild(div);
-    console.log({ main, linkPreview });
   }
 
   async init() {
@@ -186,7 +185,8 @@ class ShowwcaseEmbed {
       const threadResults = await this.fetchThread(id);
 
       if (!threadResults.success) {
-        error = "Something went wrong fetching thread.";
+        console.error(`Something went wrong fetching thread with id ${id}.`);
+        return;
       }
 
       const data = threadResults.data;
@@ -238,53 +238,52 @@ class ShowwcaseEmbed {
       while (counter !== 0) {
         const id = threadIds[count];
         const resp = await this.fetchThread(id);
-        if (!resp.success) {
-          error = "Something went wrong fetching thread.";
-          break;
+        if (resp.success) {
+          const data = resp.data;
+          threadData.push(data);
         }
-        const data = resp.data;
-        threadData.push(data);
         count += 1;
         counter--;
       }
 
-      // console.log(threadData.length);
       threadData.forEach(data => {
-        let linkPreview = null;
+        if (typeof data.error === "undefined") {
+          let linkPreview = null;
 
-        if (data?.linkPreviewMeta !== null && data?.linkPreviewMeta?.type === "external") {
-          linkPreview = {
-            description: data?.linkPreviewMeta?.description,
-            title: data?.linkPreviewMeta?.title,
-            image: data?.linkPreviewMeta?.images[0] ?? null,
-            url: data?.linkPreviewMeta?.url
+          if (data?.linkPreviewMeta !== null && data?.linkPreviewMeta?.type === "external") {
+            linkPreview = {
+              description: data?.linkPreviewMeta?.description,
+              title: data?.linkPreviewMeta?.title,
+              image: data?.linkPreviewMeta?.images[0] ?? null,
+              url: data?.linkPreviewMeta?.url
+            }
           }
-        }
-        if (data?.linkPreviewMeta !== null && data?.linkPreviewMeta?.type === "project") {
-          linkPreview = {
-            description: data?.linkPreviewMeta?.project?.projectSummary,
-            title: data?.linkPreviewMeta?.project?.title,
-            image: data?.linkPreviewMeta?.project?.coverImageUrl ?? null,
-            url: data?.linkPreviewMeta?.project?._self
+          if (data?.linkPreviewMeta !== null && data?.linkPreviewMeta?.type === "project") {
+            linkPreview = {
+              description: data?.linkPreviewMeta?.project?.projectSummary,
+              title: data?.linkPreviewMeta?.project?.title,
+              image: data?.linkPreviewMeta?.project?.coverImageUrl ?? null,
+              url: data?.linkPreviewMeta?.project?._self
+            }
           }
-        }
 
-        this.renderThread({
-          main: {
-            description: data?.message,
-            title: data?.title ?? "",
-            images: data?.images[0] ?? "",
-            username: data?.user?.username,
-            userImage: data?.user?.profilePictureUrl,
-            fullname: data?.user?.displayName,
-            emoji: data?.user?.activity?.emoji,
-            id: data?.id,
-            likes: data?.totalUpvotes,
-            upvotes: data?.totalBoosts,
-            tagline: data?.user?.headline
-          },
-          linkPreview: linkPreview
-        });
+          this.renderThread({
+            main: {
+              description: data?.message,
+              title: data?.title ?? "",
+              images: data?.images[0] ?? "",
+              username: data?.user?.username,
+              userImage: data?.user?.profilePictureUrl,
+              fullname: data?.user?.displayName,
+              emoji: data?.user?.activity?.emoji,
+              id: data?.id,
+              likes: data?.totalUpvotes,
+              upvotes: data?.totalBoosts,
+              tagline: data?.user?.headline
+            },
+            linkPreview: linkPreview
+          });
+        }
       })
       return;
     }
