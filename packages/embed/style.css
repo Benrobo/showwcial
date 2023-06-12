@@ -1,16 +1,16 @@
 @font-face {
   font-family: Poppins-Regular;
-  src: url("./assets/fonts/Poppins-Regular.ttf");
+  src: url("https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.3/assets/fonts/Poppins-Regular.ttf");
 }
 
 @font-face {
   font-family: Poppins-SemiBold;
-  src: url("./assets/fonts/Poppins-SemiBold.ttf");
+  src: url("https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.3/assets/fonts/Poppins-SemiBold.ttf");
 }
 
 @font-face {
   font-family: Poppins-ExtraBold;
-  src: url("./assets/fonts/Poppins-ExtraBold.ttf");
+  src: url("https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.3/assets/fonts/Poppins-ExtraBold.ttf");
 }
 
 /* Fonts */

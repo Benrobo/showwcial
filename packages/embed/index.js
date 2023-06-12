@@ -119,7 +119,7 @@ class ShowwcaseEmbed {
       </div>
     </div>
     <div class="showwcase-logo">
-      <img src="./assets/logos/showwcase-2.jpeg" class="" />
+      <img src="https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.3/assets/logos/showwcase-2.jpeg" class="" />
     </div>
   </div>
   <!-- Thread section -->
