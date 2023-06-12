@@ -11,15 +11,8 @@ Follow the instruction below on how the widget can be used.
 Include the following script before the closing `</body>` tag.
 
 ```js
-
-// Ionicons Lib (This embed widget depends on it, so do well to include it.)
-<script
-    type="module"
-    src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"
-></script>
-
 // Embed Widget
-<script src="https://cdn.jsdelivr.net/npm/showwcial-embed@0.1.0/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/showwcial-embed@0.2.0/index.js"></script>
 ```
 
 ### Step 2

@@ -1,7 +1,11 @@
 window.addEventListener("DOMContentLoaded", () => {
   const script = document.createElement("script");
+  const script2 = document.createElement("script");
   script.src = `https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.2/markdownFormatter.js`
+  script2.src = `https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js`
+  script2.type = "module"
   document.body.appendChild(script)
+  document.body.appendChild(script2)
 })
 
 class ShowwcaseEmbed {
