@@ -19,7 +19,7 @@ Include the following script before the closing `</body>` tag.
 ></script>
 
 // Embed Widget
-<script src="https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.9/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/showwcial-embed@0.1.0/index.js"></script>
 ```
 
 ### Step 2
@@ -54,4 +54,4 @@ Invoke the widget within your application by calling adding the following code.
 
 If all have been done correctly, you should get the following result:
 
-![image]()
+![image](https://raw.githubusercontent.com/Benrobo/showwcial/main/packages/embed/preview.png)
