@@ -1,9 +1,3 @@
-let content = `
-# Hello, Markdown! \n Here is some example **formatting**
-`;
-// let element = document.getElementById("thread-markdown-content");
-// element.innerHTML = MarkdownToHtml.parse(content);
-
 window.addEventListener("DOMContentLoaded", () => {
   const script = document.createElement("script");
   script.src = "./markdownFormatter.js"
@@ -71,11 +65,8 @@ class ShowwcaseEmbed {
     const threadUrl = `https://www.showwcase.com/thread/${main.id}`
     const renderThreadImage = () => {
       if (!this.isEmpty(main.images)) {
-        return `<div class="w-full mb-2">
-        <img
-          class="w-full max-w-[400px] h-auto bg-dark-100 rounded-[10px]"
-          src="${main.images}"
-        />
+        return `<div class="thread-image">
+        <img src="${main.images}"/>
       </div>`
       }
       return ""
@@ -83,22 +74,18 @@ class ShowwcaseEmbed {
 
     const renderLinkPreview = () => {
       if (this.isEmpty(main.images)) {
-        return `<a
-        href="${linkPreview.url}"
-        class="w-full border-solid border-[1px] border-white-600 rounded-[10px] flex flex-col items-center justify-center mb-3"
-      >
-        <div class="w-full flex flex-col items-start justify-start">
+        const { url, image, hostname, title, description } = linkPreview;
+        return `<a href="${url}" class="linkPreview">
+        <div>
           <!-- image -->
-          <img
-          class="w-full max-h-[250px] h-auto bg-dark-100 rounded-[10px]"
-          src="${linkPreview.image ?? "https://assets.showwcase.com/coverimages/thumbnail.png"}"
+          <img src="${image ?? "https://assets.showwcase.com/coverimages/thumbnail.png"}"
         />
           <div
-            class="w-full h-auto p-2 border-solid border-t-[1px] border-t-white-600 flex flex-col items-start justify-start"
+            class="details"
           >
-            <p class="text-white-400 pp-RG text-[12px]">${new URL(linkPreview?.url).hostname}</p>
-            <p class="text-white-100 pp-RG text-[14px]">${linkPreview?.title.length > 25 ? linkPreview?.title.slice(0, 25) + "..." : linkPreview.title ?? ""}</p>
-            <p class="text-white-400 pp-RG text-[14px]">${linkPreview.description.length > 30 ? linkPreview.description.slice(0, 30) + "..." : linkPreview.description}</p>
+            <p class="pp-RG text-[12px]">${new URL(url).hostname}</p>
+            <p class="pp-RG p-14">${title.length > 25 ? title.slice(0, 25) + "..." : title ?? ""}</p>
+            <p class="pp-RG p-14">${description.length > 30 ? description.slice(0, 30) + "..." : description}</p>
           </div>
         </div>
       </a>`
@@ -106,48 +93,40 @@ class ShowwcaseEmbed {
       return ""
     }
 
+    const addDottt = (text, cond) => {
+      if (text.length > cond) {
+        let newText = text.slice(0, cond);
+        return `${newText}...`
+      }
+      return text;
+    }
+
     const threadCont = `
-    <div
-    onClick="window.location.href = '${threadUrl}'"
-  class="min:w-full sm:w-full md:w-[380px] lg:w-[380px] xl:w-[380px] w-full cursor-pointer h-auto bg-dark-300 showwcial-bookmark-widget flex items-center justify-center flex-col relative p-3 rounded-md"
->
+    <div class="showwcial-embed">
   <!-- User Info -->
-  <div class="w-full flex items-start justify-start">
-    <span class="relative w-[48px] h-[48px]">
-      <img
-        src="${main.userImage}"
-        class="absolute top-0 left-0 object-cover min-w-[100%] max-w-[100%] max-h-[100%] min-h-[100%] rounded-[50%]"
-      />
-    </span>
-    <div class="w-auto ml-5 flex flex-col items-start justify-start">
-      <div class="flex items-start justify-start">
-        <p class="text-white-100 pp-SB text-[14px]">${main.fullname.length > 10 ? main.fullname.slice(0, 10) + "..." : main.fullname}</p>
-        <p class="text-white-100 pp-SB text-[14px] ml-1 mr-1">${main.emoji}</p>
-        <p class="text-white-300 pp-RG text-[13px]">@${main.username}</p>
+  <div class="showwcial-userInfo">
+    <div class="showwcase-user-profile">
+      <img src="${main.userImage}" class="" />
+    </div>
+    <div class="showwcial-user-details">
+      <div class="showwcial-user-details-1">
+        <p class="p-14 pp-SB">${addDottt(main.fullname, 12)}</p>
+        <p class="p-14">${main.emoji}</p>
+        <p class="p-13 pp-RG">@${main.username}</p>
       </div>
-      <div class="flex items-start justify-start">
-        <p class="text-white-200 pp-RG text-[14px]">${main.tagline?.length > 30 ? main.tagline.slice(0, 30) + "..." : main.tagline}</p>
+      <div class="showwcial-user-details-1">
+        <p class="p-14 pp-RG">${addDottt(main.tagline, 20)}</p>
       </div>
     </div>
-    <div
-      class="w-auto absolute top-0 right-3 flex flex-col items-end justify-end"
-    >
-      <img
-        src="./assets/logos/showwcase-2.jpeg"
-        class="w-[30px] rounded-[50%] mr-2 mt-3 border-solid border-[.5px] border-white-600"
-      />
+    <div class="showwcase-logo">
+      <img src="./assets/logos/showwcase-2.jpeg" class="" />
     </div>
   </div>
   <!-- Thread section -->
-  <div
-    class="w-full h-auto flex flex-col break-all whitespace-normal flex-wrap whitespace-nowrap items-start justify-start"
-  >
-    ${main.title.length > 0 ? `<p class="w-full overflow-hidden text-white-200 flex flex-wrap pp-SB whitespace-normal text-[14px] break-words break-all mt-2">${main.title}</p>` : ""}
-    <div class="text-white-200 pp-RG whitespace-pre-wrap flex-wrap text-[14px]">
-      <div
-        class="break-words overflow-hidden whitespace-pre-wrap overflow-hidden max-w-[420px]"
-        id="thread-markdown-content"
-      >${MarkdownToHtml.parse(main.description)}</div>
+  <div class="showwcial-thread-section">
+    <p class="pp-SB p-14 title">${main.title}</p>
+    <div class="markdown-content pp-RG" id="thread-markdown-content">
+      ${MarkdownToHtml.parse(main.description)}
     </div>
 
     <!-- Thread Image -->
@@ -157,58 +136,36 @@ class ShowwcaseEmbed {
     ${renderLinkPreview()}
 
     <!-- Thread action info -->
-    <div class="w-full flex items-center justify-start">
-      <span class="text-white-300 pp-RG text-[13px] mb-1"
-        >9:20 PM . May 21, 2023</span
-      >
-    </div>
+    <!-- <div class="timing">
+      <span class="pp-RG p-13">${main.timestamp}</span>
+    </div> -->
 
-    <div class="w-full border-solid border-[.5px] border-white-600"></div>
+    <div class="divider"></div>
 
     <!-- Reply, Likes, Copy -->
-    <div class="w-full mt-3 flex items-center justify-start gap-3">
-      <a href="#" class="flex items-center justify-center">
-        <ion-icon
-          name="heart"
-          class="p-2 text-[15px] mr-1 rounded-[50%] hover:bg-red-900 transition-all text-red-305"
-        ></ion-icon>
-        <span class="text-[14px] text-white-400 pp-SB">${main.likes}</span>
+    <div class="thread-actions">
+      <a href="#" class="">
+        <ion-icon name="heart" class="icon icon1"></ion-icon>
+        <span class="p-14 pp-SB">${main.likes}</span>
       </a>
-      <a href="#" class="flex items-center justify-center">
-        <ion-icon
-          name="arrow-up-circle"
-          class="p-2 text-[15px] mr-1 rounded-[50%] hover:bg-green-600 transition-all text-green-500"
-        ></ion-icon>
-        <span class="text-[14px] text-white-400 pp-SB">${main.upvotes}</span>
+      <a href="#" class="">
+        <ion-icon name="arrow-up-circle" class="icon icon2"></ion-icon>
+        <span class="p-14 pp-SB">${main.upvotes}</span>
       </a>
-      <a href="#" class="flex items-center justify-center">
-        <ion-icon
-          name="chatbubble"
-          class="p-2 text-[15px] mr-1 rounded-[50%] hover:bg-blue-705 transition-all text-blue-300"
-        ></ion-icon>
-        <span class="text-[14px] text-white-400 pp-SB"></span>
+      <a href="#" class="">
+        <ion-icon name="chatbubble" class="icon icon3"></ion-icon>
+        <!-- <span class="p-14 pp-SB">${main.comments}</span> -->
       </a>
-      <a href="#" class="flex items-center justify-center ml-4 hover:underline">
-        <ion-icon
-          name="link"
-          class="p-2 text-[15px] mr-1 rounded-[50%] hover:bg-blue-705 transition-all text-blue-300"
-        ></ion-icon>
-        <span class="text-[13px] hover:underline text-white-100 pp-RG"
-          >Copy Link</span
-        >
+      <a href="#" class="">
+        <ion-icon name="link" class="icon icon3"></ion-icon>
+        <span class="p-13 pp-RG">Copy Link</span>
       </a>
     </div>
-    <div class="w-full mt-5 flex items-center justify-center">
-      <a
-        href="${threadUrl}"
-        class="w-full hover:bg-blue-705 transition-all flex items-center justify-center text-blue-300 pp-RG text-center px-3 py-2 rounded-[30px] border-solid border-[1px] border-white-600 text-[14px]"
-      >
-        Read more on Showwcase
-      </a>
+    <div class="readmore">
+      <a href="${main.threadUrl}" class="p-14 pp-RG">Read more on Showwcase</a>
     </div>
   </div>
-</div>
-    `
+</div>`
 
     div.innerHTML = (threadCont);
     mainContainer.appendChild(div);

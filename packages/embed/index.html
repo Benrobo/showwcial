@@ -4,81 +4,91 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>welcome</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <script src="./markdownFormatter.js"></script>
-
     <link rel="stylesheet" href="./style.css" />
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              clifford: "#da373d",
-              dark: {
-                100: "#131418",
-                200: "#1E1E22",
-                300: "#181920",
-                400: "#12151A",
-                405: "rgb(18, 21, 26,.5)",
-                500: "#20222C",
-                600: "rgba(0,0,0,.5)",
-                700: "rgba(0,0,0,.9)",
-                800: "rgba(19, 20, 24, .8)",
-                900: "rgba(19, 20, 24, .4)",
-              },
-              green: {
-                100: "#64f4ac",
-                200: "#64f4acea",
-                300: "rgb(100, 244, 172, .7)",
-                305: "#5dc8a9",
-                400: "#05ff82",
-                500: "#15eb80",
-                600: "rgb(3, 252, 128, .4)",
-              },
-              red: {
-                100: "rgb(255, 0, 0, .4)",
-                200: "#ff0000",
-                300: "#cc0000",
-                305: "#ff4741",
-                400: "#990000",
-                500: "#660000",
-                600: "#330000",
-                700: "#000000",
-              },
-              white: {
-                100: "#fff",
-                105: "#f6f8fb",
-                200: "#ccc",
-                300: "#ebebebb6",
-                400: "#777",
-                500: "rgba(0,0,0,.1)",
-                600: "rgba(255,255,255,0.08)",
-              },
-              blue: {
-                100: "#258dfd",
-                105: "#4055e4",
-                200: "#4898f0",
-                300: "#3F7EEE",
-                301: "#59CBE8",
-                302: "#102241",
-                400: "#0655E2",
-                500: "#513cef",
-                600: "#5452d379",
-                700: "#0142e2",
-                705: "rgba(1, 65, 226, 0.4)",
-                800: "#08173f",
-              },
-            },
-          },
-        },
-      };
-    </script>
   </head>
-  <body
-    class="relative w-full h-auto border-solid border-[.5px] border-white-600 py-2 px-3"
-  >
-    <div id="app" class=""></div>
+  <body>
+    <!-- <div id="app" class=""></div> -->
+    <div class="showwcial-embed">
+      <!-- User Info -->
+      <div class="showwcial-userInfo">
+        <div class="showwcase-user-profile">
+          <img src="./assets/logos/logo2.png" class="" />
+        </div>
+        <div class="showwcial-user-details">
+          <div class="showwcial-user-details-1">
+            <p class="p-14 pp-SB">John Doe</p>
+            <p class="p-14">🚀</p>
+            <p class="p-13 pp-RG">@jonny54</p>
+          </div>
+          <div class="showwcial-user-details-1">
+            <p class="p-14 pp-RG">Mobile Engineer</p>
+          </div>
+        </div>
+        <div class="showwcase-logo">
+          <img src="./assets/logos/showwcase-2.jpeg" class="" />
+        </div>
+      </div>
+      <!-- Thread section -->
+      <div class="showwcial-thread-section">
+        <p class="pp-SB p-14 title">Thread title goes here</p>
+        <div class="markdown-content pp-RG" id="thread-markdown-content">
+          welcome
+        </div>
+
+        <!-- Thread Image -->
+        <div class="thread-image">
+          <img
+            src="https://project-assets.showwcase.com/1420x/102662/1684794358548-Screenshot%25202023-05-19%2520at%252020.png"
+          />
+        </div>
+
+        <!-- Thread Link Preview -->
+        <a href="#" class="linkPreview">
+          <div>
+            <!-- image -->
+            <img
+              src="https://project-assets.showwcase.com/1420x/102662/1684794358548-Screenshot%25202023-05-19%2520at%252020.png"
+            />
+            <div class="details">
+              <p class="pp-RG text-[12px]">showwcase.com</p>
+              <p class="pp-RG p-14">Thread title here...</p>
+              <p class="pp-RG p-14">Thread description here...</p>
+            </div>
+          </div>
+        </a>
+
+        <!-- Thread action info -->
+        <div class="timing">
+          <span class="pp-RG p-13">9:20 PM . May 21, 2023</span>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Reply, Likes, Copy -->
+        <div class="thread-actions">
+          <a href="#" class="">
+            <ion-icon name="heart" class="icon icon1"></ion-icon>
+            <span class="p-14 pp-SB">10</span>
+          </a>
+          <a href="#" class="">
+            <ion-icon name="arrow-up-circle" class="icon icon2"></ion-icon>
+            <span class="p-14 pp-SB">10</span>
+          </a>
+          <a href="#" class="">
+            <ion-icon name="chatbubble" class="icon icon3"></ion-icon>
+            <span class="p-14 pp-SB">10</span>
+          </a>
+          <a href="#" class="">
+            <ion-icon name="link" class="icon icon3"></ion-icon>
+            <span class="p-13 pp-RG">Copy Link</span>
+          </a>
+        </div>
+        <div class="readmore">
+          <a href="" class="p-14 pp-RG"> Read more on Showwcase </a>
+        </div>
+      </div>
+    </div>
 
     <script
       type="module"
@@ -90,9 +100,9 @@
     ></script>
     <script src="./index.js"></script>
     <script>
-      const embedd = new ShowwcaseEmbed("#app", [103234]);
+      // const embedd = new ShowwcaseEmbed("#app", [103234]);
 
-      console.log(embedd);
+      // console.log(embedd);
     </script>
   </body>
 </html>

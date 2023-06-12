@@ -1,0 +1,12 @@
+{
+  "name": "showwcial-embed",
+  "version": "0.0.1",
+  "description": "A mini javascript library which enables you embed showwcase `Threads` in your personal site.",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

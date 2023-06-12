@@ -30,5 +30,301 @@
   font-family: "Coda", cursive;
 }
 
-iframe {
+.p-14 {
+  font-size: 14px;
+}
+
+.p-13 {
+  font-size: 13px;
+}
+
+.showwcial-embed {
+  width: 100%;
+  max-width: 350px;
+  height: auto;
+  background: #181920;
+  padding: 25px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 10px;
+  position: relative;
+}
+
+.showwcial-userInfo {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: start;
+  justify-content: flex-start;
+}
+
+.showwcase-user-profile {
+  width: 48px;
+  height: 48px;
+  position: relative;
+}
+
+.showwcase-user-profile img {
+  position: absolute;
+  top: 0px;
+  left: 10px;
+  object-fit: cover;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  border-radius: 50%;
+}
+
+.showwcial-user-details {
+  width: auto;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-items: flex-start;
+}
+
+.showwcial-user-details p {
+  padding: 0px;
+  margin: 0px;
+}
+
+.showwcial-user-details-1 {
+  display: flex;
+  align-items: start;
+  justify-content: flex-start;
+}
+
+.showwcial-user-details-1 .p-14 {
+  color: #fff;
+  padding: 0px;
+}
+
+.showwcial-user-details-1 .p-13 {
+  color: #ccc;
+}
+
+.showwcase-logo {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: end;
+}
+
+.showwcase-logo img {
+  width: 30px;
+  border-radius: 50%;
+  margin-right: 2px;
+  margin-top: 3px;
+  border: 0.5px solid #777;
+}
+
+/* Thread section */
+.showwcial-thread-section {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+  flex-wrap: wrap;
+  white-space: nowrap;
+}
+
+.showwcial-thread-section .title {
+  color: #ccc;
+  white-space: pre-wrap;
+}
+
+.showwcial-thread-section .markdown-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+  flex-wrap: wrap;
+  white-space: pre-wrap;
+  color: #ccc;
+  width: 100%;
+  max-width: 420px;
+  margin-bottom: 10px;
+}
+
+/* Thread Image */
+.showwcial-thread-section .thread-image {
+  width: 100%;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+.showwcial-thread-section .thread-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  background: #000;
+}
+
+/* Thread Link Preview */
+.showwcial-thread-section .linkPreview {
+  width: 100%;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.showwcial-thread-section .linkPreview div {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+}
+
+.showwcial-thread-section .linkPreview div img {
+  width: 100%;
+  height: auto;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  /* max-height: 100px; */
+}
+
+.showwcial-thread-section .linkPreview div .details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: start;
+  padding: 8px;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.showwcial-thread-section .linkPreview div .details p {
+  margin: 0px;
+}
+
+.showwcial-thread-section .linkPreview div .details p:nth-child(1) {
+  font-size: 12px;
+  text-decoration: none;
+  color: #777;
+}
+
+.showwcial-thread-section .linkPreview div .details p:nth-child(2) {
+  font-size: 14px;
+  text-decoration: none;
+  color: #fff;
+}
+.showwcial-thread-section .linkPreview div .details p:nth-child(3) {
+  font-size: 14px;
+  text-decoration: none;
+  color: #777;
+}
+
+/* Thread timing */
+.showwcial-thread-section .timing {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.showwcial-thread-section .timing span {
+  color: #ccc;
+}
+
+.showwcial-thread-section .divider {
+  width: 100%;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 10px;
+}
+
+/* Actions */
+.showwcial-thread-section .thread-actions {
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+
+.showwcial-thread-section .thread-actions a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showwcial-thread-section .thread-actions a .icon {
+  padding: 10px;
+  font-size: 15px;
+  margin-right: 1px;
+  border-radius: 50%;
+  transition: all 0.2 ease-in-out;
+}
+
+.showwcial-thread-section .thread-actions a span {
+  color: #777;
+}
+
+.showwcial-thread-section .thread-actions a .icon1 {
+  color: #ff4741;
+}
+.showwcial-thread-section .thread-actions a .icon2 {
+  color: #15eb80;
+}
+.showwcial-thread-section .thread-actions a .icon3 {
+  color: #3f7eee;
+}
+
+.showwcial-thread-section .thread-actions a .icon1:hover {
+  background: rgb(255, 0, 0, 0.4);
+}
+.showwcial-thread-section .thread-actions a .icon2:hover {
+  background: rgb(3, 252, 128, 0.4);
+}
+.showwcial-thread-section .thread-actions a .icon3:hover {
+  background: rgba(1, 65, 226, 0.4);
+}
+
+.showwcial-thread-section .thread-actions a span {
+  color: #ccc;
+}
+.showwcial-thread-section .thread-actions a span:hover {
+  text-decoration: underline;
+}
+
+/* Readmore Button */
+.showwcial-thread-section .readmore {
+  width: 100%;
+  margin-top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showwcial-thread-section .readmore a {
+  width: 100%;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  color: #3f7eee;
+  text-align: center;
+  padding: 10px;
+  border-radius: 30px;
+  transition: 0.1s all ease;
+}
+
+.showwcial-thread-section .readmore a:hover {
+  background: rgba(1, 65, 226, 0.08);
 }
