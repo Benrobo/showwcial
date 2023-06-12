@@ -155,13 +155,9 @@ class ShowwcaseEmbed {
         <ion-icon name="chatbubble" class="icon icon3"></ion-icon>
         <!-- <span class="p-14 pp-SB">${main.comments}</span> -->
       </a>
-      <a href="#" class="">
-        <ion-icon name="link" class="icon icon3"></ion-icon>
-        <span class="p-13 pp-RG">Copy Link</span>
-      </a>
     </div>
     <div class="readmore">
-      <a href="${main.threadUrl}" class="p-14 pp-RG">Read more on Showwcase</a>
+      <a href="${threadUrl}" target="_blank" class="p-14 pp-RG">Read more on Showwcase</a>
     </div>
   </div>
 </div>`
