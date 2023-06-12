@@ -73,7 +73,7 @@ class ShowwcaseEmbed {
     }
 
     const renderLinkPreview = () => {
-      if (this.isEmpty(main.images)) {
+      if (this.isEmpty(main.images) && linkPreview !== null) {
         const { url, image, hostname, title, description } = linkPreview;
         return `<a href="${url}" class="linkPreview">
         <div>
