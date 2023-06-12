@@ -74,17 +74,17 @@ class ShowwcaseEmbed {
 
     const renderLinkPreview = () => {
       if (this.isEmpty(main.images) && linkPreview !== null) {
-        return `<a href="${linkPreview.url}" class="linkPreview">
+        return `<a href="${linkPreview?.url}" class="linkPreview">
         <div>
           <!-- image -->
-          <img src="${linkPreview.image ?? "https://assets.showwcase.com/coverimages/thumbnail.png"}"
+          <img src="${linkPreview?.image ?? "https://assets.showwcase.com/coverimages/thumbnail.png"}"
         />
           <div
             class="details"
           >
-            <p class="pp-RG text-[12px]">${new URL(linkPreview.url).hostname}</p>
-            <p class="pp-RG p-14">${linkPreview.title.length > 25 ? linkPreview.title.slice(0, 25) + "..." : linkPreview.title ?? ""}</p>
-            <p class="pp-RG p-14">${linkPreview.description.length > 30 ? linkPreview.description.slice(0, 30) + "..." : description}</p>
+            <p class="pp-RG text-[12px]">${new URL(linkPreview?.url).hostname}</p>
+            <p class="pp-RG p-14">${linkPreview?.title.length > 25 ? linkPreview?.title.slice(0, 25) + "..." : linkPreview?.title ?? ""}</p>
+            <p class="pp-RG p-14">${linkPreview?.description.length > 30 ? linkPreview?.description.slice(0, 30) + "..." : linkPreview?.description}</p>
           </div>
         </div>
       </a>`
