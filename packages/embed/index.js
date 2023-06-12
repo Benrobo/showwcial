@@ -1,6 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   const script = document.createElement("script");
-  script.src = "./markdownFormatter.js"
+  script.src = `https://cdn.jsdelivr.net/npm/showwcial-embed@0.0.2/markdownFormatter.js`
   document.body.appendChild(script)
 })
 
