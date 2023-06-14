@@ -129,7 +129,7 @@ export default class FriendController extends BaseController {
               ? userPic
               : `https://profile-assets.showwcase.com/${userPic}`,
             followers: user.totalFollowers,
-            tags: user.tags,
+            tags: user?.tags ?? [],
           };
         }
       })
