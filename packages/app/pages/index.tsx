@@ -4,6 +4,7 @@ import { BsArrowUpRight, BsFillPlayFill } from "react-icons/bs";
 import Gap from "../components/Gap";
 import { useState } from "react";
 import Modal from "../components/Modal";
+import withoutAuth from "../util/withoutAuth";
 
 function Home() {
   const [isVideoPreview, setIsVideoPreview] = useState(false);
@@ -253,7 +254,7 @@ function Home() {
   );
 }
 
-export default Home;
+export default withoutAuth(Home);
 
 interface FeaturesContProp {
   title?: string;
