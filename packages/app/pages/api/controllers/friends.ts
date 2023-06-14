@@ -133,7 +133,7 @@ export default class FriendController extends BaseController {
           };
         }
       })
-      .filter((user) => user.tags.length > 1);
+      .filter((user) => user?.tags.length > 1);
 
     if (filterUser.length === 0) {
       this.error(
