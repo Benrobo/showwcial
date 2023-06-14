@@ -3,6 +3,7 @@ import { isEmpty } from ".";
 
 const clearLocalStorage = () => {
   localStorage.removeItem("authToken");
+  localStorage.removeItem("userData");
 };
 
 function isAuthenticated(token: string) {
