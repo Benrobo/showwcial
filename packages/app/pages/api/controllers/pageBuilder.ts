@@ -515,10 +515,6 @@ export default class PageBuilderController extends BaseController {
     if (createdSites.portfolioData !== null) {
       const portfolio = createdSites?.portfolioData;
 
-      delete createdSites["createdAt"];
-      delete createdSites["id"];
-      delete createdSites["userId"];
-
       createdSites.portfolioData["userImage"] = userData?.image;
       createdSites.portfolioData["fullname"] = userData?.fullname;
 
@@ -581,6 +577,10 @@ export default class PageBuilderController extends BaseController {
     }
 
     delete createdSites["notionDatabaseId"];
+
+    delete createdSites["createdAt"];
+    delete createdSites["id"];
+    delete createdSites["userId"];
 
     this.success(
       res,
